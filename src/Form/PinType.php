@@ -17,6 +17,7 @@ class PinType extends AbstractType
                 'label' => 'Image (JPEG or PNG file)',
                 'required' => false,
                 'allow_delete' => true,
+                'imagine_pattern' => 'squared_thumbnail_small',
                 'download_uri' => false,
             ])
             ->add('title')

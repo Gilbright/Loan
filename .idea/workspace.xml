@@ -10,13 +10,19 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f80b58fb-a3b8-45aa-aee5-da04844b7c97" name="Default Changelist" comment="VichUploaderBundle added to form">
+    <list default="true" id="f80b58fb-a3b8-45aa-aee5-da04844b7c97" name="Default Changelist" comment="Adding validation">
+      <change afterPath="$PROJECT_DIR$/config/packages/liip_imagine.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/routes/liip_imagine.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pins.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pins.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Pin.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Pin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/PinType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/PinType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,6 +149,9 @@
       <path value="$PROJECT_DIR$/vendor/twig/string-extra" />
       <path value="$PROJECT_DIR$/vendor/vich/uploader-bundle" />
       <path value="$PROJECT_DIR$/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/vendor/imagine/imagine" />
+      <path value="$PROJECT_DIR$/vendor/liip/imagine-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/templating" />
     </include_path>
   </component>
   <component name="ProjectId" id="1hc4a7WArmhcw900o6ZdfvDZdaA" />
@@ -183,7 +192,7 @@
       <workItem from="1600297108277" duration="650000" />
       <workItem from="1600365157665" duration="14202000" />
       <workItem from="1600463208274" duration="536000" />
-      <workItem from="1600508827793" duration="2999000" />
+      <workItem from="1600508827793" duration="3924000" />
     </task>
     <task id="LOCAL-00001" summary="pins project">
       <created>1600509227814</created>
@@ -213,7 +222,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600545531253</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Adding validation">
+      <created>1600546988663</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1600546988663</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -235,7 +251,8 @@
     <MESSAGE value="pins project" />
     <MESSAGE value="VichUploaderBundle bundle added" />
     <MESSAGE value="VichUploaderBundle added to form" />
-    <option name="LAST_COMMIT_MESSAGE" value="VichUploaderBundle added to form" />
+    <MESSAGE value="Adding validation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding validation" />
   </component>
   <component name="WindowStateProjectService">
     <state x="448" y="127" key="#com.intellij.ide.util.MemberChooser" timestamp="1600459787842">
