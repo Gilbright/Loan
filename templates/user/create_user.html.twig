@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block title %} create user {% endblock %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto" >
+                <article>
+                    <h2> Create User # </h2>
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <br>
+                    <input type="submit" value="create user" class="btn btn-primary btn-lg btn-block" formnovalidate>
+                    {{ form_end(form) }}
+                </article>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

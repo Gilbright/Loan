@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Pin {% endblock %}
+
+{% block body %}
+    <h1>{{ doPlural(pins|length,'Pin') }}</h1>
+    {% for pin in pins %}
+        <article>
+            <h2><a href="{{ path('app_show',{ 'id': pin.id }) }}"> {{ pin.title }}</a></h2>
+            <p>{{ pin.description|u.truncate(25, '...',false) }}</p>
+            <p>Submitted {{ time_diff(pin.createdAt) }}</p>
+        </article>
+    {% endfor %}
+{% endblock%}
