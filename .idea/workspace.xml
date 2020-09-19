@@ -10,16 +10,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f80b58fb-a3b8-45aa-aee5-da04844b7c97" name="Default Changelist" comment="pins project">
-      <change afterPath="$PROJECT_DIR$/config/packages/vich_uploader.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pins.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pins.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Pin.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Pin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+    <list default="true" id="f80b58fb-a3b8-45aa-aee5-da04844b7c97" name="Default Changelist" comment="VichUploaderBundle bundle added">
+      <change beforePath="$PROJECT_DIR$/src/Form/PinType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/PinType.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +178,7 @@
       <workItem from="1600297108277" duration="650000" />
       <workItem from="1600365157665" duration="14202000" />
       <workItem from="1600463208274" duration="536000" />
-      <workItem from="1600508827793" duration="1671000" />
+      <workItem from="1600508827793" duration="1950000" />
     </task>
     <task id="LOCAL-00001" summary="pins project">
       <created>1600509227814</created>
@@ -195,7 +187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600509227814</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="VichUploaderBundle bundle added">
+      <created>1600544814910</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1600544814910</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,7 +214,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="pins project" />
-    <option name="LAST_COMMIT_MESSAGE" value="pins project" />
+    <MESSAGE value="VichUploaderBundle bundle added" />
+    <option name="LAST_COMMIT_MESSAGE" value="VichUploaderBundle bundle added" />
   </component>
   <component name="WindowStateProjectService">
     <state x="448" y="127" key="#com.intellij.ide.util.MemberChooser" timestamp="1600459787842">
@@ -234,10 +234,10 @@
       <screen x="45" y="23" width="1235" height="777" />
     </state>
     <state x="453" y="116" key="Github.UntrackedFilesDialog/45.23.1235.777@45.23.1235.777" timestamp="1600509136755" />
-    <state x="262" y="151" key="Vcs.Push.Dialog.v2" timestamp="1600509230959">
+    <state x="262" y="151" key="Vcs.Push.Dialog.v2" timestamp="1600544818775">
       <screen x="45" y="23" width="1235" height="777" />
     </state>
-    <state x="262" y="151" key="Vcs.Push.Dialog.v2/45.23.1235.777@45.23.1235.777" timestamp="1600509230959" />
+    <state x="262" y="151" key="Vcs.Push.Dialog.v2/45.23.1235.777@45.23.1235.777" timestamp="1600544818775" />
     <state x="460" y="332" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1600463374723">
       <screen x="45" y="23" width="1235" height="777" />
     </state>
