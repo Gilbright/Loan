@@ -10,7 +10,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f80b58fb-a3b8-45aa-aee5-da04844b7c97" name="Default Changelist" comment="VichUploaderBundle added to form" />
+    <list default="true" id="f80b58fb-a3b8-45aa-aee5-da04844b7c97" name="Default Changelist" comment="VichUploaderBundle added to form">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Pin.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Pin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -176,7 +183,7 @@
       <workItem from="1600297108277" duration="650000" />
       <workItem from="1600365157665" duration="14202000" />
       <workItem from="1600463208274" duration="536000" />
-      <workItem from="1600508827793" duration="2185000" />
+      <workItem from="1600508827793" duration="2999000" />
     </task>
     <task id="LOCAL-00001" summary="pins project">
       <created>1600509227814</created>
@@ -199,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600545272268</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="VichUploaderBundle added to form">
+      <created>1600545531253</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1600545531253</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

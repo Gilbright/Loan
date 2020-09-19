@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PinRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -23,10 +24,12 @@ class Pin
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $title;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="text")
      */
     private $description;
@@ -42,11 +45,17 @@ class Pin
     private $updatedAt;
 
     /**
+     * @Assert\NotBlank
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      *
      * @Vich\UploadableField(mapping="pin_image", fileNameProperty="imageName")
      *
      * @var File|null
+     *
+     * @Assert\Image(
+     *     maxSize = "8M",
+     *     maxSizeMessage = "Please upload a valid image with max size 8M  "
+     * )
      */
     private $imageFile;
 
