@@ -1,26 +1,30 @@
 version: "3.1"
 services:
-    webserver:
-      container_name: pins-nginx
-      build: docker/nginx
-      working_dir: /application
-      restart: on-failure
-      volumes:
-        - .:/application:cached
-        - ./var/nginx_logs:/var/log/nginx
-        - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-        - ~/.ssh/:/root/.ssh/
+  phenix-nginx:
+    container_name: pins-nginx
+    build: docker/nginx
+    working_dir: /application
+    restart: on-failure
+    volumes:
+      - .:/application:cached
+      - ./var/nginx_logs:/var/log/nginx
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ~/.ssh/:/root/.ssh/
+    labels:
+      - traefik.http.routers.pins-nginx.rule=Host(`pins.box`)
 
-    php-fpm:
-      container_name: pins-fpm
-      build: docker/php-fpm
-      working_dir: /application
-      restart: on-failure
-      volumes:
-        - .:/application:cached
-        - ./var/log:/application/var/log
-        - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
-        - ~/.ssh/:/root/.ssh/
+  phenix-fpm:
+    container_name: pins-fpm
+    build: docker/php-fpm
+    working_dir: /application
+    restart: on-failure
+    volumes:
+      - .:/application:cached
+      - ./var/log:/application/var/log
+      - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+      - ~/.ssh/:/root/.ssh/
+    labels:
+      - traefik.enable=false
 
 networks:
   default:
