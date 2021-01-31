@@ -38,6 +38,6 @@ class Kernel extends BaseKernel
 
     public function getCacheDir()
     {
-        return "/tmp/pins";
+        return "/tmp/loan";
     }
 }

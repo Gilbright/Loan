@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINER_NAME = pins-fpm
+CONTAINER_NAME = phenix-fpm
 NETWORK_NAME = nirvana
 
 setup:

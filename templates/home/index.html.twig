@@ -3,8 +3,8 @@
 {% block title %} Pin {% endblock %}
 
 {% block body %}
-    <h1>{{ doPlural(pins|length,'Pin') }}</h1>
-    {% for pin in pins %}
+    <h1>{{ doPlural(loan|length,'Pin') }}</h1>
+    {% for pin in loan %}
         <article>
             <h2><a href="{{ path('app_show',{ 'id': pin.id }) }}"> {{ pin.title }}</a></h2>
             <p>{{ pin.description|u.truncate(25, '...',false) }}</p>

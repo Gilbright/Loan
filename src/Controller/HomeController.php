@@ -20,9 +20,9 @@ class HomeController extends AbstractController
      */
     public function index(PinRepository $repository)
     {
-        $pins = $repository->findBy([],array('id' => 'DESC'));
+        $loan = $repository->findBy([],array('id' => 'DESC'));
 
-        return $this->render('home/index.html.twig',compact('pins'));
+        return $this->render('home/index.html.twig',compact('loan'));
     }
 
     /**

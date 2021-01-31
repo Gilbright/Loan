@@ -1,7 +1,7 @@
 version: "3.1"
 services:
   phenix-nginx:
-    container_name: pins-nginx
+    container_name: loan-nginx
     build: docker/nginx
     working_dir: /application
     restart: on-failure
@@ -11,10 +11,10 @@ services:
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ~/.ssh/:/root/.ssh/
     labels:
-      - traefik.http.routers.pins-nginx.rule=Host(`pins.box`)
+      - traefik.http.routers.loan-nginx.rule=Host(`loan.box`)
 
   phenix-fpm:
-    container_name: pins-fpm
+    container_name: loan-fpm
     build: docker/php-fpm
     working_dir: /application
     restart: on-failure
