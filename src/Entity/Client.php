@@ -46,11 +46,6 @@ class Client
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $birthDate;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $address;
 
     /**
@@ -87,6 +82,11 @@ class Client
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="clients")
      */
     private $projectId;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $birthDate;
 
     public function getId(): ?int
     {
@@ -149,18 +149,6 @@ class Client
     public function setNationality(string $nationality): self
     {
         $this->nationality = $nationality;
-
-        return $this;
-    }
-
-    public function getBirthDate(): ?string
-    {
-        return $this->birthDate;
-    }
-
-    public function setBirthDate(string $birthDate): self
-    {
-        $this->birthDate = $birthDate;
 
         return $this;
     }
@@ -270,6 +258,18 @@ class Client
     public function setProjectId(?Project $projectId): self
     {
         $this->projectId = $projectId;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?\DateTimeInterface
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(\DateTimeInterface $birthDate): self
+    {
+        $this->birthDate = $birthDate;
 
         return $this;
     }
