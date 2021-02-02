@@ -3,3 +3,98 @@ $primary: darken(#428bca, 20%);
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
+
+body{
+  font-family: 'Montserrat', sans-serif;
+}
+.hq-template{
+  margin-top: 30px;
+  height: 550px;
+  box-shadow: 0px 0px 20px 0px rgba(0,0,0,.2);
+}
+.login-block{
+  margin: auto;
+  padding: 5%;
+}
+.login-block .logo a{
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.login-block .logo i{
+  color: #3873d2;
+  width: 25px;
+  height: 25px;
+}
+.login-block h3{
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #111;
+}
+.login-block label{
+  text-transform: uppercase;
+  font-weight: 300;
+}
+.login-block input{
+  box-shadow: none !important;
+  outline: none !important;
+  border: none;
+  border-bottom: 2px solid #111 !important;
+  border-radius: 0;
+}
+.login-block .forgot{
+  float: right;
+  color: #9a9a9a;
+}
+.login-block .login-btn{
+  margin-top: 70px;
+}
+.login-block .login-btn a{
+  text-decoration: none;
+  padding: 10px 30px;
+  background-image: linear-gradient(90deg, #95c4ea , #3873d2);
+  border-radius: 20px;
+  color: #fff;
+  text-transform: uppercase;
+}
+.login-block p{
+  color: #9a9a9a;
+  margin-top: 20px;
+
+}
+.login-block p a {
+  color: #9a9a9a;
+  text-transform: uppercase;
+}
+.pic-block{
+  height: 550px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.pic-block .logo{
+  color: #fff;
+  text-decoration: none;
+}
+.pic-block img{
+  height: 100px;
+  width: 100px;
+}
+.copyright{
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+}
+.copyright a{
+  color: #3873d2 !important;
+  font-weight: bold;
+}
+/********************************* media queries***********/
+@media only screen and (max-width: 750px){
+  .pic-block{
+    display: none;
+  }
+}
