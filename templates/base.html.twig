@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
@@ -9,15 +9,6 @@
 </head>
 <body>
 {{ include('extensions/nav.html.twig') }}
-
-
-{% for type, messages in app.flashes %}
-    {% for message in messages %}
-        <div class="alert alert-{{ type }}" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endfor %}
 
 <main role="main" class="container">
     {% block body %}{% endblock %}
