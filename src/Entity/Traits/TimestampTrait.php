@@ -67,6 +67,7 @@ trait TimestampTrait
 
     /**
      * @ORM\PreUpdate()
+     * @ORM\PrePersist()
      */
     public function preUpdatedAt(): void
     {
