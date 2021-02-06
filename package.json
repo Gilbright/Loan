@@ -1,5 +1,6 @@
 {
     "devDependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.2",
         "@symfony/stimulus-bridge": "^1.1.0",
         "@symfony/webpack-encore": "^1.0.0",
         "bootstrap": "^4.6.0",
@@ -22,5 +23,14 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "chart.js": "^2.9.4",
+        "daterangepicker": "^3.1.0",
+        "icheck-bootstrap": "^3.0.1",
+        "jquery-ui": "^1.12.1",
+        "moment": "^2.29.1",
+        "overlayscrollbars": "^1.13.1",
+        "summernote": "^0.8.18"
     }
 }
