@@ -22,18 +22,29 @@ class TestFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $employee = new Employee();
-        $employee->setNameSurname('Marwane Tchassama')
+        $employee1 = new Employee();
+        $employee1->setNameSurname('Gildas Decadjevi')
+            ->setEmail('dodo@gmail.com')
+            ->setPhoneNumber('05385817620')
+            ->setAddress('Ataşehir')
+            ->setPassword($this->passwordEncoder->encodePassword($employee1,'12345'))
+            ->setRoles(['ROLE_EXPERT']);
+
+        $manager->persist($employee1);
+
+        $employee2 = new Employee();
+        $employee2->setNameSurname('Marwane Tchassama')
             ->setEmail('demo@gmail.com')
             ->setPhoneNumber('05385817620')
             ->setAddress('Ataşehir')
-            ->setPassword($this->passwordEncoder->encodePassword($employee,'123456'));
+            ->setPassword($this->passwordEncoder->encodePassword($employee2,'123456'))
+            ->setRoles(['ROLE_BOSS']);
 
-        $manager->persist($employee);
+        $manager->persist($employee2);
 
-        foreach (range(0, 1) as $index) {
+       /* foreach (range(0, 1) as $index) {
             $this->loading($manager);
-        }
+        }*/
 
         $manager->flush();
     }
