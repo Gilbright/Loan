@@ -33,7 +33,7 @@
                     </a>
                 </li>
 
-                {% if is_granted('ROLE_SECRETAIRE') %}
+                {% if is_granted('ROLE_USER') %}
                     {{ include('extensions/admin/role/secretaire.html.twig') }}
                 {% elseif is_granted('ROLE_EXPERT') %}
                     {{ include('extensions/admin/role/expert.html.twig') }}
