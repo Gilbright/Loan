@@ -4,6 +4,7 @@ const $ = require('jquery');
 
 require('bootstrap');
 
+import './css/admin.scss';
 require('bootstrap/js/dist/popover');
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
@@ -14,12 +15,21 @@ require('daterangepicker');
 require('jquery-ui');
 require('chart.js');
 require('moment');
-require('bs-stepper')
+require('datatables.net-buttons-bs4');
+require('datatables');
+require('datatables.net-responsive-bs4');
+require('inputmask/dist/jquery.inputmask.min.js')
 
-document.addEventListener('DOMContentLoaded', function () {
-    window.stepper = new Stepper(document.querySelector('.bs-stepper'))
-});
+require('bs-custom-file-input/dist/bs-custom-file-input.min.js');
+
+//Datemask dd/mm/yyyy
+$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+$('[data-mask]').inputmask();
+
+//bs-custom input file for upload
+module.exports = function () {
+    bsCustomFileInput.init();
+};
 
 import './styles/adminlte.scss';
-
 
