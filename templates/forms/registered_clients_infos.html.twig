@@ -31,7 +31,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="card-title" >Informations des membres du groupe (Veuillez inserer les informations du leader de l'equipe en premier.)</h3>
+                                    <h3 class="card-title" >Informations des membres du groupe (Veuillez inserer les informations du leader de l'equipe en premier).</h3>
                                 </div>
                                 <div class="col">
                                     <button type="submit" class="btn btn-info float-right">Ajouter un membre</button>
@@ -40,10 +40,53 @@
                         </div>
 
                         <!--LE tableau des data des clients du team -->
-                        <div class="card-body">
+                        <div class="card-body table-responsive p-0">
+                            {% set clientsData = true %}
+                            {% if clientsData %}
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nom et prenoms</th>
+                                        <th>Date de naissance</th>
+                                        <th>Genre</th>
+                                        <th>Profession</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>183</td>
+                                        <td>John Doe</td>
+                                        <td>11-7-2014</td>
+                                        <td><span class="tag tag-success">Approved</span></td>
+                                        <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>219</td>
+                                        <td>Alexander Pierce</td>
+                                        <td>11-7-2014</td>
+                                        <td><span class="tag tag-warning">Pending</span></td>
+                                        <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>657</td>
+                                        <td>Bob Doe</td>
+                                        <td>11-7-2014</td>
+                                        <td><span class="tag tag-primary">Approved</span></td>
+                                        <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>175</td>
+                                        <td>Mike Doe</td>
+                                        <td>11-7-2014</td>
+                                        <td><span class="tag tag-danger">Denied</span></td>
+                                        <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            {% endif %}
                         </div>
                         <div class="card-footer">
-                            {% set clientsData = [] %}
                             {% if clientsData %}
                                 <button type="submit" class="btn btn-info float-right">Enregister et continuer</button>
                             {% endif %}

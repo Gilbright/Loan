@@ -14,7 +14,7 @@ class RegisterController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('forms/register_client.html.twig');
+        return $this->render('forms/registered_project_clients.html.twig');
     }
 
 
