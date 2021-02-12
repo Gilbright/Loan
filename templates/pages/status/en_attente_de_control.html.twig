@@ -1,0 +1,72 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>General Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">General Form</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+
+        <div class=" container-fluid">
+
+            <div class="row">
+                <div class="col">
+                    <div class="app-card app-card-orders-table shadow-sm mb-5">
+                        <div class="app-card-body">
+                            <div class="table-responsive">
+                                <table class="table text-left">
+                                    <thead>
+                                    <tr>
+                                        <th class="cell">Projet Id</th>
+                                        <th class="cell">Nom du projet </th>
+                                        <th class="cell">Leader du projet</th>
+                                        <th class="cell">Date</th>
+                                        <th class="cell">Statut</th>
+                                        <th class="cell">Montant voulu</th>
+                                        <th class="cell"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% set  waitingData = [1, 2, 3, 4, 5, 6, 7] %}
+                                        {% for data in waitingData %}
+                                            <tr>
+                                                <td class="cell">#15346</td>
+                                                <td class="cell"><span class="truncate">Lorem ipsum dolor sit amet eget volutpat erat</span></td>
+                                                <td class="cell">John Sanders</td>
+                                                <td class="cell"><span>17 Oct</span><span class="note">2:16 PM</span></td>
+                                                <td class="cell"><span class="badge badge-pill bg-warning">EN ATTENTE DE CONTROLE</span></td>
+                                                <td class="cell">$259.35</td>
+                                                <td class="cell"><button type="submit" class="btn btn-info btn-sm"><i class="fa fa-dot-circle-o"></i>
+                                                        Verifier </button></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div><!--//table-responsive-->
+
+                        </div><!--//app-card-body-->
+                    </div><!--//tab-content-->
+                </div>
+            </div><!--//app-content-->
+
+        </div><!--//app-wrapper-->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+
