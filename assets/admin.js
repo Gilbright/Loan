@@ -15,10 +15,13 @@ require('daterangepicker');
 require('jquery-ui');
 require('chart.js');
 require('moment');
-require('datatables.net-buttons-bs4');
-require('datatables');
-require('datatables.net-responsive-bs4');
+
+require('datatables/media/js/jquery.dataTables.min.js')
+require('datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')
+require('datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js')
+
 require('inputmask/dist/jquery.inputmask.min.js')
+require('datatables.net-dt')();
 
 require('bs-custom-file-input/dist/bs-custom-file-input.min.js');
 
@@ -33,3 +36,9 @@ module.exports = function () {
 
 import './styles/adminlte.scss';
 
+$(function () {
+    $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+});

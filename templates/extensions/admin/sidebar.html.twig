@@ -33,10 +33,12 @@
                     </a>
                 </li>
 
-                {% if is_granted('ROLE_USER') %}
+                <!-- A revoir le yonlendirme en fonction du user-->
+                {% if is_granted('ROLE_EXPERT') %}
+                {{ include('extensions/admin/role/expert.html.twig') }}
+
+                {% elseif is_granted('ROLE_USER') %}
                     {{ include('extensions/admin/role/secretaire.html.twig') }}
-                {% elseif is_granted('ROLE_EXPERT') %}
-                    {{ include('extensions/admin/role/expert.html.twig') }}
                 {% elseif is_granted('ROLE_TRESORIER') %}
                     {{ include('extensions/admin/role/tresorier.html.twig') }}
                 {% elseif is_granted('ROLE_BOSS') %}

@@ -31,6 +31,7 @@
         "chart.js": "^2.9.4",
         "datatables": "^1.10.18",
         "datatables.net-buttons-bs4": "^1.6.5",
+        "datatables.net-dt": "^1.10.23",
         "datatables.net-responsive-bs4": "^2.2.7",
         "daterangepicker": "^3.1.0",
         "icheck-bootstrap": "^3.0.1",
