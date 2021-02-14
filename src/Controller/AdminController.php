@@ -18,7 +18,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/attente_etude/{projectId}", name="app-view")
+     * @Route("/attente_ee/{projectId}", name="app-view")
      * @param string|null $projectId
      * @return Response
      */
@@ -39,7 +39,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/attente_etude/{projectId}", name="app-view2")
+     * @Route("/attente_etude/{projectId}", name="app-attente-etude-view")
      * @param string|null $projectId
      * @return Response
      */
@@ -47,6 +47,44 @@ class AdminController extends AbstractController
     {
         return $this->render('pages/status/en_attente_etude.html.twig');
     }
+
+    /**
+     * @Route("/analysis_on_going", name="app-view3")
+     * @return Response
+     */
+    public function analysisOnGoing(): Response
+    {
+        return $this->render('pages/status/analysis_on_going.html.twig');
+    }
+
+    /**
+     * @Route("/interview_step", name="app-interview-view")
+     * @return Response
+     */
+    public function interviewStep(): Response
+    {
+        return $this->render('pages/status/interview_step.html.twig');
+    }
+
+    /**
+     * @Route("/reanalyse", name="app-reanalyse-view")
+     * @return Response
+     */
+    public function reanalyze(): Response
+    {
+        return $this->render('pages/status/to_be_reanalysed.html.twig');
+    }
+
+
+    /**
+     * @Route("/manager_analysis", name="app-manager-view")
+     * @return Response
+     */
+    public function managerAnalysis(): Response
+    {
+        return $this->render('pages/status/manager_analysis.html.twig');
+    }
+
 
 
 }

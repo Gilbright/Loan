@@ -9,17 +9,20 @@
                 </div>
             </div>
             <br/>
-            <div class="row">
-                <div class="col">
-                    <!-- textarea -->
-                    <div class="form-group">
-                        <textarea class="form-control" rows="3" placeholder="Entrer ..."></textarea>
+            <form type="POST">
+                <div class="row">
+                    <div class="col">
+                        <!-- textarea -->
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" placeholder="Entrer ...(Dans le cas d'un entretien veuillez inserer la date
+                            de l'entretien et n'oubliez pas d'jouter vos notes pendant et apres l'entretien)."></textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
-            </div>
+                <div class="row">
+                    <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
+                </div>
+            </form>
         </div>
 
         <!--note -->
@@ -34,18 +37,36 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="btn-group w-100">
-                    <button class="btn btn-success col" onclick="location.href='{{ path('app_secretaire_view') }}'">
+
+                    {% set projectStatus = 'interview_step' %}
+                    {% if projectStatus == 'interview_step' %}
+                        {% set buttonValidationType = 'Valider definitivement' %}
+                        {% set buttonContinuationType = "Continuer l'evaluation de l'entretien apres"  %}
+                        <!-- We have to change this two because they are related to interview continuation and validation. -->
+                        {% set validationLink = "app-interview-view" %}
+                        {% set continuationLink = 'app-attente-etude-view' %}
+
+                    {% else %}
+                        {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
+                        {% set buttonContinuationType = "Continuer l'etude plus tard"  %}
+                        {% set validationLink = "app-interview-view" %}
+                        {% set continuationLink = 'app-attente-etude-view' %}
+                    {% endif %}
+
+                    <a type="button" class="btn btn-success col" href="{{ path( validationLink ) }}" >
                         <i class="fas fa-plus"></i>
-                        <span>Valider pour l'etape d'entretien</span>
-                    </button>
-                    <button type="reset" class="btn btn-warning col"  onclick="location.href='{{ path('app_secretaire_view') }}'">
-                        <i class="fas fa-times-circle"></i>
-                        <span>Continuer l'etude plus tard</span>
-                    </button>
-                    <button type="reset" class="btn btn-danger col"  onclick="location.href='{{ path('app_secretaire_view') }}'">
+                        <span>{{ buttonValidationType }}</span>
+                    </a>
+                    <a type="button" class="btn btn-warning col" href="{{ path(continuationLink, {projectId: 'ph23'}) }}" >
+                        <i class="fas fa-plus"></i>
+                        <span>{{ buttonContinuationType }}</span>
+                    </a>
+
+                    <a type="button" class="btn btn-danger col" href="{{ path('app_secretaire_view') }}" >
                         <i class="fas fa-times-circle"></i>
                         <span>Rejeter le projet</span>
-                    </button>
+                    </a>
+
                 </div>
             </div>
 

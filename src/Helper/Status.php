@@ -14,7 +14,7 @@ class Status
 
     public const INTERVIEW_STEP = 'ETAPE D ENTRETIEN';
 
-    public const POST_INTERVIEW_STEP = 'POST ENTRETIEN';
+    //public const POST_INTERVIEW_STEP = 'POST ENTRETIEN'; // A revoir --> enlevable
 
     public const MANAGER_ANALYSIS = 'ANALYSE DU MANAGER';
 

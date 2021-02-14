@@ -1,14 +1,27 @@
 {% extends 'pages/base_project_clients.html.twig' %}
 
-<!-- Ajouter une Note -->
 {% block note_block %}
     <div class="card {{ statusData[0] }}">
         <div class="card-header">
             <div class="row">
                 <div class="col">
-                    <h3 class="card-title" >Ajouter une Note</h3>
+                    <h3 class="card-title">Ajouter une Note</h3>
                 </div>
             </div>
+            <br/>
+            <form type="POST">
+                <div class="row">
+                    <div class="col">
+                        <!-- textarea -->
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" placeholder="Entrer ..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
+                </div>
+            </form>
         </div>
 
         <!--note -->
@@ -18,11 +31,46 @@
     </div>
 {% endblock %}
 
+
 {% block footer_block %}
     <div class="card-footer">
-        <a href="#">
-            <button type="button" class="btn btn-info float-right">Valider</button>
-        </a>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="btn-group w-100">
+
+                    {% set projectStatus = 'etape_entretien' %}
+                    {% if projectStatus != 'rejeté' %}
+                        {% set buttonValidationType = 'Valider definitivement' %}
+                        {% set buttonContinuationType = "Continuer l'evaluation apres"  %}
+
+                        {% set validationLink = "app-interview-view" %}
+                        {% set continuationLink = 'app-attente-etude-view' %}
+
+                    {% else %}
+                        {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
+                        {% set buttonContinuationType = "Continuer l'etude plus tard"  %}
+                        {% set validationLink = "app-interview-view" %}
+                        {% set continuationLink = 'app-attente-etude-view' %}
+                    {% endif %}
+
+                    <a type="button" class="btn btn-success col" href="{{ path( validationLink ) }}" >
+                        <i class="fas fa-plus"></i>
+                        <span>{{ buttonValidationType }}</span>
+                    </a>
+                    <a type="button" class="btn btn-warning col" href="{{ path(continuationLink, {projectId: 'ph23'}) }}" >
+                        <i class="fas fa-plus"></i>
+                        <span>{{ buttonContinuationType }}</span>
+                    </a>
+
+                    <a type="button" class="btn btn-danger col" href="{{ path('app_secretaire_view') }}" >
+                        <i class="fas fa-times-circle"></i>
+                        <span>Rejeter le projet</span>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
     </div>
+
 {% endblock %}
-<!-- /.card -->
