@@ -1,0 +1,77 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>General Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">General Form</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class=" container-fluid">
+
+            <div class="row">
+                <div class="col">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="card-title" >Details Financiers</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--LE body du tableau des notes du projet -->
+                        <div class="card-body table-responsive p-0">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ProjetId</th>
+                                    <th>Type</th>
+                                    <th>Montant</th>
+                                    <th>Fait par</th>
+                                    <th>Montant restant a envoyer</th>
+                                    <th>Montant restant a reçevoir</th>
+                                    <th>Notes</th>
+                                    <th>Dates d'operation</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set notesData = [1,2,3,4,5,6,7,8,9] %}
+                                {% for note in notesData %}
+                                    <tr>
+                                        <td>ph12324fjtrs</td>
+                                        <td>Entrant</td>
+                                        <td>1000000</td>
+                                        <td>G D J</td>
+                                        <td>250000</td>
+                                        <td>0.0</td>
+                                        <td>Le payement debudeta en fin Juin</td>
+                                        <td>12.01.2021</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div><!--//app-content-->
+
+        </div><!--//app-wrapper-->
+    </section>
+    <!-- /.content -->
+
+
+{% endblock %}

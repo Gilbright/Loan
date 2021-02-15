@@ -53,16 +53,17 @@
                         {% set continuationLink = 'app-attente-etude-view' %}
                     {% endif %}
 
-                    <a type="button" class="btn btn-success col" href="{{ path( validationLink ) }}" >
+                    <!-- burda dashborda yönlendireceğiz gerisi backend -->
+                    <a type="button" class="btn btn-success col" href="#" >
                         <i class="fas fa-plus"></i>
-                        <span>{{ buttonValidationType }}</span>
+                        <span>Valider definitivement</span>
                     </a>
-                    <a type="button" class="btn btn-warning col" href="{{ path(continuationLink, {projectId: 'ph23'}) }}" >
+                    <a type="button" class="btn btn-warning col" href="{{ path('app-manager-view', {projectId: 'ph23'}) }}" >
                         <i class="fas fa-plus"></i>
-                        <span>{{ buttonContinuationType }}</span>
+                        <span>Continuer l'analyse apres</span>
                     </a>
-
-                    <a type="button" class="btn btn-danger col" href="{{ path('app_secretaire_view') }}" >
+                    <!-- burda dashborda yönlendireceğiz gerisi backend -->
+                    <a type="button" class="btn btn-danger col" href="#" >
                         <i class="fas fa-times-circle"></i>
                         <span>Rejeter le projet</span>
                     </a>
