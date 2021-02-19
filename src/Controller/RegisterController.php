@@ -23,7 +23,7 @@ class RegisterController extends AbstractController
      */
     public function index1(): Response
     {
-        return $this->render('pages/statusRedirections/secretaire_view.html.twig');
+        return $this->render('secretary_view.html.twig');
     }
 
     /**
@@ -55,7 +55,7 @@ class RegisterController extends AbstractController
      */
     public function index4(): Response
     {
-        return $this->render('pages/statusRedirections/tresorier_view.html.twig');
+        return $this->render('accountant_view.html.twig');
     }
 
 }

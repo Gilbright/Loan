@@ -18,6 +18,20 @@
 
 
     {% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('admin') }}
+        {{ encore_entry_script_tags('stepper') }}
+
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+            $.widget.bridge('uibutton', $.ui.button)
+        </script>
+
+        <!-- jQuery Knob Chart -->
+        <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+
+        <script src="dist/js/pages/dashboard.js"></script>
+    {% endblock %}
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -30,24 +44,8 @@
         </div>
 
         {{ include('extensions/admin/footer.html.twig') }}
-        {{ include('extensions/admin/control-sidebar.html.twig') }}
     </div>
 
 
-
-{% block javascripts %}
-    {{ encore_entry_script_tags('admin') }}
-    {{ encore_entry_script_tags('stepper') }}
-
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
-
-    <!-- jQuery Knob Chart -->
-    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-
-    <script src="dist/js/pages/dashboard.js"></script>
-{% endblock %}
 </body>
 </html>
