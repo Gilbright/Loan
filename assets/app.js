@@ -7,7 +7,7 @@
 
 // any CSS you import will output into a single css file (app.scss in this case)
 import './styles/app.scss';
-
+import './login1';
 // start the Stimulus application
 import './bootstrap';
 
@@ -21,7 +21,7 @@ require('bootstrap');
 
 // or you can include specific pieces
 // require('bootstrap/js/dist/tooltip');
- require('bootstrap/js/dist/popover');
+require('bootstrap/js/dist/popover');
 
 // require the JavaScript
 require('bootstrap-star-rating');

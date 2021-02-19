@@ -1,0 +1,77 @@
+{% extends 'pages/base_project_clients.html.twig' %}
+
+{% block note_block %}
+    <div class="card {{ statusData[0] }}">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h3 class="card-title">Ajouter une Note</h3>
+                </div>
+            </div>
+            <br/>
+            <form type="POST">
+                <div class="row">
+                    <div class="col">
+                        <!-- textarea -->
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" placeholder="Entrer ..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+
+        <!--note -->
+        <div class="card-body table-responsive p-0">
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footer_block %}
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="btn-group w-100">
+
+                    {% set projectStatus = 'etape_entretien' %}
+                    {% if projectStatus != 'rejeté' %}
+                        {% set buttonValidationType = 'Valider definitivement' %}
+                        {% set buttonContinuationType = "Continuer l'evaluation apres"  %}
+
+                        {% set validationLink = "app-interview-view" %}
+                        {% set continuationLink = 'app-attente-etude-view' %}
+
+                    {% else %}
+                        {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
+                        {% set buttonContinuationType = "Continuer l'etude plus tard"  %}
+                        {% set validationLink = "app-interview-view" %}
+                        {% set continuationLink = 'app-attente-etude-view' %}
+                    {% endif %}
+
+                    <!-- burda dashborda yönlendireceğiz gerisi backend -->
+                    <a type="button" class="btn btn-success col" href="#" >
+                        <i class="fas fa-plus"></i>
+                        <span>Valider definitivement</span>
+                    </a>
+                    <a type="button" class="btn btn-warning col" href="{{ path('app-manager-view', {projectId: 'ph23'}) }}" >
+                        <i class="fas fa-plus"></i>
+                        <span>Continuer l'analyse apres</span>
+                    </a>
+                    <!-- burda dashborda yönlendireceğiz gerisi backend -->
+                    <a type="button" class="btn btn-danger col" href="#" >
+                        <i class="fas fa-times-circle"></i>
+                        <span>Rejeter le projet</span>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
