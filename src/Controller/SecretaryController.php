@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\OptionsResolver\ProjectResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ class SecretaryController extends AbstractController
     {
         if ($request->isMethod('POST')){
 
-            dd($request->request->all());
+            dd(ProjectResolver::resolve($request->request->all()));
         }
         return $this->render('forms/register_project.html.twig');
 
