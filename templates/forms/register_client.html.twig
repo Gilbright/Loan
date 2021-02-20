@@ -39,7 +39,7 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>1 - Nom et prenoms</label>
-                                            <input type="text" class="form-control" placeholder="Entrer ...">
+                                            <input type="text" class="form-control" name="nameSurname" placeholder="Entrer ...">
                                         </div>
                                     </div>
                                 </div>
@@ -51,7 +51,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                            <input type="text" name="birthDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -84,7 +84,7 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>4 - Nationalité</label>
-                                            <input type="text" class="form-control" placeholder="Entrer ...">
+                                            <input type="text" name="nationality" class="form-control" placeholder="Entrer ...">
                                         </div>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                 </div>
-                                                <input type="text" class="form-control" data-inputmask='"mask": "99 - 99 - 99 - 99"' data-mask>
+                                                <input type="text" name="phoneNumber" class="form-control" data-inputmask='"mask": "99 - 99 - 99 - 99"' data-mask>
                                             </div>
 
                                         </div>
@@ -115,7 +115,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                                 </div>
-                                                <input type="email" class="form-control" placeholder="Email">
+                                                <input type="email" name="email" class="form-control" placeholder="Email">
                                             </div>
 
                                         </div>
@@ -128,7 +128,7 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>7 - Profession</label>
-                                            <input type="text" class="form-control" placeholder="Entrer ...">
+                                            <input type="text" name="profession" class="form-control" placeholder="Entrer ...">
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>8 - Revenu mensuel</label>
-                                            <input type="number" class="form-control" placeholder="Entrer ...">
+                                            <input type="number" name="monthlyIncome" class="form-control" placeholder="Entrer ...">
                                         </div>
                                     </div>
                                 </div>
@@ -148,7 +148,7 @@
                                         <!-- textarea -->
                                         <div class="form-group">
                                             <label>9 - Addresse de  la personne</label>
-                                            <textarea class="form-control" rows="3" placeholder="Entrer ..."></textarea>
+                                            <textarea class="form-control" name="address" rows="3" placeholder="Entrer ..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -158,7 +158,7 @@
                                         <!-- textarea -->
                                         <div class="form-group">
                                             <label>10 - Numero de la piece d'identité</label>
-                                            <input type="text" class="form-control" placeholder="Entrer ...">
+                                            <input type="text" name="idNumber" class="form-control" placeholder="Entrer ...">
                                         </div>
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@
 
 
                                             <div class="icheck-primary d-inline">
-                                                <input type="checkbox" id="checkboxPrimary3" >
+                                                <input type="checkbox" name="confirm" id="checkboxPrimary3" >
                                                 <label for="checkboxPrimary3">
                                                     Je confiirme sur l'honneur la verracité des informations entrées.
                                                 </label>
