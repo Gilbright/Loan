@@ -4,17 +4,20 @@
 namespace App\Service\OptionsResolver;
 
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolver as SymfonyOptionsResolver;
 
 class ClientResolver extends AbstractOptionResolver
 {
-    public static function _resolve(array $data)
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public static function _resolve($data)
     {
-        $data = (new OptionsResolver())
+        $data = (new SymfonyOptionsResolver())
             ->setRequired([
                 'nameSurname',
                 'birthDate',
-                'gender',
                 'nationality',
                 'phoneNumber',
                 'email',
@@ -26,7 +29,6 @@ class ClientResolver extends AbstractOptionResolver
                 ])
             ->setAllowedTypes('nameSurname', 'string')
             ->setAllowedTypes('birthDate', ['string', 'DateTime'])
-            ->setAllowedTypes('gender', ['string', 'int', 'bool'])
             ->setAllowedTypes('nationality', 'string')
             ->setAllowedTypes('phoneNumber',['string', 'int'] )
             ->setAllowedTypes('email', 'string')
@@ -37,5 +39,6 @@ class ClientResolver extends AbstractOptionResolver
             ->setAllowedTypes('confirm', ['string', 'int'])
             ->resolve($data)
         ;
+        return $data;
     }
 }
