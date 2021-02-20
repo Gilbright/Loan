@@ -10,12 +10,35 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecretaryController extends AbstractController
 {
     /**
-     * @Route("/recent", name="app_recent")
+     * @Route("/admin", name="admin")
+     */
+    public function adminGo(): Response
+    {
+        return $this->render('pages/dashboard.html.twig');
+    }
+
+    /**
+     * @Route("/secretary/registerProject", name="app_sec_register_project")
      * @param Request $request
      * @return Response
      */
     public function index(Request $request): Response
     {
-        return $this->render('tables/recent_projects.html.twig');
+        if ($request->isMethod('POST')){
+
+            dd($request->request->all());
+        }
+        return $this->render('forms/register_project.html.twig');
+
+    }
+
+    /**
+     * @Route("/secretary/waintingControl", name="app_sec_waiting_control")
+     * @param Request $request
+     * @return Response
+     */
+    public function secWaitingControl (Request $request): Response
+    {
+        return $this->render('pages/status/sec_waiting_for_control.html.twig');
     }
 }

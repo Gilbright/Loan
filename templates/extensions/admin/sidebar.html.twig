@@ -35,11 +35,10 @@
 
                 <!-- A revoir le yonlendirme en fonction du user-->
 
-                {% if is_granted('ROLE_BOSS') %}
-                {{ include('extensions/admin/role/boss.html.twig') }}
-
-                {% elseif is_granted('ROLE_USER') %}
+                {% if is_granted('ROLE_USER') and is_granted('ROLE_SECRETARY') %}
                     {{ include('extensions/admin/role/secretaire.html.twig') }}
+                {% elseif is_granted('ROLE_BOSS') %}
+                    {{ include('extensions/admin/role/boss.html.twig') }}
                 {% elseif is_granted('ROLE_TRESORIER') %}
                     {{ include('extensions/admin/role/tresorier.html.twig') }}
                 {% elseif is_granted('ROLE_EXPERT') %}

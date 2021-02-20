@@ -9,13 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
-    /**
-     * @Route("/admin", name="admin")
-     */
-    public function index(): Response
-    {
-        return $this->render('pages/status/bos_manager_analysis.html.twig');
-    }
 
     /**
      * @Route("/attente_ee/{projectId}", name="app-view")

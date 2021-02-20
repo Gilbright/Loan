@@ -8,7 +8,6 @@
     {% endblock %}
 </head>
 <body>
-{{ include('extensions/nav.html.twig') }}
 
 <main role="main" class="container">
     {% block body %}{% endblock %}
@@ -16,6 +15,5 @@
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
 {% endblock %}
-{{ include('extensions/footer.html.twig') }}
 </body>
 </html>
