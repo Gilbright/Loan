@@ -8,9 +8,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ClientResolver extends AbstractOptionResolver
 {
-    public static function _resolve(array $client)
+    public static function _resolve(array $data)
     {
-        $client = (new OptionsResolver())
+        $data = (new OptionsResolver())
             ->setRequired([
                 'nameSurname',
                 'birthDate',
@@ -35,7 +35,7 @@ class ClientResolver extends AbstractOptionResolver
             ->setAllowedTypes('address', 'string')
             ->setAllowedTypes('idNumber', ['string', 'int'])
             ->setAllowedTypes('confirm', ['string', 'int'])
-            ->resolve($client)
+            ->resolve($data)
         ;
     }
 }
