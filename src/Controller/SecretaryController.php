@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Client;
+use App\Helper\Status;
 use App\Service\ClientManager;
+use App\Service\NoteManager;
 use App\Service\OptionsResolver\ProjectResolver;
 use App\Service\ProjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,12 +33,39 @@ class SecretaryController extends AbstractController
     public function index(Request $request, ProjectManager $projectManager): Response
     {
         if ($request->isMethod('POST')){
-            $projectManager->execute($request->request->all());
+            $projectId = $projectManager->execute($request->request->all());
 
-            return $this->redirectToRoute('app_sec_list_client');
+            return $this->redirectToRoute('app_sec_list_client',['projectId' => $projectId]);
         }
 
         return $this->render('forms/register_project.html.twig');
+    }
+
+    /**
+     * @Route("/secretary/clients/{projectId}", name="app_sec_list_client")
+     * @param Request $request
+     * @param ClientManager $clientManager
+     * @param string $projectId
+     * @return Response
+     */
+    public function listClient(Request $request, ClientManager $clientManager, string $projectId, EntityManagerInterface $entityManager): Response
+    {
+        $clients = $clientManager->getClients($projectId);
+
+        if ($request->isMethod('POST')){
+            /** @var Client $teamLeadClient */
+            $teamLeadClient = $clientManager->getClientById(current($clients)['id']);
+            $teamLeadClient->setIsTeamLead(true);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin');
+        }
+
+
+        return $this->render('forms/registered_clients_infos.html.twig',[
+            'clientsData' => $clients,
+            'projectId' => $projectId
+        ]);
     }
 
     /**
@@ -42,39 +73,79 @@ class SecretaryController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function secWaitingControl (Request $request): Response
+    public function secWaitingControl (ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        return $this->render('pages/status/sec_waiting_for_control.html.twig');
-    }
+        $projects = $projectManager->getProjectsByStatus(Status::SEC_WAITING_FOR_CONTROL);
+        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
-    /**
-     * @Route("/secretary/clients}", name="app_sec_list_client")
-     * @param ProjectManager $projectManager
-     * @param ClientManager $clientManager
-     * @return Response
-     */
-    public function listClient(ProjectManager $projectManager, ClientManager $clientManager): Response
-    {
-        $clients = $clientManager->getClients($projectManager->getProjectId());
-
-        return $this->render('forms/registered_clients_infos.html.twig',[
-            'clientsData' => $clients
+        return $this->render('pages/status/sec_waiting_for_control.html.twig', [
+            'projects' => $projects,
+            'teamLeads' => $teamLeads
         ]);
     }
 
     /**
-     * @Route("/secretary/registerClient", name="app_sec_register_client")
+     * @Route("/secretary/registerClient/{projectId}", name="app_sec_register_client")
      * @param Request $request
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function registerClient(Request $request, ClientManager $clientManager): Response
+    public function registerClient(Request $request, ClientManager $clientManager, string $projectId): Response
     {
         if ($request->isMethod('POST')){
-             $clientManager->execute($request->request->all());
-            return $this->redirectToRoute('app_sec_list_client');
+             $clientManager->execute($request->request->all(), $projectId);
+            return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
         }
 
         return $this->render('forms/register_client.html.twig');
     }
+
+    /**
+     * @Route("/secretary/view/{projectId}", name="app_sec_view")
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
+     * @param string $projectId
+     * @param Request $request
+     * @param NoteManager $noteManager
+     * @return Response
+     */
+    public function secView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager): Response
+    {
+        $project = $projectManager->getProjectById($projectId);
+        $projectTeam = $clientManager->getClients($projectId);
+        $projectNotes = $noteManager->getNotesByProjectId($projectId);
+
+        if ($request->isMethod('POST')){
+            $data = $request->request->all();
+            $data['project'] = $project;
+
+            $noteManager->execute($data);
+
+            return $this->redirectToRoute('app_sec_view', ['projectId' => $projectId]);
+        }
+        return $this->render('pages/statusRedirections/secretary_view.html.twig',[
+            'project' => $project,
+            'projectTeam' => $projectTeam,
+            'projectNotes' => $projectNotes
+        ]);
+    }
+
+    /**
+     * @Route("/secretary/interview", name="app_sec_interview")
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
+     * @return Response
+     */
+    public function secInsterviewStep (ProjectManager $projectManager, ClientManager $clientManager): Response
+    {
+        $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
+        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+
+        return $this->render('pages/status/sec_interview_step.html.twig', [
+            'projects' => $projects,
+            'teamLeads' => $teamLeads
+        ]);
+    }
+
+
 }

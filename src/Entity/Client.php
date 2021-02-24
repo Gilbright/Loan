@@ -84,9 +84,22 @@ class Client
     private $projectId;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="string")
      */
     private $birthDate;
+
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $profession;
+
+    /**
+     * @ORM\Column(type="string", length=55)
+     */
+    private $gender;
+
+
 
     public function getId(): ?int
     {
@@ -262,14 +275,53 @@ class Client
         return $this;
     }
 
-    public function getBirthDate(): ?\DateTimeInterface
+    public function getBirthDate(): ?string
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(\DateTimeInterface $birthDate): self
+    public function setBirthDate(string $birthDate): self
     {
         $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param $gender
+     * @return $this
+     */
+    public function setGender($gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProfession()
+    {
+        return $this->profession;
+    }
+
+    /**
+     * @param $profession
+     * @return $this
+     */
+    public function setProfession($profession): self
+    {
+        $this->profession = $profession;
 
         return $this;
     }

@@ -1,37 +1,5 @@
 {% extends 'pages/base_project_clients.html.twig' %}
 
-{% block note_block %}
-    <div class="card {{ statusData[0] }}">
-        <div class="card-header">
-            <div class="row">
-                <div class="col">
-                    <h3 class="card-title">Ajouter une Note</h3>
-                </div>
-            </div>
-            <br/>
-            <form type="POST">
-                <div class="row">
-                    <div class="col">
-                        <!-- textarea -->
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3" placeholder="Entrer ...(Dans le cas d'un entretien veuillez inserer la date
-                            de l'entretien et n'oubliez pas d'jouter vos notes pendant et apres l'entretien)."></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
-                </div>
-            </form>
-        </div>
-
-        <!--note -->
-        <div class="card-body table-responsive p-0">
-
-        </div>
-    </div>
-{% endblock %}
-
 {% block footer_block %}
     <div class="card-footer">
         <div class="row">

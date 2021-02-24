@@ -31,7 +31,7 @@
                             <div class="table-responsive">
                                 <table class="table text-left">
                                     <thead>
-                                    <tr>
+                                        <tr>
                                         <th class="cell">Projet Id</th>
                                         <th class="cell">Nom du projet </th>
                                         <th class="cell">Leader du projet</th>
@@ -42,27 +42,25 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% set  waitingData = [1, 2, 3, 4, 5, 6, 7] %}
-                                    {% for data in waitingData %}
-                                        <tr>
-                                            <td class="cell">#15346</td>
-                                            <td class="cell"><span class="truncate">Lorem ipsum dolor sit amet eget volutpat erat</span></td>
-                                            <td class="cell">John Sanders</td>
-                                            <td class="cell"><span>17 Oct</span><span class="note">2:16 PM</span></td>
-                                            <td class="cell"><span class="badge badge-pill bg-warning">EN ATTENTE DE CONTROLE</span></td>
-                                            <td class="cell">$259.35</td>
-                                            <td class="cell">
-                                                {% block button_block %}
-                                                     <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-dot-circle-o"></i>
-                                                        Verifier </button>
-                                                {% endblock %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                    {% for index, project in projects %}
+                                            <tr>
+                                                <td class="cell">{{ project.projectId }}</td>
+                                                <td class="cell"><span class="truncate">{{ project.name }}</span></td>
+                                                <td class="cell">{{ teamLeads[index].nameSurname }}</td>
+                                                <td class="cell"><span>{{ project.updatedAt|date('d-m-Y') }}</span></td>
+                                                <td class="cell"><span class="badge badge-pill bg-warning">{{ project.status }}</span></td>
+                                                <td class="cell">{{ project.amount }}</td>
+                                                <td class="cell">
+                                                    {% block button_block %}
+                                                         <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-dot-circle-o"></i>
+                                                            Verifier </button>
+                                                    {% endblock %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div><!--//table-responsive-->
-
                         </div><!--//app-card-body-->
                     </div><!--//tab-content-->
                 </div>

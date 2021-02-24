@@ -75,9 +75,20 @@ class Project
      */
     private $clients;
 
+    /**
+     * @ORM\Column(type="text", nullable=false)
+     */
+    private $details;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="project")
+     */
+    private $notes;
+
     public function __construct()
     {
         $this->clients = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -242,6 +253,54 @@ class Project
             // set the owning side to null (unless already changed)
             if ($client->getProjectId() === $this) {
                 $client->setProjectId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    /**
+     * @param mixed $details
+     */
+    public function setDetails($details): self
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Note[]
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): self
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes[] = $note;
+            $note->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): self
+    {
+        if ($this->notes->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getProject() === $this) {
+                $note->setProject(null);
             }
         }
 

@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Project;
 use App\Helper\Status;
+use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ProjectResolver;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -14,18 +15,22 @@ class ProjectManager
     /** @var EntityManagerInterface $entityManager */
     private $entityManager;
 
-    private $projectId;
+
+    /**@var ProjectRepository $projectRepository*/
+    private $projectRepository;
 
     /**
      * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
+     * @param ProjectRepository $projectRepository
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ProjectRepository $projectRepository)
     {
         $this->entityManager = $entityManager;
+        $this->projectRepository = $projectRepository;
     }
 
-    public function execute(array $data): void
+    public function execute(array $data): ?string
     {
         $data = ProjectResolver::resolve($data);
 
@@ -39,12 +44,14 @@ class ProjectManager
             ->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths'])
             ->setModalityAmount((float)$data['modalityAmount'])
             ->setAmount((float)$data['amountWanted'])
-            ->setName($data['projectName']);
+            ->setName($data['projectName'])
+            ->setDetails($data['projectDetails'])
+        ;
 
-       /* $this->entityManager->persist($projectEntity);
-        $this->entityManager->flush();*/
+        $this->entityManager->persist($projectEntity);
+        $this->entityManager->flush();
 
-        $this->projectId = $projectEntity->getProjectId();
+        return $projectEntity->getProjectId();
     }
 
     private function repaymentDurationCalculator(array $data): float
@@ -54,19 +61,16 @@ class ProjectManager
         return $data['amountWanted'] / $monthlyPay;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getProjectId()
+    public function getProjectsByStatus(string $status): array
     {
-        return $this->projectId;
+        return $this->projectRepository->findBy(
+            [ 'status' => $status],
+            ['createdAt' => 'DESC']
+        );
     }
 
-    /**
-     * @param mixed $projectId
-     */
-    public function setProjectId($projectId): void
+    public function getProjectById (string $projectId = null)
     {
-        $this->projectId = $projectId;
+        return $this->projectRepository->findOneBy(['projectId' => $projectId]);
     }
 }
