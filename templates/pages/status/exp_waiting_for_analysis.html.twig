@@ -1,11 +1,9 @@
-{% extends 'pages/status/status_base.html.twig' %}
+{% extends '/pages/status/all_status_base.html.twig' %}
 
 {% block button_block %}
-        <a href="{{ path('app-view', {projectId: 'ph32254378329'})  }}">
-            <button type="button" class="btn btn-info btn-sm"  ><i class="fa fa-dot-circle-o"></i>
-             Examiner
-            </button>
-        </a>
+    <a href="{{ path('app_expert_view', {projectId: project.projectId})  }}">
+        <button type="button" class="btn btn-info btn-sm"  ><i class="fa fa-dot-circle-o"></i>
+            Analyser
+        </button>
+    </a>
 {% endblock %}
-
-

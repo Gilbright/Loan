@@ -32,10 +32,10 @@ class SecretaryController extends AbstractController
      */
     public function index(Request $request, ProjectManager $projectManager): Response
     {
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $projectId = $projectManager->execute($request->request->all());
 
-            return $this->redirectToRoute('app_sec_list_client',['projectId' => $projectId]);
+            return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
         }
 
         return $this->render('forms/register_project.html.twig');
@@ -52,7 +52,7 @@ class SecretaryController extends AbstractController
     {
         $clients = $clientManager->getClients($projectId);
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             /** @var Client $teamLeadClient */
             $teamLeadClient = $clientManager->getClientById(current($clients)['id']);
             $teamLeadClient->setIsTeamLead(true);
@@ -62,7 +62,7 @@ class SecretaryController extends AbstractController
         }
 
 
-        return $this->render('forms/registered_clients_infos.html.twig',[
+        return $this->render('forms/registered_clients_infos.html.twig', [
             'clientsData' => $clients,
             'projectId' => $projectId
         ]);
@@ -73,7 +73,7 @@ class SecretaryController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function secWaitingControl (ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function secWaitingControl(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
         $projects = $projectManager->getProjectsByStatus(Status::SEC_WAITING_FOR_CONTROL);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
@@ -92,8 +92,8 @@ class SecretaryController extends AbstractController
      */
     public function registerClient(Request $request, ClientManager $clientManager, string $projectId): Response
     {
-        if ($request->isMethod('POST')){
-             $clientManager->execute($request->request->all(), $projectId);
+        if ($request->isMethod('POST')) {
+            $clientManager->execute($request->request->all(), $projectId);
             return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
         }
 
@@ -115,7 +115,7 @@ class SecretaryController extends AbstractController
         $projectTeam = $clientManager->getClients($projectId);
         $projectNotes = $noteManager->getNotesByProjectId($projectId);
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $data['project'] = $project;
 
@@ -123,7 +123,7 @@ class SecretaryController extends AbstractController
 
             return $this->redirectToRoute('app_sec_view', ['projectId' => $projectId]);
         }
-        return $this->render('pages/statusRedirections/secretary_view.html.twig',[
+        return $this->render('pages/statusRedirections/secretary_view.html.twig', [
             'project' => $project,
             'projectTeam' => $projectTeam,
             'projectNotes' => $projectNotes
@@ -136,7 +136,7 @@ class SecretaryController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function secInsterviewStep (ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function secInsterviewStep(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
         $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
@@ -146,6 +146,5 @@ class SecretaryController extends AbstractController
             'teamLeads' => $teamLeads
         ]);
     }
-
 
 }

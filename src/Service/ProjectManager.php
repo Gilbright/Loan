@@ -73,4 +73,12 @@ class ProjectManager
     {
         return $this->projectRepository->findOneBy(['projectId' => $projectId]);
     }
+
+    public function changeProjectStatus(string $newStatus, string $projectId){
+        $project = $this->getProjectById($projectId);
+
+        $project->setStatus($newStatus);
+
+        $this->entityManager->flush();
+    }
 }

@@ -6,8 +6,8 @@
             <div class="col-lg-12">
                 <div class="btn-group w-100">
 
-                    {% set projectStatus = 'interview_step' %}
-                    {% if projectStatus == 'interview_step' %}
+                    {% set projectStatus = project.status %}
+                    {% if projectStatus == 'ETAPE D ENTRETIEN' %}
                         {% set buttonValidationType = 'Valider definitivement' %}
                         {% set buttonContinuationType = "Continuer l'evaluation de l'entretien apres"  %}
                         <!-- We have to change this two because they are related to interview continuation and validation. -->
@@ -17,20 +17,20 @@
                     {% else %}
                         {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
                         {% set buttonContinuationType = "Continuer l'etude plus tard"  %}
-                        {% set validationLink = "app-interview-view" %}
-                        {% set continuationLink = 'app-attente-etude-view' %}
+                        {% set validationLink = "expert_send_to_interview" %}
+                        {% set continuationLink = 'expert_continue_later' %}
                     {% endif %}
 
-                    <a type="button" class="btn btn-success col" href="{{ path( validationLink ) }}" >
+                    <a type="button" class="btn btn-success col" href="{{ path( validationLink, {projectId: project.projectId} ) }}" >
                         <i class="fas fa-plus"></i>
                         <span>{{ buttonValidationType }}</span>
                     </a>
-                    <a type="button" class="btn btn-warning col" href="{{ path(continuationLink, {projectId: 'ph23'}) }}" >
+                    <a type="button" class="btn btn-warning col" href="{{ path(continuationLink, {projectId: project.projectId}) }}" >
                         <i class="fas fa-plus"></i>
                         <span>{{ buttonContinuationType }}</span>
                     </a>
 
-                    <a type="button" class="btn btn-danger col" href="{{ path('app_secretaire_view') }}" >
+                    <a type="button" class="btn btn-danger col" href="{{ path('expert_reject_project', {projectId: project.projectId}) }}" >
                         <i class="fas fa-times-circle"></i>
                         <span>Rejeter le projet</span>
                     </a>
