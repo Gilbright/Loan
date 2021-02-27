@@ -110,7 +110,7 @@ class AdminController extends AbstractController
      */
     public function managerViewValidatedFinanced(): Response
     {
-        return $this->render('pages/status/validated_financed.html.twig');
+        return $this->render('pages/status/acc_validated_financed.html.twig');
     }
 
     /**
