@@ -26,11 +26,11 @@ class AdminController extends AbstractController
      * @param string|null $projectId
      * @return Response
      */
-    public function attenteControl($projectId): Response
+   /* public function attenteControl($projectId): Response
     {
         return $this->render('pages/status/en_attente_de_control.html.twig');
     }
-
+*/
     /**
      * @Route("/attente_etude/{projectId}", name="app-attente-etude-view")
      * @param string|null $projectId
@@ -51,7 +51,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/interview_step", name="app-interview-view")
+     * @Route("/interview_step...*", name="app-interview-view")
      * @return Response
      */
     public function interviewStep(): Response

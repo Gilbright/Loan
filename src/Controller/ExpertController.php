@@ -20,7 +20,7 @@ class ExpertController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function waitingAnalysis(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function expWaitingAnalysis(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
         $projects = $projectManager->getProjectsByStatus(Status::EXP_WAITING_FOR_ANALYSIS);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
@@ -118,7 +118,9 @@ class ExpertController extends AbstractController
      */
     public function expInterviewStep(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
+        $postInterviewProjects = $projectManager->getProjectsByStatus(Status::EXP_POST_INTERVIEW);
         $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
+        $projects = array_merge($postInterviewProjects, $projects);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
         return $this->render('pages/status/exp_interview_step.html.twig', [
@@ -143,6 +145,27 @@ class ExpertController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route ("/expert/sendToPostInterview/{projectId}", name="expert_post_interview")
+     * @param string $projectId
+     * @param ProjectManager $projectManager
+     */
+    public function expPostInterview(string $projectId, ProjectManager $projectManager)
+    {
+        $projectManager->changeProjectStatus(Status::EXP_POST_INTERVIEW, $projectId);
+        return $this->redirectToRoute('app_exp_waiting_analysis');
+    }
+
+    /**
+     * @Route ("/expert/validateProject/{projectId}", name="expert_validate_project")
+     * @param string $projectId
+     * @param ProjectManager $projectManager
+     */
+    public function expValidateProject (string $projectId, ProjectManager $projectManager)
+    {
+        $projectManager->changeProjectStatus(Status::BOS_MANAGER_ANALYSIS, $projectId);
+        return $this->redirectToRoute('app_exp_waiting_analysis');
+    }
 
     //TODO: The expert must add a note before validating or rejecting any project !!!!!******* TODO !!!!
 

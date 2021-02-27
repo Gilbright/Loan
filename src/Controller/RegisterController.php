@@ -32,11 +32,12 @@ class RegisterController extends AbstractController
      * @Route("/boss_view", name="app_boss_view")
      * @return Response
      */
+/*
     public function index3(): Response
     {
         return $this->render('pages/statusRedirections/boss_view.html.twig');
     }
-
+*/
     /**
      * @Route("/tresorier_view", name="app_tresorier_view")
      * @return Response

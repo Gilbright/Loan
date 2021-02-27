@@ -7,12 +7,12 @@
                 <div class="btn-group w-100">
 
                     {% set projectStatus = project.status %}
-                    {% if projectStatus == 'ETAPE D ENTRETIEN' %}
+                    {% if (projectStatus == 'ETAPE D ENTRETIEN' or projectStatus == 'POST ENTRETIEN') %}
                         {% set buttonValidationType = 'Valider definitivement' %}
                         {% set buttonContinuationType = "Continuer l'evaluation de l'entretien apres"  %}
                         <!-- We have to change this two because they are related to interview continuation and validation. -->
-                        {% set validationLink = "app-interview-view" %}
-                        {% set continuationLink = 'app-attente-etude-view' %}
+                        {% set validationLink = "expert_validate_project" %}
+                        {% set continuationLink = 'expert_post_interview' %}
 
                     {% else %}
                         {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}

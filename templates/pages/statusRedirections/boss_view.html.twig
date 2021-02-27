@@ -1,39 +1,36 @@
 {% extends 'pages/base_project_clients.html.twig' %}
 
-
-
 {% block footer_block %}
     <div class="card-footer">
         <div class="row">
             <div class="col-lg-12">
                 <div class="btn-group w-100">
 
-                    {% set projectStatus = 'etape_entretien' %}
-                    {% if projectStatus != 'rejeté' %}
-                        {% set buttonValidationType = 'Valider definitivement' %}
-                        {% set buttonContinuationType = "Continuer l'evaluation apres"  %}
-
-                        {% set validationLink = "app-interview-view" %}
-                        {% set continuationLink = 'app-attente-etude-view' %}
+                    {% set projectStatus = project.status %}
+                    {% if (projectStatus != 'REJETE') %}
+                        {% set buttonValidationType = 'Valider pour le financement' %}
+                        {% set buttonContinuationType = "Continuer l'analyse du projet plus tard"  %}
+                        <!-- We have to change this two because they are related to interview continuation and validation. -->
+                        {% set validationLink = "expert_validate_project" %}
+                        {% set continuationLink = 'expert_post_interview' %}
 
                     {% else %}
                         {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
                         {% set buttonContinuationType = "Continuer l'etude plus tard"  %}
-                        {% set validationLink = "app-interview-view" %}
-                        {% set continuationLink = 'app-attente-etude-view' %}
+                        {% set validationLink = "expert_send_to_interview" %}
+                        {% set continuationLink = 'expert_continue_later' %}
                     {% endif %}
 
-                    <!-- burda dashborda yönlendireceğiz gerisi backend -->
-                    <a type="button" class="btn btn-success col" href="#" >
+                    <a type="button" class="btn btn-success col" href="{{ path( validationLink, {projectId: project.projectId} ) }}" >
                         <i class="fas fa-plus"></i>
-                        <span>Valider definitivement</span>
+                        <span>{{ buttonValidationType }}</span>
                     </a>
-                    <a type="button" class="btn btn-warning col" href="{{ path('app-manager-view', {projectId: 'ph23'}) }}" >
+                    <a type="button" class="btn btn-warning col" href="{{ path(continuationLink, {projectId: project.projectId}) }}" >
                         <i class="fas fa-plus"></i>
-                        <span>Continuer l'analyse apres</span>
+                        <span>{{ buttonContinuationType }}</span>
                     </a>
-                    <!-- burda dashborda yönlendireceğiz gerisi backend -->
-                    <a type="button" class="btn btn-danger col" href="#" >
+
+                    <a type="button" class="btn btn-danger col" href="{{ path('expert_reject_project', {projectId: project.projectId}) }}" >
                         <i class="fas fa-times-circle"></i>
                         <span>Rejeter le projet</span>
                     </a>
