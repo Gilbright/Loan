@@ -147,4 +147,14 @@ class SecretaryController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route ("/secretary/sendToExpertAnalysis/{projectId}", name="secretary_send_to_exp_analysis")
+     * @param string $projectId
+     * @param ProjectManager $projectManager
+     */
+    public function sendToExpertAnalysis(string $projectId, ProjectManager $projectManager)
+    {
+        $projectManager->changeProjectStatus(Status::EXP_WAITING_FOR_ANALYSIS, $projectId);
+        return $this->redirectToRoute('app_sec_waiting_control');
+    }
 }

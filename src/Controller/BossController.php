@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Helper\Status;
 use App\Service\ClientManager;
+use App\Service\FinanceManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,13 +39,15 @@ class BossController extends AbstractController
      * @param string $projectId
      * @param Request $request
      * @param NoteManager $noteManager
+     * @param FinanceManager $financeManager
      * @return Response
      */
-    public function bossView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager): Response
+    public function bossView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager, FinanceManager $financeManager): Response
     {
         $project = $projectManager->getProjectById($projectId);
         $projectTeam = $clientManager->getClients($projectId);
         $projectNotes = $noteManager->getNotesByProjectId($projectId);
+        $financialDetails = $financeManager->getFinancialDetailsByProjectId($projectId);
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
@@ -58,9 +61,11 @@ class BossController extends AbstractController
         return $this->render('pages/statusRedirections/boss_view.html.twig', [
             'project' => $project,
             'projectTeam' => $projectTeam,
-            'projectNotes' => $projectNotes
+            'projectNotes' => $projectNotes,
+            'financeDetails' => $financialDetails
         ]);
     }
+
 
     /**
      * @Route ("/boss/validateForFinance/{projectId}", name="boss_validate_for_finance")
@@ -97,7 +102,8 @@ class BossController extends AbstractController
 
     /**
      * @Route("/boss/analysisGoingOn", name="app_boss_analysis_going_on")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function bossAnalysisOn(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -113,7 +119,8 @@ class BossController extends AbstractController
 
     /**
      * @Route("/boss/beenValidated", name="app_boss_been_validated")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function bossBeenValidated(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -129,7 +136,8 @@ class BossController extends AbstractController
 
     /**
      * @Route("/boss/validatedFinanced", name="app_boss_validated_financed")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function bossValidatedFinanced (ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -137,7 +145,7 @@ class BossController extends AbstractController
         $projects = $projectManager->getProjectsByStatus(Status::ACC_VALIDATED_FINANCED);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
-        return $this->render('pages/status/acc_validated_financed.html.twig', [
+        return $this->render('pages/status/bos_validated_financed.html.twig', [
             'projects' => $projects,
             'teamLeads' => $teamLeads
         ]);
@@ -145,7 +153,8 @@ class BossController extends AbstractController
 
     /**
      * @Route("/boss/validatedLacking", name="app_boss_validated_lacking")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function bossValidatedLacking (ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -153,7 +162,7 @@ class BossController extends AbstractController
         $projects = $projectManager->getProjectsByStatus(Status::ACC_LACKING_FUND);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
-        return $this->render('pages/status/acc_lacking_fund.html.twig', [
+        return $this->render('pages/status/bos_lacking_fund.html.twig', [
             'projects' => $projects,
             'teamLeads' => $teamLeads
         ]);
@@ -161,7 +170,8 @@ class BossController extends AbstractController
 
     /**
      * @Route("/boss/toReview", name="app_boss_to_review")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function bossToReview(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -177,7 +187,8 @@ class BossController extends AbstractController
 
     /**
      * @Route("/boss/rejectedProjects", name="app_boss_rejected_projects")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function bossRejectedProjects(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -191,7 +202,27 @@ class BossController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route ("/boss/resendToExpert/{projectId}", name="boss_resend_to_expert")
+     * @param string $projectId
+     * @param ProjectManager $projectManager
+     */
+    public function bossResendToExpert(string $projectId, ProjectManager $projectManager)
+    {
+        $projectManager->changeProjectStatus(Status::EXP_WAITING_FOR_ANALYSIS, $projectId);
+        return $this->redirectToRoute('admin');
+    }
 
+    /**
+     * @Route ("/boss/fullReject/{projectId}", name="boss_full_reject")
+     * @param string $projectId
+     * @param ProjectManager $projectManager
+     */
+    public function bossFullReject(string $projectId, ProjectManager $projectManager)
+    {
+        $projectManager->changeProjectStatus(Status::EXP_REJECTED, $projectId);
+        return $this->redirectToRoute('admin');
+    }
 
 
 

@@ -33,6 +33,11 @@ class Note
     private $content;
 
     /**
+    * @ORM\Column(type="string", nullable=false)
+    */
+    private $authorRole;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="notes")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -75,6 +80,25 @@ class Note
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorRole(): string
+    {
+        return $this->authorRole;
+    }
+
+    /**
+     * @param string $authorRole
+     * @return $this
+     */
+    public function setAuthorRole(string $authorRole): self
+    {
+        $this->authorRole = $authorRole;
 
         return $this;
     }

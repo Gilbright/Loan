@@ -7,34 +7,101 @@
                 <div class="btn-group w-100">
 
                     {% set projectStatus = project.status %}
-                    {% if (projectStatus == 'ANALYSE DU MANAGER' or projectStatus == 'ANALYSE DU MANAGER EN COURS') %}
-                        {% set buttonValidationType = 'Valider pour le financement' %}
-                        {% set buttonContinuationType = "Continuer l'analyse du projet plus tard"  %}
-                        <!-- We have to change this two because they are related to interview continuation and validation. -->
-                        {% set validationLink = 'boss_validate_for_finance' %}
-                        {% set continuationLink = 'boss_continue_later' %}
 
-                    {% else %}
-                        {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
-                        {% set buttonContinuationType = "Continuer l'etude plus tard"  %}
-                        {% set validationLink = "expert_send_to_interview" %}
-                        {% set continuationLink = 'expert_continue_later' %}
+                    {% if (projectStatus == 'REJETE') %}
+                        {% block note_block %}
+                        {% endblock %}
                     {% endif %}
 
-                    <a type="button" class="btn btn-success col" href="{{ path( validationLink, {projectId: project.projectId} ) }}" >
-                        <i class="fas fa-plus"></i>
-                        <span>{{ buttonValidationType }}</span>
-                    </a>
-                    <a type="button" class="btn btn-warning col" href="{{ path(continuationLink, {projectId: project.projectId}) }}" >
-                        <i class="fas fa-plus"></i>
-                        <span>{{ buttonContinuationType }}</span>
-                    </a>
+                    {% if projectStatus == 'VALIDE' or projectStatus == 'PROJET MANQUANT DE FONDS' or projectStatus == 'REJETE' %}
+                        <a type="button" class="btn btn-secondary float-right"
+                           href="{{ path('admin') }}">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Quitter</span>
+                        </a>
+                        <!-- list detail Financier -->
+                        {% block finance_detail_block %}
+                            {% if financeDetails %}
+                                <div class="card {{ statusData[0] }}">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h3 class="card-title">Details Financiers du projet</h3>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                    <a type="button" class="btn btn-danger col" href="{{ path('boss_reject_project', {projectId: project.projectId}) }}" >
-                        <i class="fas fa-times-circle"></i>
-                        <span>Rejeter le projet</span>
-                    </a>
+                                    <!--LE body du tableau des finance du projet -->
+                                    <div class="card-body table-responsive p-0">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Auteur</th>
+                                                <th>Type</th>
+                                                <th>Montant</th>
+                                                <th>Montant restant a debourser pour le project</th>
+                                                <th>Montant restant a rembourser</th>
+                                                <th>Date d'ajout</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for financeDetail in financeDetails %}
+                                                <tr>
+                                                    <td>{{ financeDetail.operationExecutor }}</td>
+                                                    <td>{{ financeDetail.type }}</td>
+                                                    <td>{{ financeDetail.amount }}</td>
+                                                    <td>{{ financeDetail.amountLeftToBeSentByUs }}</td>
+                                                    <td>{{ financeDetail.amountLeftToBePaidToUs }}</td>
+                                                    <td>{{ financeDetail.createdAt|date('d-m-Y') }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endblock %}
 
+                    {% else %}
+                        {% if (projectStatus == 'ANALYSE DU MANAGER' or projectStatus == 'ANALYSE DU MANAGER EN COURS') %}
+                            {% set buttonValidationType = 'Valider pour le financement' %}
+                            {% set buttonContinuationType = "Continuer l'analyse du projet plus tard" %}
+                            <!-- We have to change this two because they are related to interview continuation and validation. -->
+                            {% set validationLink = 'boss_validate_for_finance' %}
+                            {% set continuationLink = 'boss_continue_later' %}
+                            {% set rejectLink = 'boss_reject_project' %}
+                        {% elseif (projectStatus == 'PROJET A REVOIR') %}
+                            {% set buttonValidationType = "Renvoyer pour une reetude de l'expert" %}
+                            {% set buttonContinuationType = "Revoir plus tard" %}
+                            {% set validationLink = "boss_resend_to_expert" %}
+                            {% set continuationLink = 'admin' %}
+                            {% set rejectLink = 'boss_full_reject' %}
+                        {% else %}
+                            {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
+                            {% set buttonContinuationType = "Continuer l'etude plus tard" %}
+                            {% set validationLink = "expert_send_to_interview" %}
+                            {% set continuationLink = 'expert_continue_later' %}
+                            {% set rejectLink = 'boss_reject_project' %}
+
+                        {% endif %}
+
+                        <a type="button" class="btn btn-success col"
+                           href="{{ path( validationLink, {projectId: project.projectId} ) }}">
+                            <i class="fas fa-plus"></i>
+                            <span>{{ buttonValidationType }}</span>
+                        </a>
+                        <a type="button" class="btn btn-warning col"
+                           href="{{ path(continuationLink, {projectId: project.projectId}) }}">
+                            <i class="fas fa-plus"></i>
+                            <span>{{ buttonContinuationType }}</span>
+                        </a>
+
+                        <a type="button" class="btn btn-danger col"
+                           href="{{ path(rejectLink, {projectId: project.projectId}) }}">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Rejeter le projet</span>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
 

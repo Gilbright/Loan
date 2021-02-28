@@ -75,8 +75,19 @@
                     </div>
                     <!-- /.card -->
 
-                    <!-- TABLEAU DES NOTES DU PROJET -->
-                    <div class="card {{ statusData[0] }}">
+                    <!-- list detail Financier -->
+                    {% block finance_detail_block %}
+
+                    {% endblock %}
+
+                    <!-- Ajouter un detail Financier -->
+                    {% block finance_block %}
+
+                    {% endblock %}
+
+                    {% if projectNotes %}
+                        <!-- TABLEAU DES NOTES DU PROJET -->
+                        <div class="card {{ statusData[0] }}">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col">
@@ -91,6 +102,7 @@
                                 <thead>
                                 <tr>
                                     <th>Auteur</th>
+                                    <th>Role</th>
                                     <th>Date d'ajout</th>
                                     <th>Note</th>
                                 </tr>
@@ -99,6 +111,7 @@
                                 {% for note in projectNotes %}
                                     <tr>
                                         <td>{{ note.employee.nameSurname }}</td>
+                                        <td>{{ note.authorRole }}</td>
                                         <td>{{ note.updatedAt|date('d-m-Y') }}</td>
                                         <td>{{ note.content }}</td>
                                     </tr>
@@ -107,12 +120,8 @@
                             </table>
                         </div>
                     </div>
+                    {% endif %}
                     <!-- /.card -->
-
-                    <!-- Ajouter une Note -->
-                    {% block finance_block %}
-
-                    {% endblock %}
 
                     <!-- Ajouter une Note -->
                     {% block note_block %}

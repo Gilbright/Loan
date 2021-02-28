@@ -4,7 +4,9 @@
 namespace App\Service;
 
 
+use App\Entity\Employee;
 use App\Entity\Note;
+use App\Helper\RoleTranslator;
 use App\Repository\NoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
@@ -41,9 +43,14 @@ class NoteManager
 
     public function execute (array $data){
         $content = $data['noteContent'];
+        /** @var Employee $employee */
         $employee = $this->security->getUser();
+        $authorRole = current(array_filter($employee->getRoles(), function ($role){
+            return $role !== 'ROLE_USER';
+        }));
 
         $noteEntity = (new Note())
+            ->setAuthorRole(RoleTranslator::translate($authorRole))
             ->setContent($content)
             ->setEmployee($employee)
             ->setProject($data['project']);
@@ -53,14 +60,12 @@ class NoteManager
     }
 
     public function getNotesByProjectId(string $projectId){
-        $result = $this->entityManager->createQueryBuilder()
+        return $this->entityManager->createQueryBuilder()
             ->select('n')
             ->from(Note::class, 'n')
             ->innerJoin('n.project', 'p', Join::WITH, 'p.projectId = :projectId')
             ->setParameter('projectId', $projectId)
-            ->orderBy('n.createdAt', 'DESC')
+            ->orderBy('n.createdAt', 'ASC')
             ->getQuery()->getResult();
-
-        return $result;
     }
 }
