@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class AccountantController
  * @package App\Controller
- * @Security(is_granted('ROLE_USER') and is_granted('ROLE_ACCOUNTANT'))
+ * @Security("is_granted('ROLE_USER') and is_granted('ROLE_ACCOUNTANT')")
  */
 class AccountantController extends AbstractController
 {

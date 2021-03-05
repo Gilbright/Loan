@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class BossController
  * @package App\Controller
- * @Security("is_granted('ROLE_USER') and is_granted('ROLE_BOSS'))
+ * @Security("is_granted('ROLE_USER') and is_granted('ROLE_BOSS')")
  */
 class BossController extends AbstractController
 {

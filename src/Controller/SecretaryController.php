@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class SecretaryController
  * @package App\Controller
- * @Security("is_granted('ROLE_USER') and is_granted('ROLE_SECRETARY'))
+ * @Security("is_granted('ROLE_USER') and is_granted('ROLE_SECRETARY')")
  */
 class SecretaryController extends AbstractController
 {

@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ExpertController
  * @package App\Controller
- * @Security("is_granted('ROLE_USER') and is_granted('ROLE_EXPERT'))
+ * @Security("is_granted('ROLE_USER') and is_granted('ROLE_EXPERT')")
  */
 class ExpertController extends AbstractController
 {
