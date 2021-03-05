@@ -65,6 +65,32 @@ class Employee implements UserInterface
      */
     private $notes;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $idPictureLink;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $idDocumentPictureLink;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $birthDate;
+
+    /**
+     * @ORM\Column(type="string", length=55)
+     */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nationality;
+
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
@@ -226,4 +252,73 @@ class Employee implements UserInterface
 
         return $this;
     }
+
+    public function getIdPictureLink(): ?string
+    {
+        return $this->idPictureLink;
+    }
+
+    public function setIdPictureLink(?string $idPictureLink): self
+    {
+        $this->idPictureLink = $idPictureLink;
+
+        return $this;
+    }
+
+    public function getIdDocumentPictureLink(): ?string
+    {
+        return $this->idDocumentPictureLink;
+    }
+
+    public function setIdDocumentPictureLink(?string $idDocumentPictureLink): self
+    {
+        $this->idDocumentPictureLink = $idDocumentPictureLink;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?string
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(string $birthDate): self
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param $gender
+     * @return $this
+     */
+    public function setGender($gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getNationality(): ?string
+    {
+        return $this->nationality;
+    }
+
+    public function setNationality(string $nationality): self
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
 }

@@ -231,7 +231,12 @@ class BossController extends AbstractController
         return $this->redirectToRoute('admin');
     }
 
-
+    /**
+     * @Route ("/boss/newEmployee", name="app_boss_add_employee")
+     */
+    public function bossAddEmployee(){
+        
+    }
 
 
 

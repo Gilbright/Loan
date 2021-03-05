@@ -5,64 +5,72 @@ namespace App\Service;
 
 
 use App\Entity\Client;
-use App\Repository\ClientRepository;
-use App\Repository\ProjectRepository;
+use App\Entity\Employee;
+use App\Helper\RoleHelper;
+use App\Repository\EmployeeRepository;
 use App\Service\OptionsResolver\ClientResolver;
+use App\Service\OptionsResolver\EmployeeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
-class ClientManager
+class EmployeeManager
 {
     /** @var EntityManagerInterface $entityManager */
     private $entityManager;
 
     /**
-     * @var ClientRepository $clientRepository
+     * @var EmployeeRepository $employeeRepository
      */
-    private $clientRepository;
-
-    /** @var ProjectRepository $projectRepository */
-    private $projectRepository;
+    private $employeeRepository;
 
     /**
      * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
-     * @param ClientRepository $clientRepository
-     * @param ProjectRepository $projectRepository
+     * @param EmployeeRepository $employeeRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, ProjectRepository $projectRepository)
+    public function __construct(EntityManagerInterface $entityManager, EmployeeRepository $employeeRepository)
     {
         $this->entityManager = $entityManager;
-        $this->clientRepository = $clientRepository;
-        $this->projectRepository = $projectRepository;
+        $this->employeeRepository = $employeeRepository;
     }
 
-    public function execute(array $data, string $projectId): void
+    public function execute(array $data): void
     {
-        $data = ClientResolver::resolve($data);
+        $data = EmployeeResolver::resolve($data);
 
-        //find the project by projectID
-        $projectEntity = $this->getProjectById($projectId);
+        $employeeEntity = new Employee();
 
-        $clientEntity = new Client();
-
-        $clientEntity->setProjectId($projectEntity)
-            ->setAddress($data['address'])
+        $employeeEntity->setAddress($data['address'])
             ->setPhoneNumber($data['phoneNumber'])
             ->setEmail($data['email'])
             ->setNameSurname($data['nameSurname'])
             ->setIdDocumentPictureLink("link there")
             ->setIdPictureLink("link here")
             ->setNationality($data['nationality'])
-            ->setIsTeamLead(false)
             ->setGender("M") // TODO: THİS İS THE DEFAULT VERSİON TO BE FİXED LATER
-            ->setProfession($data['profession'])
-            ->setMonthlyIncome($data['monthlyIncome'])
+            ->setRoles($this->roleParser($data['role']))
+            ->setPassword('12345')
             ->setBirthDate($data['birthDate']);
 
-        $this->entityManager->persist($clientEntity);
+        $this->entityManager->persist($employeeEntity);
         $this->entityManager->flush();
 
+    }
+
+    public function roleParser($role): array{
+        switch (strtolower($role)){
+            case 'secretaire':
+                return [RoleHelper::SECRETARY];
+            case 'directeur':
+                return [RoleHelper::BOSS];
+            case 'tresorier':
+                return [RoleHelper::ACCOUNTANT];
+            case 'expert':
+                return [RoleHelper::EXPERT];
+            default:
+                throw new Exception('No Suitable Role Found');
+        }
     }
 
     public function getClients(string $projectId = null): array
@@ -79,13 +87,13 @@ class ClientManager
         return $result;
     }
 
-    public function getClientById (int $clientId)
+    public function getClientById(int $clientId)
     {
         return $this->clientRepository->find($clientId);
     }
 
 
-    public function getProjectById (string $projectId = null)
+    public function getProjectById(string $projectId = null)
     {
         return $this->projectRepository->findOneBy(['projectId' => $projectId]);
     }
@@ -94,8 +102,8 @@ class ClientManager
     {
         $teamLeads = [];
 
-        foreach ($projects as $project){
-            $teamLeads[] =  $this->clientRepository->findOneBy([
+        foreach ($projects as $project) {
+            $teamLeads[] = $this->clientRepository->findOneBy([
                 'projectId' => $project->getId(),
                 'isTeamLead' => 1
             ]);
