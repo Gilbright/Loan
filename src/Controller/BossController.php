@@ -7,18 +7,25 @@ use App\Service\ClientManager;
 use App\Service\FinanceManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class BossController
+ * @package App\Controller
+ * @Security("is_granted('ROLE_USER') and is_granted('ROLE_BOSS'))
+ */
 class BossController extends AbstractController
 {
     //TODO: The BOSS must add a note before validating or rejecting any project !!!!!******* TODO !!!!
 
     /**
      * @Route("/boss/waitingConfirmation", name="app_boss_waiting_confirmation")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function bossWaitingConfirmation(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -72,7 +79,7 @@ class BossController extends AbstractController
      * @param string $projectId
      * @param ProjectManager $projectManager
      */
-    public function bossValidateForFinance (string $projectId, ProjectManager $projectManager)
+    public function bossValidateForFinance(string $projectId, ProjectManager $projectManager)
     {
         $projectManager->changeProjectStatus(Status::BOS_BEEN_VALIDATED, $projectId);
         return $this->redirectToRoute('app_boss_waiting_confirmation');
@@ -94,7 +101,7 @@ class BossController extends AbstractController
      * @param string $projectId
      * @param ProjectManager $projectManager
      */
-    public function bossRejectForReview (string $projectId, ProjectManager $projectManager)
+    public function bossRejectForReview(string $projectId, ProjectManager $projectManager)
     {
         $projectManager->changeProjectStatus(Status::BOS_TO_BE_REANALYZED, $projectId);
         return $this->redirectToRoute('app_boss_waiting_confirmation');
@@ -140,7 +147,7 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossValidatedFinanced (ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossValidatedFinanced(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
         $projects = $projectManager->getProjectsByStatus(Status::ACC_VALIDATED_FINANCED);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
@@ -157,7 +164,7 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossValidatedLacking (ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossValidatedLacking(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
         $projects = $projectManager->getProjectsByStatus(Status::ACC_LACKING_FUND);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);

@@ -6,14 +6,19 @@ use App\Entity\Client;
 use App\Helper\Status;
 use App\Service\ClientManager;
 use App\Service\NoteManager;
-use App\Service\OptionsResolver\ProjectResolver;
 use App\Service\ProjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class SecretaryController
+ * @package App\Controller
+ * @Security("is_granted('ROLE_USER') and is_granted('ROLE_SECRETARY'))
+ */
 class SecretaryController extends AbstractController
 {
     /**
@@ -70,7 +75,8 @@ class SecretaryController extends AbstractController
 
     /**
      * @Route("/secretary/waintingControl", name="app_sec_waiting_control")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function secWaitingControl(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -136,7 +142,7 @@ class SecretaryController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function secInsterviewStep(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function secInterviewStep(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
         $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);

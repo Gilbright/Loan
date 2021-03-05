@@ -6,18 +6,25 @@ use App\Helper\Status;
 use App\Service\ClientManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class ExpertController
+ * @package App\Controller
+ * @Security("is_granted('ROLE_USER') and is_granted('ROLE_EXPERT'))
+ */
 class ExpertController extends AbstractController
 {
     //TODO: The expert must add a note before validating or rejecting any project !!!!!******* TODO !!!!
 
     /**
      * @Route("/expert/waitingAnalysis", name="app_exp_waiting_analysis")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function expWaitingAnalysis(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -97,7 +104,8 @@ class ExpertController extends AbstractController
 
     /**
      * @Route("/expert/analysisOnGoing", name="app_exp_analysis_on_going")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function expAnalysisOn(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -113,7 +121,8 @@ class ExpertController extends AbstractController
 
     /**
      * @Route("/expert/interviewStep", name="app_exp_interview_step")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function expInterviewStep(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -131,7 +140,8 @@ class ExpertController extends AbstractController
 
     /**
      * @Route("/expert/toReview", name="app_exp_to_review")
-     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
      * @return Response
      */
     public function expToReview(ProjectManager $projectManager, ClientManager $clientManager): Response
@@ -161,7 +171,7 @@ class ExpertController extends AbstractController
      * @param string $projectId
      * @param ProjectManager $projectManager
      */
-    public function expValidateProject (string $projectId, ProjectManager $projectManager)
+    public function expValidateProject(string $projectId, ProjectManager $projectManager)
     {
         $projectManager->changeProjectStatus(Status::BOS_MANAGER_ANALYSIS, $projectId);
         return $this->redirectToRoute('app_exp_waiting_analysis');
