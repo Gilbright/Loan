@@ -9,15 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class RegisterController extends AbstractController
 {
     /**
-     * @Route("/readres", name="app_register")
-     * @return Response
-     */
-    public function index(): Response
-    {
-        return $this->render('pages/consult_status.html.twig');
-    }
-
-    /**
      * @Route("/secretaire_view", name="app_secretaire_view")
      * @return Response
      */

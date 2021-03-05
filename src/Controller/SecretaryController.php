@@ -22,14 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecretaryController extends AbstractController
 {
     /**
-     * @Route("/admin", name="admin")
-     */
-    public function adminGo(): Response
-    {
-        return $this->render('pages/dashboard.html.twig');
-    }
-
-    /**
      * @Route("/secretary/registerProject", name="app_sec_register_project")
      * @param Request $request
      * @param ProjectManager $projectManager
