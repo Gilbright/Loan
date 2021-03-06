@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AccountantController extends AbstractController
 {
     /**
-     * @Route("/accountant/waitingConfirmation", name="app_acc_waiting_finance")
+     * @Route("/accountant/waitingForFinance", name="app_acc_waiting_finance")
      * @param ProjectManager $projectManager
      * @param ClientManager $clientManager
      * @return Response
@@ -76,7 +76,7 @@ class AccountantController extends AbstractController
     }
 
     /**
-     * @Route("/acc/ValidatedFinanced", name="app_acc_validated_financed")
+     * @Route("/accountant/ValidatedFinanced", name="app_acc_validated_financed")
      * @param ProjectManager $projectManager
      * @param ClientManager $clientManager
      * @return Response
@@ -93,7 +93,7 @@ class AccountantController extends AbstractController
     }
 
     /**
-     * @Route("/acc/accListLacFund", name="app_acc_list_lac_fund")
+     * @Route("/accountant/accListLacFund", name="app_acc_list_lac_fund")
      * @param ProjectManager $projectManager
      * @param ClientManager $clientManager
      * @return Response

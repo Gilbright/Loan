@@ -38,6 +38,7 @@
                                 <thead>
                                 <tr>
                                     <th>ID du projet</th>
+                                    <th>Nom du projet</th>
                                     <th>Type</th>
                                     <th>Montant</th>
                                     <th>Enregistré par</th>
@@ -51,6 +52,7 @@
                                 {% for financialDetail in financialDetails %}
                                     <tr>
                                         <td>{{ financialDetail.projectId.projectId }}</td>
+                                        <td>{{ financialDetail.projectId.name }}</td>
                                         <td>{{ financialDetail.type | getType(financialDetail.type) }}</td>
                                         <td>{{ financialDetail.amount }}</td>
                                         <td>{{ financialDetail.operationExecutor.nameSurname }}</td>

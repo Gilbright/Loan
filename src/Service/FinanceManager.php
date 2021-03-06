@@ -168,6 +168,6 @@ class FinanceManager
 
     public function getFinancialDetails(): array
     {
-        return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC']);
+        return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC'], 50);
     }
 }
