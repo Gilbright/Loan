@@ -113,8 +113,10 @@
 
 {% block footer_block %}
     <div class="card-footer">
-        <a href="#">
-            <button type="button" class="btn btn-info float-right">Valider</button>
+        <a type="button" class="btn btn-secondary col"
+           href="{{ path('admin') }}">
+            <i class="fas fa-times-circle"></i>
+            <span>Quitter</span>
         </a>
     </div>
 {% endblock %}

@@ -76,6 +76,40 @@ class AccountantController extends AbstractController
     }
 
     /**
+     * @Route("/acc/ValidatedFinanced", name="app_acc_validated_financed")
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
+     * @return Response
+     */
+    public function accValidatedFinanced(ProjectManager $projectManager, ClientManager $clientManager): Response
+    {
+        $projects = $projectManager->getProjectsByStatus(Status::ACC_VALIDATED_FINANCED);
+        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+
+        return $this->render('pages/status/acc_validated_financed.html.twig', [
+            'projects' => $projects,
+            'teamLeads' => $teamLeads
+        ]);
+    }
+
+    /**
+     * @Route("/acc/accListLacFund", name="app_acc_list_lac_fund")
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
+     * @return Response
+     */
+    public function accListLacFund(ProjectManager $projectManager, ClientManager $clientManager): Response
+    {
+        $projects = $projectManager->getProjectsByStatus(Status::ACC_LACKING_FUND);
+        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+
+        return $this->render('pages/status/acc_lacking_fund.html.twig', [
+            'projects' => $projects,
+            'teamLeads' => $teamLeads
+        ]);
+    }
+
+    /**
      * @Route ("/accountant/accLacFund/{projectId}", name="acc_lack_fund")
      * @param string $projectId
      * @param ProjectManager $projectManager
@@ -84,5 +118,18 @@ class AccountantController extends AbstractController
     {
         $projectManager->changeProjectStatus(Status::ACC_LACKING_FUND, $projectId);
         return $this->redirectToRoute('admin');
+    }
+
+    /**
+     * @Route ("/accountant/financialReport", name="app_acc_report")
+     * @param ProjectManager $projectManager
+     */
+    public function accFinancialReport(ProjectManager $projectManager, FinanceManager $financeManager)
+    {
+        $financialDetails = $financeManager->getFinancialDetails();
+
+        return $this->render('tables/financial_report.html.twig', [
+            'financialDetails' => $financialDetails
+        ]);
     }
 }

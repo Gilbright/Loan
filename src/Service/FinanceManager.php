@@ -14,6 +14,7 @@ use App\Entity\FinanceDetail;
 use App\Entity\Project;
 use App\Helper\TypeHelper;
 use App\Repository\ClientRepository;
+use App\Repository\FinanceDetailRepository;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\FinancialDetailResolver;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,9 +26,7 @@ class FinanceManager
     /** @var EntityManagerInterface $entityManager */
     private $entityManager;
 
-    /**
-     * @var ClientRepository $clientRepository
-     */
+    /** @var ClientRepository $clientRepository*/
     private $clientRepository;
 
     /** @var ProjectRepository $projectRepository */
@@ -36,18 +35,24 @@ class FinanceManager
     /** @var Security $security*/
     private $security;
 
+    /** @var FinanceDetailRepository $financeDetailRepository*/
+    private $financeDetailRepository;
+
     /**
      * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param ClientRepository $clientRepository
      * @param ProjectRepository $projectRepository
+     * @param Security $security
+     * @param FinanceDetailRepository $financeDetailRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, ProjectRepository $projectRepository, Security $security)
+    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, ProjectRepository $projectRepository, Security $security, FinanceDetailRepository $financeDetailRepository)
     {
         $this->entityManager = $entityManager;
         $this->clientRepository = $clientRepository;
         $this->projectRepository = $projectRepository;
         $this->security = $security;
+        $this->financeDetailRepository = $financeDetailRepository;
     }
 
     public function excecute(array $data)
@@ -159,5 +164,10 @@ class FinanceManager
         }
 
         return $financialDetailsByType;
+    }
+
+    public function getFinancialDetails(): array
+    {
+        return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC']);
     }
 }
