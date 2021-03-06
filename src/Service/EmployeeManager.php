@@ -4,14 +4,11 @@
 namespace App\Service;
 
 
-use App\Entity\Client;
 use App\Entity\Employee;
 use App\Helper\RoleHelper;
 use App\Repository\EmployeeRepository;
-use App\Service\OptionsResolver\ClientResolver;
 use App\Service\OptionsResolver\EmployeeResolver;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 class EmployeeManager
@@ -50,12 +47,11 @@ class EmployeeManager
             ->setNationality($data['nationality'])
             ->setGender("M") // TODO: THİS İS THE DEFAULT VERSİON TO BE FİXED LATER
             ->setRoles($this->roleParser($data['role']))
-            ->setPassword('12345')
+            ->setPassword('phenix')
             ->setBirthDate($data['birthDate']);
 
         $this->entityManager->persist($employeeEntity);
         $this->entityManager->flush();
-
     }
 
     public function roleParser($role): array{
@@ -73,42 +69,11 @@ class EmployeeManager
         }
     }
 
-    public function getClients(string $projectId = null): array
+    /**
+     * @return Employee[]
+     */
+    public function getEmployees(): array
     {
-        $result = $this->entityManager->createQueryBuilder()
-            ->select('c')
-            ->from(Client::class, 'c')
-            ->innerJoin('c.projectId', 'p', Join::WITH, 'p.projectId = :projectId')
-            ->setParameter('projectId', $projectId)
-            ->setMaxResults(10)
-            ->orderBy('c.createdAt', 'DESC')
-            ->getQuery()->getArrayResult();
-
-        return $result;
-    }
-
-    public function getClientById(int $clientId)
-    {
-        return $this->clientRepository->find($clientId);
-    }
-
-
-    public function getProjectById(string $projectId = null)
-    {
-        return $this->projectRepository->findOneBy(['projectId' => $projectId]);
-    }
-
-    public function getProjectsTeamLeads(array $projects): array
-    {
-        $teamLeads = [];
-
-        foreach ($projects as $project) {
-            $teamLeads[] = $this->clientRepository->findOneBy([
-                'projectId' => $project->getId(),
-                'isTeamLead' => 1
-            ]);
-        }
-
-        return $teamLeads;
+        return $this->employeeRepository->findAll();
     }
 }

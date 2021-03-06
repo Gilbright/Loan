@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Helper\Status;
 use App\Service\ClientManager;
+use App\Service\EmployeeManager;
 use App\Service\FinanceManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
@@ -233,13 +234,29 @@ class BossController extends AbstractController
 
     /**
      * @Route ("/boss/newEmployee", name="app_boss_add_employee")
+     * @param Request $request
+     * @param EmployeeManager $employeeManager
      */
-    public function bossAddEmployee(){
-        
+    public function bossAddEmployee(Request $request, EmployeeManager $employeeManager)
+    {
+        if ($request->isMethod('POST')) {
+            $employeeManager->execute($request->request->all());
+            return $this->redirectToRoute('boss_list_employees');
+        }
+
+        return $this->render('forms/register_employee.html.twig');
     }
 
-
-
+    /**
+     * @Route ("/boss/listEmployee", name="boss_list_employees")
+     * @param EmployeeManager $employeeManager
+     * @return Response
+     */
+    public function bossGetEmployees(EmployeeManager $employeeManager): Response
+    {
+        $employees = $employeeManager->getEmployees();
+        return $this->render('forms/registered_employees.html.twig', ['employeesData' => $employees]);
+    }
 
 
 

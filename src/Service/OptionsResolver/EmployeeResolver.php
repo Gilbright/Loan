@@ -21,20 +21,16 @@ class EmployeeResolver extends AbstractOptionResolver
                 'nationality',
                 'phoneNumber',
                 'email',
-                'profession',
+                'role',
                 'address',
-                'idNumber',
-                'confirm'
                 ])
             ->setAllowedTypes('nameSurname', 'string')
             ->setAllowedTypes('birthDate', ['string', 'DateTime'])
             ->setAllowedTypes('nationality', 'string')
             ->setAllowedTypes('phoneNumber',['string', 'int'] )
             ->setAllowedTypes('email', 'string')
-            ->setAllowedTypes('profession', 'string')
+            ->setAllowedTypes('role', 'string')
             ->setAllowedTypes('address', 'string')
-            ->setAllowedTypes('idNumber', ['string', 'int'])
-            ->setAllowedTypes('confirm', ['string', 'int', 'boolean'])
             ->resolve($data)
         ;
         return $data;
