@@ -241,14 +241,14 @@ class BossController extends AbstractController
     {
         if ($request->isMethod('POST')) {
             $employeeManager->execute($request->request->all());
-            return $this->redirectToRoute('boss_list_employees');
+            return $this->redirectToRoute('app_boss_list_employees');
         }
 
         return $this->render('forms/register_employee.html.twig');
     }
 
     /**
-     * @Route ("/boss/listEmployee", name="boss_list_employees")
+     * @Route ("/boss/listEmployee", name="app_boss_list_employees")
      * @param EmployeeManager $employeeManager
      * @return Response
      */
