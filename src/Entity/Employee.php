@@ -91,9 +91,15 @@ class Employee implements UserInterface
     private $nationality;
 
 
+    /**
+     * @ORM\OneToMany(targetEntity=FinanceDetail::class, mappedBy="operationExecutor")
+     */
+    private $financeDetails;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
+        $this->financeDetails = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -247,6 +253,36 @@ class Employee implements UserInterface
             // set the owning side to null (unless already changed)
             if ($note->getEmployee() === $this) {
                 $note->setEmployee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FinanceDetail[]
+     */
+    public function getFinanceDetails(): Collection
+    {
+        return $this->financeDetails;
+    }
+
+    public function addFinanceDetail(FinanceDetail $financeDetail): self
+    {
+        if (!$this->financeDetails->contains($financeDetail)) {
+            $this->financeDetails[] = $financeDetail;
+            $financeDetail->setOperationExecutor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFinanceDetail(FinanceDetail $financeDetail): self
+    {
+        if ($this->financeDetails->removeElement($financeDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($financeDetail->getOperationExecutor() === $this) {
+                $financeDetail->setOperationExecutor(null);
             }
         }
 

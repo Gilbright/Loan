@@ -112,7 +112,7 @@
                                     <tr>
                                         <td>{{ note.employee.nameSurname }}</td>
                                         <td>{{ note.authorRole }}</td>
-                                        <td>{{ note.updatedAt|date('d-m-Y') }}</td>
+                                        <td>{{ note.updatedAt|date('d-m-Y H:i:s') }}</td>
                                         <td>{{ note.content }}</td>
                                     </tr>
                                 {% endfor %}

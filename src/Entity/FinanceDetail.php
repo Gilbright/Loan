@@ -29,11 +29,6 @@ class FinanceDetail
     private $amount;
 
     /**
-     * @ORM\Column(type="json")
-     */
-    private $operationExecutor = [];
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $amountLeftToBeSentByUs;
@@ -64,6 +59,12 @@ class FinanceDetail
      */
     private $projectId;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Employee::class, inversedBy="financeDetails")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $operationExecutor;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,18 +90,6 @@ class FinanceDetail
     public function setAmount(float $amount): self
     {
         $this->amount = $amount;
-
-        return $this;
-    }
-
-    public function getOperationExecutor(): ?array
-    {
-        return $this->operationExecutor;
-    }
-
-    public function setOperationExecutor(array $operationExecutor): self
-    {
-        $this->operationExecutor = $operationExecutor;
 
         return $this;
     }
@@ -186,6 +175,18 @@ class FinanceDetail
     public function setProjectId(?Project $projectId): self
     {
         $this->projectId = $projectId;
+
+        return $this;
+    }
+
+    public function getOperationExecutor(): ?Employee
+    {
+        return $this->operationExecutor;
+    }
+
+    public function setOperationExecutor(?Employee $operationExecutor): self
+    {
+        $this->operationExecutor = $operationExecutor;
 
         return $this;
     }

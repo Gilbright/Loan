@@ -36,6 +36,11 @@ class Project
     private $amount;
 
     /**
+     * @ORM\Column(type="float")
+     */
+    private $finalAmount;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $repaymentDuration;
@@ -303,6 +308,25 @@ class Project
                 $note->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFinalAmount()
+    {
+        return $this->finalAmount;
+    }
+
+    /**
+     * @param $finalAmount
+     * @return $this
+     */
+    public function setFinalAmount($finalAmount): self
+    {
+        $this->finalAmount = $finalAmount;
 
         return $this;
     }
