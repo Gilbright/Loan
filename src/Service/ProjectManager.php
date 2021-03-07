@@ -44,6 +44,7 @@ class ProjectManager
             ->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths'])
             ->setModalityAmount((float)$data['modalityAmount'])
             ->setAmount((float)$data['amountWanted'])
+            ->setFinalAmount(0)
             ->setName($data['projectName'])
             ->setDetails($data['projectDetails'])
         ;

@@ -60,6 +60,10 @@
                                     <td>{{ project.amount }}</td>
                                 </tr>
                                 <tr>
+                                    <td><b>Pret conclu</b></td>
+                                    <td>{{ project.finalAmount }}</td>
+                                </tr>
+                                <tr>
                                     <td><b>Duree&nbspde&nbspremboursement</b></td>
                                     <td> {{ project.repaymentDuration }} mois</td>
                                 </tr>
@@ -199,14 +203,14 @@
                     <!-- /.card -->
 
                     <!-- add project finale price-->
-                    {% if (project.finalAmount == 0.0 and (project.status == 'ETAPE D ENTRETIEN' or project.status == 'POST ENTRETIEN')) %}
+                    {% if (project.finalAmount == 0 and (project.status == 'ETAPE D ENTRETIEN' or project.status == 'POST ENTRETIEN')) %}
                         {% block project_finale_price %}
                             <form method="post">
                                 <div class="card {{ statusData[0] }}">
                                     <div class="card-header">
                                         <div class="row">
                                             <div class="col">
-                                                <h3 class="card-title">Ajouter Le montant Final</h3>
+                                                <h3 class="card-title">Ajouter Le montant conclu</h3>
                                             </div>
                                         </div>
                                     </div>
@@ -214,13 +218,13 @@
                                     <!--note -->
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <!-- text input -->
                                                 <div class="form-group">
-                                                    <label>Montant final du projet</label>
+                                                    <label>Montant conclu comme pret </label>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-10">
                                                 <!-- text input -->
                                                 <div class="form-group">
                                                     <input type="text" class="form-control" name="finalAmount" placeholder="Entrer ...">
