@@ -79,7 +79,7 @@ class EmployeeManager
             case 'expert':
                 return [RoleHelper::EXPERT];
             default:
-                throw new Exception('No Suitable Role Found');
+                throw new Exception('Aucun Role Correspondant au choix de fonction effectué');
         }
     }
 
@@ -89,5 +89,12 @@ class EmployeeManager
     public function getEmployees(): array
     {
         return $this->employeeRepository->findAll();
+    }
+
+    public function getEmployeesByRole($role): Employee
+    {
+        return $this->employeeRepository->findBy([
+            'roles' => json_encode([$role])
+        ]);
     }
 }

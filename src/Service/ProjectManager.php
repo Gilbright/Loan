@@ -4,7 +4,9 @@
 namespace App\Service;
 
 
+use App\Entity\Employee;
 use App\Entity\Project;
+use App\Helper\MailReceiverHelper;
 use App\Helper\Status;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ProjectResolver;
@@ -16,18 +18,30 @@ class ProjectManager
     private $entityManager;
 
 
-    /**@var ProjectRepository $projectRepository*/
+    /**@var ProjectRepository $projectRepository */
     private $projectRepository;
+
+    /**@var EmployeeManager $employeeManager */
+    private $employeeManager;
+
+    /**
+     * @var MailerManager $mailerManager
+     */
+    private $mailerManager;
 
     /**
      * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param ProjectRepository $projectRepository
+     * @param EmployeeManager $employeeManager
+     * @param MailerManager $mailerManager
      */
-    public function __construct(EntityManagerInterface $entityManager, ProjectRepository $projectRepository)
+    public function __construct(EntityManagerInterface $entityManager, ProjectRepository $projectRepository, EmployeeManager $employeeManager, MailerManager $mailerManager)
     {
         $this->entityManager = $entityManager;
         $this->projectRepository = $projectRepository;
+        $this->employeeManager = $employeeManager;
+        $this->mailerManager = $mailerManager;
     }
 
     public function execute(array $data): ?string
@@ -46,8 +60,7 @@ class ProjectManager
             ->setAmount((float)$data['amountWanted'])
             ->setFinalAmount(0)
             ->setName($data['projectName'])
-            ->setDetails($data['projectDetails'])
-        ;
+            ->setDetails($data['projectDetails']);
 
         $this->entityManager->persist($projectEntity);
         $this->entityManager->flush();
@@ -65,18 +78,31 @@ class ProjectManager
     public function getProjectsByStatus(string $status): array
     {
         return $this->projectRepository->findBy(
-            [ 'status' => $status],
+            ['status' => $status],
             ['createdAt' => 'DESC']
         );
     }
 
-    public function getProjectById (string $projectId = null)
+    public function getProjectById(string $projectId = null)
     {
         return $this->projectRepository->findOneBy(['projectId' => $projectId]);
     }
 
-    public function changeProjectStatus(string $newStatus, string $projectId){
+    public function changeProjectStatus(string $newStatus, string $projectId)
+    {
+        /** @var Project $project */
         $project = $this->getProjectById($projectId);
+
+        $mailReceivers = MailReceiverHelper::getReceiverRoleByStatus($newStatus);
+
+        // if that status change is concerned by an update mail sending, then we do it here.
+        if ($mailReceivers){
+            foreach ($mailReceivers as $receiver) {
+                $employee = $this->employeeManager->getEmployeesByRole($receiver);
+
+                $this->mailerManager->sendMailNotification($project, $employee);
+            }
+        }
 
         $project->setStatus($newStatus);
 

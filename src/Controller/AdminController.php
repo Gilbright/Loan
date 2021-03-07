@@ -11,6 +11,15 @@ class AdminController extends AbstractController
 {
 
     /**
+     * @Route("/mailTemplate", name="mail_template")
+     * @return Response
+     */
+    public function demo(): Response
+    {
+        return $this->render('/mails/employee_mail.html.twig');
+    }
+
+    /**
      * @Route("/attente_ee/{projectId}", name="app-view")
      * @param string|null $projectId
      * @return Response
