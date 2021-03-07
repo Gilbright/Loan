@@ -124,7 +124,8 @@ class SecretaryController extends AbstractController
         return $this->render('pages/statusRedirections/secretary_view.html.twig', [
             'project' => $project,
             'projectTeam' => $projectTeam,
-            'projectNotes' => $projectNotes
+            'projectNotes' => $projectNotes,
+            'financeDetails' => []
         ]);
     }
 

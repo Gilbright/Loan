@@ -46,7 +46,12 @@
                                         <th>Nom et prenoms</th>
                                         <th>Date de naissance</th>
                                         <th>Genre</th>
-                                        <th>Role</th>
+                                        <th>Fonction</th>
+                                        <th>No piece d'identité</th>
+                                        <th>Nationalité</th>
+                                        <th>Telephone</th>
+                                        <th>Email</th>
+                                        <th>Addresse</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -56,7 +61,12 @@
                                             <td>{{ data.nameSurname }}</td>
                                             <td>{{ data.birthDate }}</td>
                                             <td>{{ data.gender }}</td>
-                                            <td>{{ data.role }}</td>
+                                            <td>{{ data.roles[0] | getRole(data.roles[0]) }}</td>
+                                            <td>{{ data.idDocNumber }}</td>
+                                            <td>{{ data.nationality }}</td>
+                                            <td>{{ data.phoneNumber }}</td>
+                                            <td>{{ data.email }}</td>
+                                            <td>{{ data.address }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
@@ -66,7 +76,13 @@
                         <div class="card-footer">
                             <form method="post">
                                 {% if employeesData %}
-                                    <button onclick="{{  }}" class="btn btn-info float-right">Quitter</button>
+                                    <div class="card-footer">
+                                        <a type="button" class="btn btn-secondary col"
+                                           href="{{ path('admin') }}">
+                                            <i class="fas fa-times-circle"></i>
+                                            <span>Quitter</span>
+                                        </a>
+                                    </div>
                                 {% endif %}
                             </form>
                         </div>

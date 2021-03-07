@@ -51,30 +51,22 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                                 </div>
-                                                <input type="text" name="birthDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                                <input type="text" name="birthDate" class="form-control"  data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                                             </div>
                                             <!-- /.input group -->
                                         </div>
 
                                     <div class="row">
-                                        <div class="col-sm-3">
-                                            <!-- radio -->
-                                            <label>3 - Genre</label>
-
-                                            <div class="form-group clearfix">
-                                                <div class="icheck-primary d-inline">
-                                                    <input type="radio" id="radioPrimary1" name="man" checked>
-                                                    <label for="radioPrimary1">
-                                                        Homme
-                                                    </label>
-                                                </div>
-                                                <div class="icheck-primary d-inline float-right">
-                                                    <input type="radio" id="radioPrimary2" name="woman">
-                                                    <label for="radioPrimary2">
-                                                        Femme
-                                                    </label>
-                                                </div>
-
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label>3 - Genre</label>
+                                                <select class="form-control select2 select2-hidden-accessible"
+                                                        style="width: 100%;" data-select2-id="1" tabindex="-1"
+                                                        aria-hidden="true" name="gender">
+                                                    <option data-select2-id="1">Homme</option>
+                                                    <option selected="selected" data-select2-id="2">Femme
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

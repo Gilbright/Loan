@@ -4,7 +4,6 @@ const $ = require('jquery');
 
 require('bootstrap');
 
-import './styleFunctions'
 import './adminlte'
 import './styles/adminlte.scss';
 import './css/admin.scss';

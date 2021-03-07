@@ -41,6 +41,8 @@ class ClientManager
     {
         $data = ClientResolver::resolve($data);
 
+        $gender = $data['gender'] === 'Homme' ? 'H' : 'F';
+
         //find the project by projectID
         $projectEntity = $this->getProjectById($projectId);
 
@@ -53,9 +55,10 @@ class ClientManager
             ->setNameSurname($data['nameSurname'])
             ->setIdDocumentPictureLink("link there")
             ->setIdPictureLink("link here")
+            ->setIdDocNumber($data['idNumber'])
             ->setNationality($data['nationality'])
             ->setIsTeamLead(false)
-            ->setGender("M") // TODO: THİS İS THE DEFAULT VERSİON TO BE FİXED LATER
+            ->setGender($gender)
             ->setProfession($data['profession'])
             ->setMonthlyIncome($data['monthlyIncome'])
             ->setBirthDate($data['birthDate']);

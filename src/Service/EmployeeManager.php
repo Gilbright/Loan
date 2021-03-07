@@ -10,6 +10,7 @@ use App\Repository\EmployeeRepository;
 use App\Service\OptionsResolver\EmployeeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class EmployeeManager
 {
@@ -22,21 +23,32 @@ class EmployeeManager
     private $employeeRepository;
 
     /**
+     * @var UserPasswordEncoderInterface $passWordEncoder
+     */
+    private $passwordEncoder;
+
+    /**
      * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param EmployeeRepository $employeeRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, EmployeeRepository $employeeRepository)
+    public function __construct(EntityManagerInterface $entityManager, EmployeeRepository $employeeRepository, UserPasswordEncoderInterface $encoder)
     {
+        $this->passwordEncoder = $encoder;
         $this->entityManager = $entityManager;
         $this->employeeRepository = $employeeRepository;
     }
+
 
     public function execute(array $data): void
     {
         $data = EmployeeResolver::resolve($data);
 
+        $gender = $data['gender'] === 'Homme' ? 'H' : 'F';
+
         $employeeEntity = new Employee();
+
+        $encodedPassword = $this->passwordEncoder->encodePassword($employeeEntity, 'phenix');
 
         $employeeEntity->setAddress($data['address'])
             ->setPhoneNumber($data['phoneNumber'])
@@ -45,17 +57,19 @@ class EmployeeManager
             ->setIdDocumentPictureLink("link there")
             ->setIdPictureLink("link here")
             ->setNationality($data['nationality'])
-            ->setGender("M") // TODO: THİS İS THE DEFAULT VERSİON TO BE FİXED LATER
+            ->setGender($gender)
+            ->setIdDocNumber($data['idDocNumber'])
             ->setRoles($this->roleParser($data['role']))
-            ->setPassword('phenix')
+            ->setPassword($encodedPassword)
             ->setBirthDate($data['birthDate']);
 
         $this->entityManager->persist($employeeEntity);
         $this->entityManager->flush();
     }
 
-    public function roleParser($role): array{
-        switch (strtolower($role)){
+    public function roleParser($role): array
+    {
+        switch (strtolower($role)) {
             case 'secretaire':
                 return [RoleHelper::SECRETARY];
             case 'directeur':

@@ -258,6 +258,21 @@ class BossController extends AbstractController
         return $this->render('forms/registered_employees.html.twig', ['employeesData' => $employees]);
     }
 
+    /**
+     * @Route ("/boss/financialReport", name="app_boss_report")
+     * @param ProjectManager $projectManager
+     * @param FinanceManager $financeManager
+     * @return Response
+     */
+    public function bossFinancialReport(ProjectManager $projectManager, FinanceManager $financeManager)
+    {
+        $financialDetails = $financeManager->getFinancialDetails();
+
+        return $this->render('tables/financial_report.html.twig', [
+            'financialDetails' => $financialDetails
+        ]);
+    }
+
 
 
 

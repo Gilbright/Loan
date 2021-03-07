@@ -76,8 +76,47 @@
                     <!-- /.card -->
 
                     <!-- list detail Financier -->
+                    <!-- list detail Financier -->
                     {% block finance_detail_block %}
+                        {% if financeDetails %}
+                            <div class="card {{ statusData[0] }}">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="card-title">Details Financiers du projet</h3>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <!--LE body du tableau des finance du projet -->
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Auteur</th>
+                                            <th>Type</th>
+                                            <th>Montant</th>
+                                            <th>Montant restant a debourser pour le project</th>
+                                            <th>Montant restant a rembourser</th>
+                                            <th>Date d'ajout</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for financeDetail in financeDetails %}
+                                            <tr>
+                                                <td>{{ financeDetail.operationExecutor.nameSurname }}</td>
+                                                <td>{{ financeDetail.type }}</td>
+                                                <td>{{ financeDetail.amount }}</td>
+                                                <td>{{ financeDetail.amountLeftToBeSentByUs }}</td>
+                                                <td>{{ financeDetail.amountLeftToBePaidToUs }}</td>
+                                                <td>{{ financeDetail.createdAt|date('d-m-Y') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endblock %}
 
                     <!-- Ajouter un detail Financier -->
@@ -158,6 +197,51 @@
                         </form>
                     {% endblock %}
                     <!-- /.card -->
+
+                    <!-- add project finale price-->
+                    {% if (project.finalAmount == 0.0 and (project.status == 'ETAPE D ENTRETIEN' or project.status == 'POST ENTRETIEN')) %}
+                        {% block project_finale_price %}
+                            <form method="post">
+                                <div class="card {{ statusData[0] }}">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h3 class="card-title">Ajouter Le montant Final</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--note -->
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Montant final du projet</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="finalAmount" placeholder="Entrer ...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endblock %}
+                    {% endif %}
+
 
                     <!-- TABLEAU DES MEMBRES DU GROUPE -->
                     <div class="card {{ statusData[0] }}">

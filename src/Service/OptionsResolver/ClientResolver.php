@@ -25,7 +25,9 @@ class ClientResolver extends AbstractOptionResolver
                 'monthlyIncome',
                 'address',
                 'idNumber',
-                'confirm'
+                'confirm',
+                'idNumber',
+                'gender'
                 ])
             ->setAllowedTypes('nameSurname', 'string')
             ->setAllowedTypes('birthDate', ['string', 'DateTime'])
@@ -37,6 +39,8 @@ class ClientResolver extends AbstractOptionResolver
             ->setAllowedTypes('address', 'string')
             ->setAllowedTypes('idNumber', ['string', 'int'])
             ->setAllowedTypes('confirm', ['string', 'int'])
+            ->setAllowedTypes('idNumber', 'string')
+            ->setAllowedTypes('gender', 'string')
             ->resolve($data)
         ;
         return $data;

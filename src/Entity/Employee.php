@@ -90,6 +90,10 @@ class Employee implements UserInterface
      */
     private $nationality;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $idDocNumber;
 
     /**
      * @ORM\OneToMany(targetEntity=FinanceDetail::class, mappedBy="operationExecutor")
@@ -357,4 +361,22 @@ class Employee implements UserInterface
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getIdDocNumber()
+    {
+        return $this->idDocNumber;
+    }
+
+    /**
+     * @param $idDocNumber
+     * @return $this
+     */
+    public function setIdDocNumber($idDocNumber): self
+    {
+        $this->idDocNumber = $idDocNumber;
+
+        return $this;
+    }
 }

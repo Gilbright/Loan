@@ -6,6 +6,7 @@ use App\Helper\Status;
 use App\Service\ClientManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +49,7 @@ class ExpertController extends AbstractController
      * @param NoteManager $noteManager
      * @return Response
      */
-    public function expertView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager): Response
+    public function expertView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager, EntityManagerInterface $entityManager): Response
     {
         $project = $projectManager->getProjectById($projectId);
         $projectTeam = $clientManager->getClients($projectId);
@@ -58,14 +59,22 @@ class ExpertController extends AbstractController
             $data = $request->request->all();
             $data['project'] = $project;
 
-            $noteManager->execute($data);
+            if (isset($data['noteContent'])){
+                $noteManager->execute($data);
+            }elseif (isset($data['finalAmount'])) {
+                $project->setFinalAmount((float) $data['finalAmount']);
+
+                $entityManager->flush();
+            }
+
 
             return $this->redirectToRoute('app_expert_view', ['projectId' => $projectId]);
         }
         return $this->render('pages/statusRedirections/expert_view.html.twig', [
             'project' => $project,
             'projectTeam' => $projectTeam,
-            'projectNotes' => $projectNotes
+            'projectNotes' => $projectNotes,
+            'financeDetails' => []
         ]);
     }
 

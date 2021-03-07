@@ -123,6 +123,8 @@ class AccountantController extends AbstractController
     /**
      * @Route ("/accountant/financialReport", name="app_acc_report")
      * @param ProjectManager $projectManager
+     * @param FinanceManager $financeManager
+     * @return Response
      */
     public function accFinancialReport(ProjectManager $projectManager, FinanceManager $financeManager)
     {
