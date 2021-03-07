@@ -91,10 +91,13 @@ class EmployeeManager
         return $this->employeeRepository->findAll();
     }
 
-    public function getEmployeesByRole($role): Employee
+    public function getEmployeesByRole($role)
     {
-        return $this->employeeRepository->findBy([
-            'roles' => json_encode([$role])
-        ]);
+        $qb = $this->entityManager->createQueryBuilder();
+        return $qb->select('u')
+            ->from(Employee::class, 'u')
+            ->where('u.roles like :roles')
+            ->setParameter('roles', '%"' . $role . '"%')
+            ->getQuery()->getResult();
     }
 }

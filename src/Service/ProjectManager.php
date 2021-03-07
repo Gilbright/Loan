@@ -98,9 +98,11 @@ class ProjectManager
         // if that status change is concerned by an update mail sending, then we do it here.
         if ($mailReceivers){
             foreach ($mailReceivers as $receiver) {
-                $employee = $this->employeeManager->getEmployeesByRole($receiver);
+                $employees = $this->employeeManager->getEmployeesByRole($receiver);
 
-                $this->mailerManager->sendMailNotification($project, $employee);
+                foreach ($employees as $employee) {
+                    $this->mailerManager->sendMailNotification($project, $employee);
+                }
             }
         }
 

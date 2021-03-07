@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Helper\Status;
 use App\Service\ClientManager;
-use App\Service\MailerManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,12 +28,10 @@ class ExpertController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function expWaitingAnalysis(ProjectManager $projectManager, ClientManager $clientManager, MailerManager $mailer): Response
+    public function expWaitingAnalysis(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
         $projects = $projectManager->getProjectsByStatus(Status::EXP_WAITING_FOR_ANALYSIS);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
-
-        $mailer->sendMailNotification($projects[0], $this->getUser());
 
         return $this->render('pages/status/exp_waiting_for_analysis.html.twig', [
             'projects' => $projects,

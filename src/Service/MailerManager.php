@@ -32,7 +32,7 @@ class MailerManager
     {
         $mailObject = (new TemplatedEmail())
             ->from('mahabnadjib@gmail.com')
-            ->to('marwane.tchassama@bil.omu.edu.tr')
+            ->to($employee->getEmail())
             ->subject('Notification sur le statut d\' un projet')
             ->htmlTemplate('mails/employee_mail.html.twig')
             ->context([
