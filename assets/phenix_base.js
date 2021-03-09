@@ -4,8 +4,6 @@ const $ = require('jquery');
 
 require('bootstrap');
 
-import './adminlte'
-import './styles/adminlte.scss';
 import './css/admin.scss';
 import bsCustomFileInput from "bs-custom-file-input";
 require('bootstrap/js/dist/popover');

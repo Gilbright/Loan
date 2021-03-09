@@ -21,8 +21,8 @@ Encore
      * and one CSS file (e.g. app.scss) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
-    .addEntry('admin', './assets/admin.js')
-    .addEntry('login', './assets/js/login.js')
+    .addEntry('admin', './assets/phenix_base.js')
+    .addEntry('login', './assets/login.js')
     .addEntry('mailer', './assets/mailer.js')
 
 

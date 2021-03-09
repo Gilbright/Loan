@@ -1,1 +1,1 @@
-import './css/mailer.scss'
+import './styles/mailer.scss'
