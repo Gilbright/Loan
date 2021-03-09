@@ -1,5 +1,2 @@
-module.exports = function(name) {
-    return `Yo yo ${name} - welcome to Encore!`;
-};
-
-
+import './styles/login.scss'
+import './bootstrap';
