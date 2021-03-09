@@ -95,6 +95,8 @@ class ProjectManager
 
         $mailReceivers = MailReceiverHelper::getReceiverRoleByStatus($newStatus);
 
+        $project->setStatus($newStatus);
+
         // if that status change is concerned by an update mail sending, then we do it here.
         if ($mailReceivers){
             foreach ($mailReceivers as $receiver) {
@@ -105,8 +107,6 @@ class ProjectManager
                 }
             }
         }
-
-        $project->setStatus($newStatus);
 
         $this->entityManager->flush();
     }

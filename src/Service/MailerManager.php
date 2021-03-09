@@ -31,9 +31,9 @@ class MailerManager
     public function sendMailNotification(Project $project,Employee $employee)
     {
         $mailObject = (new TemplatedEmail())
-            ->from('mahabnadjib@gmail.com')
+            ->from('loanphenix@gmail.com')
             ->to($employee->getEmail())
-            ->subject('Notification sur le statut d\' un projet')
+            ->subject('Notification sur le statut du projet ' . $project->getProjectId())
             ->htmlTemplate('mails/employee_mail.html.twig')
             ->context([
                 'project' => $project,

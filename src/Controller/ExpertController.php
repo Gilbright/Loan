@@ -158,7 +158,7 @@ class ExpertController extends AbstractController
         $projects = $projectManager->getProjectsByStatus(Status::BOS_TO_BE_REANALYZED);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
-        return $this->render('pages/status/bos_to_be_reanalysed.html.twig', [
+        return $this->render('pages/status/exp_to_be_reanalysed.html.twig', [
             'projects' => $projects,
             'teamLeads' => $teamLeads
         ]);

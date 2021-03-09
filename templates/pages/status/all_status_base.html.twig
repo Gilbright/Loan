@@ -48,7 +48,7 @@
                                                 <td class="cell"><span class="truncate">{{ project.name }}</span></td>
                                                 <td class="cell">{{ teamLeads[index].nameSurname }}</td>
                                                 <td class="cell"><span>{{ project.updatedAt|date('d-m-Y') }}</span></td>
-                                                <td class="cell"><span class="badge badge-pill bg-warning">{{ project.status }}</span></td>
+                                                <td class="cell"><span class="{{ project.status|get_badge(project.status) }}">{{ project.status }}</span></td>
                                                 <td class="cell">{{ project.amount }}</td>
                                                 <td class="cell">
                                                     {% block button_block %}
