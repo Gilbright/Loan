@@ -1,27 +1,23 @@
-import Stepper from "bs-stepper";
+/*
+ * Welcome to your app's main JavaScript file!
+ *
+ * We recommend including the built version of this JavaScript file
+ * (and its CSS file) in your base layout (base.html.twig).
+ */
 
-const $ = require('jquery');
+// any CSS you import will output into a single css file (app.scss in this case)
+import './styles/phenix_base.scss';
 
-require('bootstrap');
+// start the Stimulus application
+import './bootstrap';
 
-import './css/admin.scss';
-import bsCustomFileInput from "bs-custom-file-input";
-require('bootstrap/js/dist/popover');
+import 'admin-lte/dist/js/adminlte.min.js'
+
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
-require('summernote');
-require('icheck-bootstrap');
-require('overlayscrollbars');
-require('daterangepicker');
-require('jquery-ui');
-require('chart.js');
-require('moment');
-require('ionicons')
 
-require('inputmask/dist/jquery.inputmask.min.js')
 
-require('bs-custom-file-input/dist/bs-custom-file-input.min.js');
-
+/*
 //Datemask dd/mm/yyyy
 $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
 $('[data-mask]').inputmask();
@@ -30,4 +26,5 @@ $('[data-mask]').inputmask();
 module.exports = function () {
     bsCustomFileInput.init();
 };
+*/
 

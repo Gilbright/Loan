@@ -21,9 +21,12 @@ Encore
      * and one CSS file (e.g. app.scss) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
-    .addEntry('admin', './assets/phenix_base.js')
+    .addEntry('phenix_base', './assets/phenix_base.js')
     .addEntry('login', './assets/login.js')
     .addEntry('mailer', './assets/mailer.js')
+    .addEntry('input_form', './assets/input_form.js')
+    .addEntry('form_validation', './assets/form_validation.js')
+    .addEntry('datatable', './assets/datatable.js')
 
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
