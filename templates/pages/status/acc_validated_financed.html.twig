@@ -1,9 +1,9 @@
-{% extends 'pages/status/status_base.html.twig' %}
+{% extends 'pages/status/all_status_base.html.twig' %}
 
 {% block button_block %}
-        <a href="{{ path('app-manager-valiated-financed-view', {projectId: 'ph32254378329'})  }}">
+        <a href="{{ path('app_acc_view', {projectId: project.projectId})  }}">
             <button type="button" class="btn btn-info btn-sm"  ><i class="fa fa-dot-circle-o"></i>
-             Details
+             Details et Modifications
             </button>
         </a>
 {% endblock %}

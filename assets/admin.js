@@ -7,6 +7,7 @@ require('bootstrap');
 import './adminlte'
 import './styles/adminlte.scss';
 import './css/admin.scss';
+import bsCustomFileInput from "bs-custom-file-input";
 require('bootstrap/js/dist/popover');
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');

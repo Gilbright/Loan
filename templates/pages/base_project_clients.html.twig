@@ -26,13 +26,13 @@
                 <!-- right column -->
                 <div class="col-lg-12">
 
-                    {% set statusData = ['card-info', 'en attente d entretien'] %}
+                    {% set statusData = [ project.status| get_card(project.status)] %}
                     <!-- TABLEAU DES INFOS DU PROJET -->
                     <div class="card {{ statusData[0] }}">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="card-title" >Statut du Projet: {{ statusData[1] }}</h3>
+                                    <h3 class="card-title">Statut du Projet: {{ project.status }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -43,31 +43,35 @@
                                 <tbody>
                                 <tr>
                                     <td><b>ID du projet</b></td>
-                                    <td>ph-45223854</td>
+                                    <td>{{ project.projectId }}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Nom du projet</b></td>
-                                    <td>John Doe</td>
+                                    <td>{{ project.name }}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Details complet du projet</b></td>
-                                    <td>Alexander Pierce What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
-                                        type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Why do we use it? It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident,
-                                        sometimes on purpose (injected humour and the like).
+                                    <td>
+                                        {{ project.details }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><b>Pret voulu</b></td>
-                                    <td>465 0000000</td>
+                                    <td>{{ project.amount }}</td>
                                 </tr>
                                 <tr>
-                                    <td><b>Duree&nbspde&nbspremboursement</b> </td>
-                                    <td> 23 mois </td>
+                                    <td><b>Pret conclu</b></td>
+                                    <td>{{ project.finalAmount }}</td>
                                 </tr>
                                 <tr>
-                                    <td><b>Modalite et echeance</b> </td>
-                                    <td>456 234 chaque 2 mois</td>
+                                    <td><b>Duree&nbspde&nbspremboursement</b></td>
+                                    <td> {{ project.repaymentDuration }} mois</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Modalite et echeance</b></td>
+                                    <td>{{ project.modalityAmount }} chaque {{ project.modalityPaymentFrequency }}
+                                        mois
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -75,12 +79,62 @@
                     </div>
                     <!-- /.card -->
 
-                    <!-- TABLEAU DES NOTES DU PROJET -->
-                    <div class="card {{ statusData[0] }}">
+                    <!-- list detail Financier -->
+                    <!-- list detail Financier -->
+                    {% block finance_detail_block %}
+                        {% if financeDetails %}
+                            <div class="card {{ statusData[0] }}">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="card-title">Details Financiers du projet</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--LE body du tableau des finance du projet -->
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Auteur</th>
+                                            <th>Type</th>
+                                            <th>Montant</th>
+                                            <th>Montant restant a debourser pour le project</th>
+                                            <th>Montant restant a rembourser</th>
+                                            <th>Date d'ajout</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for financeDetail in financeDetails %}
+                                            <tr>
+                                                <td>{{ financeDetail.operationExecutor.nameSurname }}</td>
+                                                <td>{{ financeDetail.type }}</td>
+                                                <td>{{ financeDetail.amount }}</td>
+                                                <td>{{ financeDetail.amountLeftToBeSentByUs }}</td>
+                                                <td>{{ financeDetail.amountLeftToBePaidToUs }}</td>
+                                                <td>{{ financeDetail.createdAt|date('d-m-Y') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+
+                    <!-- Ajouter un detail Financier -->
+                    {% block finance_block %}
+
+                    {% endblock %}
+
+                    {% if projectNotes %}
+                        <!-- TABLEAU DES NOTES DU PROJET -->
+                        <div class="card {{ statusData[0] }}">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="card-title" >Notes sur le projet</h3>
+                                    <h3 class="card-title">Notes sur le projet</h3>
                                 </div>
                             </div>
                         </div>
@@ -91,42 +145,114 @@
                                 <thead>
                                 <tr>
                                     <th>Auteur</th>
+                                    <th>Role</th>
                                     <th>Date d'ajout</th>
                                     <th>Note</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% set notesData = [1,2,3,4] %}
-                                {% for note in notesData %}
+                                {% for note in projectNotes %}
                                     <tr>
-                                        <td>John Cerriveau</td>
-                                        <td>25 Juin 2021</td>
-                                        <td> Le projet est excellent et parfait.</td>
+                                        <td>{{ note.employee.nameSurname }}</td>
+                                        <td>{{ note.authorRole }}</td>
+                                        <td>{{ note.updatedAt|date('d-m-Y H:i:s') }}</td>
+                                        <td>{{ note.content }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    {% endif %}
                     <!-- /.card -->
-
-                    <!-- Ajouter une Note -->
-                    {% block finance_block %}
-
-                    {% endblock %}
 
                     <!-- Ajouter une Note -->
                     {% block note_block %}
+                        <form method="post">
+                            <div class="card {{ statusData[0] }}">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="card-title">Ajouter une Note</h3>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <form type="POST">
+                                        <div class="row">
+                                            <div class="col">
+                                                <!-- textarea -->
+                                                <div class="form-group">
+                                                    <textarea class="form-control" rows="3" name="noteContent"
+                                                              placeholder="Entrez ici toute note ou nouveau detail relatif au projet ...."></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
+                                        </div>
+                                    </form>
+                                </div>
 
+                                <!--note -->
+                                <div class="card-body table-responsive p-0">
+
+                                </div>
+                            </div>
+                        </form>
                     {% endblock %}
                     <!-- /.card -->
+
+                    <!-- add project finale price-->
+                    {% if (project.finalAmount == 0 and (project.status == 'ETAPE D ENTRETIEN' or project.status == 'POST ENTRETIEN')) %}
+                        {% block project_finale_price %}
+                            <form method="post">
+                                <div class="card {{ statusData[0] }}">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h3 class="card-title">Ajouter Le montant conclu</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--note -->
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Montant conclu comme pret </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="finalAmount" placeholder="Entrer ...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        {% endblock %}
+                    {% endif %}
+
 
                     <!-- TABLEAU DES MEMBRES DU GROUPE -->
                     <div class="card {{ statusData[0] }}">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="card-title" >Informations des membres du groupe</h3>
+                                    <h3 class="card-title">Informations des membres du groupe</h3>
                                 </div>
                             </div>
                         </div>
@@ -135,29 +261,35 @@
                         <div class="card-body table-responsive p-0">
                             <table class="table">
                                 <tbody>
-                                {% set properties = [
-                                    'nameSurname',
-                                    'birthate',
-                                    'gender',
-                                    'nationality',
-                                    'email',
-                                    'Phone',
-                                    'adresse',
-                                    'profession',
-                                    'revenu mensuel',
-                                    'IdentityCardNumber',
-                                    'ID photo',
-                                    'ID Card Photo',
-                                ] %}
+                                {% set numOfClients = projectTeam|length %}
+                                <tr>
+                                    <td><b>Membre</b></td>
+                                    {% for index in 1..numOfClients %}
+                                        <td>Membre {{ index }}</td>
 
-                                {% for  property in properties %}
+                                    {% endfor %}
+                                </tr>
+
+                                {% set properties = {
+                                    'nameSurname': 'Nom et prénoms',
+                                    'phoneNumber': 'Numéro de téléphone',
+                                    'email': 'Email',
+                                    'nationality': 'Nationalité',
+                                    'address': 'Address',
+                                    'monthlyIncome': 'Revenu mensuel',
+                                    'birthDate': 'Date de naissance',
+                                    'profession': 'Profession',
+                                } %}
+
+                                {% for key,property in properties %}
                                     <tr>
                                         <td><b> {{ property }} </b></td>
 
-                                        {% for item in 0..3 %}
-                                            <td>Bilinecektirrr beyyy {{ item }}</td>
+                                        {% for client in projectTeam %}
+                                            <td>{{ client[key] }}</td>
 
                                         {% endfor %}
+
                                     </tr>
                                 {% endfor %}
                                 </tbody>

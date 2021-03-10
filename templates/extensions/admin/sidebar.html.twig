@@ -35,14 +35,13 @@
 
                 <!-- A revoir le yonlendirme en fonction du user-->
 
-                {% if is_granted('ROLE_BOSS') %}
-                {{ include('extensions/admin/role/boss.html.twig') }}
-
-                {% elseif is_granted('ROLE_USER') %}
-                    {{ include('extensions/admin/role/secretaire.html.twig') }}
-                {% elseif is_granted('ROLE_TRESORIER') %}
-                    {{ include('extensions/admin/role/tresorier.html.twig') }}
-                {% elseif is_granted('ROLE_EXPERT') %}
+                {% if is_granted('ROLE_USER') and is_granted('ROLE_SECRETARY') %}
+                    {{ include('extensions/admin/role/secretary.html.twig') }}
+                {% elseif is_granted('ROLE_USER') and is_granted('ROLE_BOSS') %}
+                    {{ include('extensions/admin/role/boss.html.twig') }}
+                {% elseif is_granted('ROLE_USER') and is_granted('ROLE_ACCOUNTANT') %}
+                    {{ include('extensions/admin/role/accountant.html.twig') }}
+                {% elseif is_granted('ROLE_USER') and is_granted('ROLE_EXPERT') %}
                     {{ include('extensions/admin/role/expert.html.twig') }}
                 {% endif %}
 

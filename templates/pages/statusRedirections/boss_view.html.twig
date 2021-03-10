@@ -1,73 +1,61 @@
 {% extends 'pages/base_project_clients.html.twig' %}
 
-{% block note_block %}
-    <div class="card {{ statusData[0] }}">
-        <div class="card-header">
-            <div class="row">
-                <div class="col">
-                    <h3 class="card-title">Ajouter une Note</h3>
-                </div>
-            </div>
-            <br/>
-            <form type="POST">
-                <div class="row">
-                    <div class="col">
-                        <!-- textarea -->
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3" placeholder="Entrer ..."></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
-                </div>
-            </form>
-        </div>
-
-        <!--note -->
-        <div class="card-body table-responsive p-0">
-
-        </div>
-    </div>
-{% endblock %}
-
-
 {% block footer_block %}
     <div class="card-footer">
         <div class="row">
             <div class="col-lg-12">
                 <div class="btn-group w-100">
 
-                    {% set projectStatus = 'etape_entretien' %}
-                    {% if projectStatus != 'rejeté' %}
-                        {% set buttonValidationType = 'Valider definitivement' %}
-                        {% set buttonContinuationType = "Continuer l'evaluation apres"  %}
+                    {% set projectStatus = project.status %}
 
-                        {% set validationLink = "app-interview-view" %}
-                        {% set continuationLink = 'app-attente-etude-view' %}
+
+                    {% if projectStatus == 'VALIDE' or projectStatus == 'VALIDE FINANCE'  or projectStatus == 'PROJET MANQUANT DE FONDS' or projectStatus == 'REJETE' %}
+                        <a type="button" class="btn btn-secondary float-right"
+                           href="{{ path('admin') }}">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Quitter</span>
+                        </a>
 
                     {% else %}
-                        {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
-                        {% set buttonContinuationType = "Continuer l'etude plus tard"  %}
-                        {% set validationLink = "app-interview-view" %}
-                        {% set continuationLink = 'app-attente-etude-view' %}
+                        {% if (projectStatus == 'ANALYSE DU MANAGER' or projectStatus == 'ANALYSE DU MANAGER EN COURS') %}
+                            {% set buttonValidationType = 'Valider pour le financement' %}
+                            {% set buttonContinuationType = "Continuer l'analyse du projet plus tard" %}
+                            <!-- We have to change this two because they are related to interview continuation and validation. -->
+                            {% set validationLink = 'boss_validate_for_finance' %}
+                            {% set continuationLink = 'boss_continue_later' %}
+                            {% set rejectLink = 'boss_reject_project' %}
+                        {% elseif (projectStatus == 'PROJET A REVOIR') %}
+                            {% set buttonValidationType = "Renvoyer pour une reetude de l'expert" %}
+                            {% set buttonContinuationType = "Revoir plus tard" %}
+                            {% set validationLink = "boss_resend_to_expert" %}
+                            {% set continuationLink = 'admin' %}
+                            {% set rejectLink = 'boss_full_reject' %}
+                        {% else %}
+                            {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
+                            {% set buttonContinuationType = "Continuer l'etude plus tard" %}
+                            {% set validationLink = "expert_send_to_interview" %}
+                            {% set continuationLink = 'expert_continue_later' %}
+                            {% set rejectLink = 'boss_reject_project' %}
+
+                        {% endif %}
+
+                        <a type="button" class="btn btn-success col"
+                           href="{{ path( validationLink, {projectId: project.projectId} ) }}">
+                            <i class="fas fa-plus"></i>
+                            <span>{{ buttonValidationType }}</span>
+                        </a>
+                        <a type="button" class="btn btn-warning col"
+                           href="{{ path(continuationLink, {projectId: project.projectId}) }}">
+                            <i class="fas fa-plus"></i>
+                            <span>{{ buttonContinuationType }}</span>
+                        </a>
+
+                        <a type="button" class="btn btn-danger col"
+                           href="{{ path(rejectLink, {projectId: project.projectId}) }}">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Rejeter le projet</span>
+                        </a>
                     {% endif %}
-
-                    <!-- burda dashborda yönlendireceğiz gerisi backend -->
-                    <a type="button" class="btn btn-success col" href="#" >
-                        <i class="fas fa-plus"></i>
-                        <span>Valider definitivement</span>
-                    </a>
-                    <a type="button" class="btn btn-warning col" href="{{ path('app-manager-view', {projectId: 'ph23'}) }}" >
-                        <i class="fas fa-plus"></i>
-                        <span>Continuer l'analyse apres</span>
-                    </a>
-                    <!-- burda dashborda yönlendireceğiz gerisi backend -->
-                    <a type="button" class="btn btn-danger col" href="#" >
-                        <i class="fas fa-times-circle"></i>
-                        <span>Rejeter le projet</span>
-                    </a>
-
                 </div>
             </div>
 

@@ -37,28 +37,29 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>ProjetId</th>
+                                    <th>ID du projet</th>
+                                    <th>Nom du projet</th>
                                     <th>Type</th>
                                     <th>Montant</th>
-                                    <th>Fait par</th>
-                                    <th>Montant restant a envoyer</th>
-                                    <th>Montant restant a reçevoir</th>
-                                    <th>Notes</th>
-                                    <th>Dates d'operation</th>
+                                    <th>Enregistré par</th>
+                                    <th>Montant restant a debourser pour le projet</th>
+                                    <th>Montant restant a rembourser</th>
+                                    <th>Details</th>
+                                    <th>Date d'operation</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% set notesData = [1,2,3,4,5,6,7,8,9] %}
-                                {% for note in notesData %}
+                                {% for financialDetail in financialDetails %}
                                     <tr>
-                                        <td>ph12324fjtrs</td>
-                                        <td>Entrant</td>
-                                        <td>1000000</td>
-                                        <td>G D J</td>
-                                        <td>250000</td>
-                                        <td>0.0</td>
-                                        <td>Le payement debudeta en fin Juin</td>
-                                        <td>12.01.2021</td>
+                                        <td>{{ financialDetail.projectId.projectId }}</td>
+                                        <td>{{ financialDetail.projectId.name }}</td>
+                                        <td>{{ financialDetail.type | getType(financialDetail.type) }}</td>
+                                        <td>{{ financialDetail.amount }}</td>
+                                        <td>{{ financialDetail.operationExecutor.nameSurname }}</td>
+                                        <td>{{ financialDetail.amountLeftToBeSentByUs }}</td>
+                                        <td>{{ financialDetail.amountLeftToBePaidToUs }}</td>
+                                        <td>{{ financialDetail.extra }}</td>
+                                        <td>{{ financialDetail.updatedAt | date('d-m-Y H:i:s') }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

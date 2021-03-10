@@ -9,12 +9,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
+
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/mailTemplate", name="mail_template")
+     * @return Response
      */
-    public function index(): Response
+    public function demo(): Response
     {
-        return $this->render('pages/status/bos_manager_analysis.html.twig');
+        return $this->render('/mails/employee_mail.html.twig');
     }
 
     /**
@@ -33,11 +35,11 @@ class AdminController extends AbstractController
      * @param string|null $projectId
      * @return Response
      */
-    public function attenteControl($projectId): Response
+   /* public function attenteControl($projectId): Response
     {
         return $this->render('pages/status/en_attente_de_control.html.twig');
     }
-
+*/
     /**
      * @Route("/attente_etude/{projectId}", name="app-attente-etude-view")
      * @param string|null $projectId
@@ -58,7 +60,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/interview_step", name="app-interview-view")
+     * @Route("/interview_step...*", name="app-interview-view")
      * @return Response
      */
     public function interviewStep(): Response
@@ -117,7 +119,7 @@ class AdminController extends AbstractController
      */
     public function managerViewValidatedFinanced(): Response
     {
-        return $this->render('pages/status/validated_financed.html.twig');
+        return $this->render('pages/status/acc_validated_financed.html.twig');
     }
 
     /**

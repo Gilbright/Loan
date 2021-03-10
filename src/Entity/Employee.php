@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
 use App\Repository\EmployeeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -57,6 +59,52 @@ class Employee implements UserInterface
      * @ORM\Column(type="text", nullable=true)
      */
     private $extra;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Note::class, mappedBy="employee")
+     */
+    private $notes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $idPictureLink;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $idDocumentPictureLink;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $birthDate;
+
+    /**
+     * @ORM\Column(type="string", length=55)
+     */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nationality;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $idDocNumber;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FinanceDetail::class, mappedBy="operationExecutor")
+     */
+    private $financeDetails;
+
+    public function __construct()
+    {
+        $this->notes = new ArrayCollection();
+        $this->financeDetails = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -183,5 +231,152 @@ class Employee implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Note[]
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): self
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes[] = $note;
+            $note->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): self
+    {
+        if ($this->notes->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getEmployee() === $this) {
+                $note->setEmployee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FinanceDetail[]
+     */
+    public function getFinanceDetails(): Collection
+    {
+        return $this->financeDetails;
+    }
+
+    public function addFinanceDetail(FinanceDetail $financeDetail): self
+    {
+        if (!$this->financeDetails->contains($financeDetail)) {
+            $this->financeDetails[] = $financeDetail;
+            $financeDetail->setOperationExecutor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFinanceDetail(FinanceDetail $financeDetail): self
+    {
+        if ($this->financeDetails->removeElement($financeDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($financeDetail->getOperationExecutor() === $this) {
+                $financeDetail->setOperationExecutor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIdPictureLink(): ?string
+    {
+        return $this->idPictureLink;
+    }
+
+    public function setIdPictureLink(?string $idPictureLink): self
+    {
+        $this->idPictureLink = $idPictureLink;
+
+        return $this;
+    }
+
+    public function getIdDocumentPictureLink(): ?string
+    {
+        return $this->idDocumentPictureLink;
+    }
+
+    public function setIdDocumentPictureLink(?string $idDocumentPictureLink): self
+    {
+        $this->idDocumentPictureLink = $idDocumentPictureLink;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?string
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(string $birthDate): self
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param $gender
+     * @return $this
+     */
+    public function setGender($gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getNationality(): ?string
+    {
+        return $this->nationality;
+    }
+
+    public function setNationality(string $nationality): self
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdDocNumber()
+    {
+        return $this->idDocNumber;
+    }
+
+    /**
+     * @param $idDocNumber
+     * @return $this
+     */
+    public function setIdDocNumber($idDocNumber): self
+    {
+        $this->idDocNumber = $idDocNumber;
+
+        return $this;
     }
 }

@@ -14,9 +14,11 @@ class Status
 
     public const EXP_INTERVIEW_STEP = 'ETAPE D ENTRETIEN';
 
-    //public const POST_INTERVIEW_STEP = 'POST ENTRETIEN'; // A revoir --> enlevable
+    public const EXP_POST_INTERVIEW = 'POST ENTRETIEN'; // A revoir --> enlevable
 
     public const BOS_MANAGER_ANALYSIS = 'ANALYSE DU MANAGER';
+
+    public const BOS_MANAGER_ANALYSIS_GOING_ON = 'ANALYSE DU MANAGER EN COURS'; // newly added
 
     public const BOS_BEEN_VALIDATED = 'VALIDE';
 
