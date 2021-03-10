@@ -34,7 +34,9 @@
         "icheck-bootstrap": "^3.0.1",
         "inputmask": "^5.0.5",
         "ionicons": "^5.5.0",
+        "jquery-knob": "^1.2.11",
         "jquery-ui": "^1.12.1",
+        "jquery-validation": "^1.19.3",
         "moment": "^2.29.1",
         "overlayscrollbars": "^1.13.1",
         "summernote": "^0.8.18"

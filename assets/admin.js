@@ -24,6 +24,12 @@ require('inputmask/dist/jquery.inputmask.min.js')
 
 require('bs-custom-file-input/dist/bs-custom-file-input.min.js');
 
+require('jquery/dist/jquery.min.js')
+require('jquery-validation/dist/jquery.validate.min.js')
+
+require('jquery-validation/dist/additional-methods.min.js')
+
+require('jquery-knob/dist/jquery.knob.min.js')
 //Datemask dd/mm/yyyy
 $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
 $('[data-mask]').inputmask();
@@ -33,3 +39,46 @@ module.exports = function () {
     bsCustomFileInput.init();
 };
 
+$(function () {
+    $.validator.setDefaults({
+        submitHandler: function () {
+            alert( "Form successful submitted!" );
+        }
+    });
+    $('#projectForm').validate({
+        rules: {
+            projectName: {
+                required: true
+            },
+            projectDetails: {
+                required: true
+            },
+            amountWanted:{
+                required: true
+            },
+            modalityAmount:{
+                required: true
+            },
+            modalityNumberOfMonths:{
+                required: true
+            },
+            confirmation: {
+                required: true
+            },
+        },
+        messages: {
+            confirmation: "Please accept our terms"
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+});
