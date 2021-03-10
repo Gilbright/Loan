@@ -90,6 +90,16 @@ class Project
      */
     private $notes;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $businessPlanLink;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $extraDocumentUploadLink;
+
     public function __construct()
     {
         $this->clients = new ArrayCollection();
@@ -327,6 +337,30 @@ class Project
     public function setFinalAmount($finalAmount): self
     {
         $this->finalAmount = $finalAmount;
+
+        return $this;
+    }
+
+    public function getBusinessPlanLink(): ?string
+    {
+        return $this->businessPlanLink;
+    }
+
+    public function setBusinessPlanLink(?string $businessPlanLink): self
+    {
+        $this->businessPlanLink = $businessPlanLink;
+
+        return $this;
+    }
+
+    public function getExtraDocumentUploadLink(): ?string
+    {
+        return $this->extraDocumentUploadLink;
+    }
+
+    public function setExtraDocumentUploadLink(?string $extraDocumentUploadLink): self
+    {
+        $this->extraDocumentUploadLink = $extraDocumentUploadLink;
 
         return $this;
     }
