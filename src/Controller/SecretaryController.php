@@ -27,7 +27,7 @@ class SecretaryController extends AbstractController
      * @param ProjectManager $projectManager
      * @return Response
      */
-    public function index(Request $request, ProjectManager $projectManager): Response
+    public function secRegisterProject(Request $request, ProjectManager $projectManager): Response
     {
         if ($request->isMethod('POST')) {
             $projectId = $projectManager->execute($request->request->all());
@@ -45,7 +45,7 @@ class SecretaryController extends AbstractController
      * @param string $projectId
      * @return Response
      */
-    public function listClient(Request $request, ClientManager $clientManager, string $projectId, EntityManagerInterface $entityManager): Response
+    public function secListClient(Request $request, ClientManager $clientManager, string $projectId, EntityManagerInterface $entityManager): Response
     {
         $clients = $clientManager->getClients($projectId);
 
@@ -88,7 +88,7 @@ class SecretaryController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function registerClient(Request $request, ClientManager $clientManager, string $projectId): Response
+    public function secRegisterClient(Request $request, ClientManager $clientManager, string $projectId): Response
     {
         if ($request->isMethod('POST')) {
             $clientManager->execute($request->request->all(), $projectId);

@@ -60,7 +60,9 @@ class ProjectManager
             ->setAmount((float)$data['amountWanted'])
             ->setFinalAmount(0)
             ->setName($data['projectName'])
-            ->setDetails($data['projectDetails']);
+            ->setDetails($data['projectDetails'])
+            ->setBusinessPlanLink($data['businessPlanLink'])
+            ->setExtraDocumentUploadLink($data['extraDocumentLink']);
 
         $this->entityManager->persist($projectEntity);
         $this->entityManager->flush();
