@@ -50,7 +50,7 @@ class ProjectManager
 
         $projectEntity = new Project();
 
-        $projectId = str_replace('.', '', uniqid('ph', true));
+        $projectId = str_replace('.', '', uniqid('ph', false));
 
         $projectEntity->setProjectId($projectId)
             ->setStatus(Status::EXP_WAITING_FOR_ANALYSIS)
