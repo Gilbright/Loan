@@ -43,6 +43,7 @@ class SecretaryController extends AbstractController
      * @param Request $request
      * @param ClientManager $clientManager
      * @param string $projectId
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     public function listClient(Request $request, ClientManager $clientManager, string $projectId, EntityManagerInterface $entityManager): Response
@@ -80,6 +81,23 @@ class SecretaryController extends AbstractController
             'projects' => $projects,
             'teamLeads' => $teamLeads
         ]);
+    }
+
+    /**
+     * @Route("/secretary/addClient", name="app_sec_add_client")
+     * @param Request $request
+     * @param ClientManager $clientManager
+     * @return Response
+     */
+    public function AddClient(Request $request, ClientManager $clientManager): Response
+    {
+        if ($request->isMethod('POST')) {
+            $clientManager->addClient($request->request->all());
+
+            return $this->redirectToRoute('admin');
+        }
+
+        return $this->render('forms/register_client.html.twig');
     }
 
     /**

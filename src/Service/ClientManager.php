@@ -106,4 +106,31 @@ class ClientManager
 
         return $teamLeads;
     }
+
+    public function addClient(array $data)
+    {
+        $data = ClientResolver::resolve($data);
+
+        $gender = $data['gender'] === 'Homme' ? 'H' : 'F';
+
+        $clientEntity = new Client();
+
+        $clientEntity
+            ->setAddress($data['address'])
+            ->setPhoneNumber($data['phoneNumber'])
+            ->setEmail($data['email'])
+            ->setNameSurname($data['nameSurname'])
+            ->setIdDocumentPictureLink("link there")
+            ->setIdPictureLink("link here")
+            ->setIdDocNumber($data['idNumber'])
+            ->setNationality($data['nationality'])
+            ->setIsTeamLead(false)
+            ->setGender($gender)
+            ->setProfession($data['profession'])
+            ->setMonthlyIncome($data['monthlyIncome'])
+            ->setBirthDate($data['birthDate']);
+
+        $this->entityManager->persist($clientEntity);
+        $this->entityManager->flush();
+    }
 }
