@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -103,6 +105,21 @@ class Client
      * @ORM\Column(type="string", length=255)
      */
     private $idDocNumber;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SavingDetail::class, mappedBy="clientId", orphanRemoval=true)
+     */
+    private $savingDetails;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $balance;
+
+    public function __construct()
+    {
+        $this->savingDetails = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -344,6 +361,48 @@ class Client
     public function setIdDocNumber($idDocNumber): self
     {
         $this->idDocNumber = $idDocNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SavingDetail[]
+     */
+    public function getSavingDetails(): Collection
+    {
+        return $this->savingDetails;
+    }
+
+    public function addSavingDetail(SavingDetail $savingDetail): self
+    {
+        if (!$this->savingDetails->contains($savingDetail)) {
+            $this->savingDetails[] = $savingDetail;
+            $savingDetail->setClientId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSavingDetail(SavingDetail $savingDetail): self
+    {
+        if ($this->savingDetails->removeElement($savingDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($savingDetail->getClientId() === $this) {
+                $savingDetail->setClientId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBalance(): ?float
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(?float $balance): self
+    {
+        $this->balance = $balance;
 
         return $this;
     }
