@@ -9,6 +9,7 @@ use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ClientResolver;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Query\Expr\Join;
 
 class ClientManager
@@ -68,7 +69,7 @@ class ClientManager
 
     }
 
-    public function getClients(string $projectId = null): array
+    public function getClientsByProjectId(string $projectId = null): array
     {
         $result = $this->entityManager->createQueryBuilder()
             ->select('c')
@@ -87,6 +88,28 @@ class ClientManager
         return $this->clientRepository->find($clientId);
     }
 
+    public function getClientByIdNumber (string $clientIdNumber)
+    {
+        return $this->clientRepository->findOneBy(['idDocNumber' => $clientIdNumber]);
+    }
+
+    public function setClientProjectId(string $clientIdNumber, string $projectId): void
+    {
+        $client = $this->getClientByIdNumber($clientIdNumber);
+        $project = $this->getProjectById($projectId);
+
+        if (!$client instanceof Client){
+            //@Todo client not fount exception
+
+            throw new EntityNotFoundException('Client not found');
+        }
+
+        if (!$client->getProjectId()){
+            $client->setProjectId($project);
+        }
+
+        $this->entityManager->flush();
+    }
 
     public function getProjectById (string $projectId = null)
     {
@@ -128,7 +151,9 @@ class ClientManager
             ->setGender($gender)
             ->setProfession($data['profession'])
             ->setMonthlyIncome($data['monthlyIncome'])
-            ->setBirthDate($data['birthDate']);
+            ->setBirthDate($data['birthDate'])
+            ->setBalance(0)
+        ;
 
         $this->entityManager->persist($clientEntity);
         $this->entityManager->flush();
