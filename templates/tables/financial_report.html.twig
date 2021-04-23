@@ -1,5 +1,15 @@
 {% extends 'layout.html.twig' %}
 
+ {% block stylesheets %}
+     {{ parent() }}
+     {{ encore_entry_link_tags('datatable') }}
+ {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('datatable') }}
+{% endblock %}
+
 {% block body %}
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -23,8 +33,8 @@
 
             <div class="row">
                 <div class="col">
-                    <div class="card card-info">
-                        <div class="card-header">
+                    <div class="app-card app-card-orders-table shadow-sm mb-5">
+                        <div class="app-card-header">
                             <div class="row">
                                 <div class="col">
                                     <h3 class="card-title" >Details Financiers</h3>
@@ -33,8 +43,11 @@
                         </div>
 
                         <!--LE body du tableau des notes du projet -->
-                        <div class="card-body table-responsive p-0">
-                            <table class="table">
+                        <div class="app-card-body table-responsive p-0">
+                            <div class="table-responsive">
+
+                            </div>
+                            <table id="financialReportTableId" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>ID du projet</th>
