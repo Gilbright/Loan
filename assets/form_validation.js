@@ -10,3 +10,5 @@ import 'admin-lte/plugins/jquery-validation/additional-methods.min.js'
 
 import './subJS/project_validation.js'
 
+import './subJS/client_validation.js'
+

@@ -2,12 +2,12 @@
 
  {% block stylesheets %}
      {{ parent() }}
-     {{ encore_entry_link_tags('input_form') }}
+     {{ encore_entry_link_tags('form_validation') }}
  {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('input_form') }}
+    {{ encore_entry_script_tags('form_validation') }}
 {% endblock %}
 
 {% block body %}
@@ -35,7 +35,7 @@
 
                 <!-- right column -->
                 <div class="col-lg-12">
-                    <form method="post">
+                    <form method="post" id="addClientForm">
                         <!-- general form elements disabled -->
                         <div class="card card-warning">
                             <div class="card-header">
@@ -43,7 +43,6 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <form>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="row">
@@ -61,7 +60,6 @@
                                                     <!-- Date dd/mm/yyyy -->
                                                     <div class="form-group">
                                                         <label>2 - Date de naissance</label>
-
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
@@ -180,7 +178,7 @@
                                                         <label>11 - Ajouter la photo de la piece d'identité</label>
                                                         <div class="input-group">
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="piece_identity">
+                                                                <input type="file" class="custom-file-input" id="piece_identity" name="pieceIdentity">
                                                                 <label class="custom-file-label" for="piece_identity">Choose file</label>
                                                             </div>
                                                             <div class="input-group-append">
@@ -198,7 +196,7 @@
                                                         <label>12 - Ajouter la photo d'identité</label>
                                                         <div class="input-group">
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="photo_identity">
+                                                                <input type="file" class="custom-file-input" id="photo_identity" name="photoIdentity">
                                                                 <label class="custom-file-label" for="photo_identity">Choose file</label>
                                                             </div>
                                                             <div class="input-group-append">
@@ -218,7 +216,7 @@
 
 
                                                 <div class="icheck-primary d-inline">
-                                                    <input type="checkbox" name="confirm" id="checkboxPrimary3" >
+                                                    <input type="checkbox" name="confirm" id="checkboxPrimary3" name="confirmation">
                                                     <label for="checkboxPrimary3">
                                                         Je confiirme sur l'honneur la veracité des informations entrées.
                                                     </label>
@@ -227,7 +225,6 @@
                                         </div>
 
                                     </div>
-                                </form>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
