@@ -134,4 +134,13 @@ class AccountantController extends AbstractController
             'financialDetails' => $financialDetails
         ]);
     }
+
+    /**
+     * @Route ("/accountant/savingAction", name="app_acc_saving_action")
+     * @param ClientManager $clientManager
+     */
+    public function accSavingAction(ClientManager $clientManager){
+
+    }
+
 }
