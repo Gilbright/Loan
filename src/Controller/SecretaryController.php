@@ -43,13 +43,21 @@ class SecretaryController extends AbstractController
      * @param Request $request
      * @param ClientManager $clientManager
      * @param string $projectId
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     public function listClient(Request $request, ClientManager $clientManager, string $projectId, EntityManagerInterface $entityManager): Response
     {
-        $clients = $clientManager->getClients($projectId);
+        $clients = $clientManager->getClientsByProjectId($projectId);
 
         if ($request->isMethod('POST')) {
+            if (isset($request->request->all()['IdNumber'])){
+                $idDocNumber = $request->request->all()['IdNumber'];
+                $clientManager->setClientProjectId($idDocNumber, $projectId);
+
+                return $this->redirectToRoute('app_sec_list_client',['projectId' => $projectId]);
+            }
+
             /** @var Client $teamLeadClient */
             $teamLeadClient = $clientManager->getClientById(current($clients)['id']);
             $teamLeadClient->setIsTeamLead(true);
@@ -57,7 +65,6 @@ class SecretaryController extends AbstractController
 
             return $this->redirectToRoute('admin');
         }
-
 
         return $this->render('forms/registered_clients_infos.html.twig', [
             'clientsData' => $clients,
@@ -80,6 +87,23 @@ class SecretaryController extends AbstractController
             'projects' => $projects,
             'teamLeads' => $teamLeads
         ]);
+    }
+
+    /**
+     * @Route("/secretary/addClient", name="app_sec_add_client")
+     * @param Request $request
+     * @param ClientManager $clientManager
+     * @return Response
+     */
+    public function AddClient(Request $request, ClientManager $clientManager): Response
+    {
+        if ($request->isMethod('POST')) {
+            $clientManager->addClient($request->request->all());
+
+            return $this->redirectToRoute('admin');
+        }
+
+        return $this->render('forms/register_client.html.twig');
     }
 
     /**
@@ -110,7 +134,7 @@ class SecretaryController extends AbstractController
     public function secView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager): Response
     {
         $project = $projectManager->getProjectById($projectId);
-        $projectTeam = $clientManager->getClients($projectId);
+        $projectTeam = $clientManager->getClientsByProjectId($projectId);
         $projectNotes = $noteManager->getNotesByProjectId($projectId);
 
         if ($request->isMethod('POST')) {

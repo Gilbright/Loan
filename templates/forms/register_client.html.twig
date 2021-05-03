@@ -2,12 +2,12 @@
 
  {% block stylesheets %}
      {{ parent() }}
-     {{ encore_entry_link_tags('input_form') }}
+     {{ encore_entry_link_tags('form_validation') }}
  {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('input_form') }}
+    {{ encore_entry_script_tags('form_validation') }}
 {% endblock %}
 
 {% block body %}
@@ -35,7 +35,7 @@
 
                 <!-- right column -->
                 <div class="col-lg-12">
-                    <form method="post">
+                    <form method="post" id="addClientForm">
                         <!-- general form elements disabled -->
                         <div class="card card-warning">
                             <div class="card-header">
@@ -43,164 +43,171 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <form>
                                     <div class="row">
-                                        <div class="col">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>1 - Nom et prenoms</label>
-                                                <input type="text" class="form-control" name="nameSurname" placeholder="Entrer ...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Date dd/mm/yyyy -->
-                                        <div class="form-group">
-                                            <label>2 - Date de naissance</label>
-
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                                </div>
-                                                <input type="text" name="birthDate" class="form-control"  data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
-                                            </div>
-                                            <!-- /.input group -->
-                                        </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label>3 - Genre</label>
-                                                <select class="form-control select2 select2-hidden-accessible"
-                                                        style="width: 100%;" data-select2-id="1" tabindex="-1"
-                                                        aria-hidden="true" name="gender">
-                                                    <option data-select2-id="1">Homme</option>
-                                                    <option selected="selected" data-select2-id="2">Femme
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>4 - Nationalité</label>
-                                                <input type="text" name="nationality" class="form-control" placeholder="Entrer ...">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>5 - Numero de telephone</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- text input -->
+                                                    <div class="form-group">
+                                                        <label>1 - Nom et prenoms</label>
+                                                        <input type="text" class="form-control" name="nameSurname" placeholder="Entrer ...">
                                                     </div>
-                                                    <input type="text" name="phoneNumber" class="form-control" data-inputmask='"mask": "99 - 99 - 99 - 99"' data-mask>
                                                 </div>
-
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>6 - E-mail</label>
-
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- Date dd/mm/yyyy -->
+                                                    <div class="form-group">
+                                                        <label>2 - Date de naissance</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                                            </div>
+                                                            <input type="text" name="birthDate" class="form-control"  data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                                        </div>
+                                                        <!-- /.input group -->
                                                     </div>
-                                                    <input type="email" name="email" class="form-control" placeholder="Email">
                                                 </div>
-
                                             </div>
-                                        </div>
-                                    </div>
 
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>7 - Profession</label>
-                                                <input type="text" name="profession" class="form-control" placeholder="Entrer ...">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>8 - Revenu mensuel</label>
-                                                <input type="number" name="monthlyIncome" class="form-control" placeholder="Entrer ...">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- textarea -->
-                                            <div class="form-group">
-                                                <label>9 - Addresse de  la personne</label>
-                                                <textarea class="form-control" name="address" rows="3" placeholder="Entrer ..."></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- textarea -->
-                                            <div class="form-group">
-                                                <label>10 - Numero de la piece d'identité</label>
-                                                <input type="text" name="idNumber" class="form-control" placeholder="Entrer ...">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- textarea -->
-                                            <div class="form-group">
-                                                <label>11 - Ajouter la photo de la piece d'identité</label>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="piece_identity">
-                                                        <label class="custom-file-label" for="piece_identity">Choose file</label>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>3 - Genre</label>
+                                                        <select class="form-control select2 select2-hidden-accessible"
+                                                                style="width: 100%;" data-select2-id="1" tabindex="-1"
+                                                                aria-hidden="true" name="gender">
+                                                            <option data-select2-id="1">Homme</option>
+                                                            <option selected="selected" data-select2-id="2">Femme
+                                                            </option>
+                                                        </select>
                                                     </div>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">Upload</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- text input -->
+                                                    <div class="form-group">
+                                                        <label>4 - Nationalité</label>
+                                                        <input type="text" name="nationality" class="form-control" placeholder="Entrer ...">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- text input -->
+                                                    <div class="form-group">
+                                                        <label>5 - Numero de telephone</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                                            </div>
+                                                            <input type="text" name="phoneNumber" class="form-control" data-inputmask='"mask": "99 - 99 - 99 - 99"' data-mask>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- text input -->
+                                                    <div class="form-group">
+                                                        <label>6 - E-mail</label>
+
+                                                        <div class="input-group mb-3">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                                            </div>
+                                                            <input type="email" name="email" class="form-control" placeholder="Email">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- text input -->
+                                                    <div class="form-group">
+                                                        <label>7 - Profession</label>
+                                                        <input type="text" name="profession" class="form-control" placeholder="Entrer ...">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- textarea -->
-                                            <div class="form-group">
-                                                <label>12 - Ajouter la photo d'identité</label>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="photo_identity">
-                                                        <label class="custom-file-label" for="photo_identity">Choose file</label>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- text input -->
+                                                    <div class="form-group">
+                                                        <label>8 - Revenu mensuel</label>
+                                                        <input type="number" name="monthlyIncome" class="form-control" placeholder="Entrer ...">
                                                     </div>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">Upload</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- textarea -->
+                                                    <div class="form-group">
+                                                        <label>9 - Addresse de  la personne</label>
+                                                        <textarea class="form-control" name="address" rows="8" placeholder="Entrer ..."></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- textarea -->
+                                                    <div class="form-group">
+                                                        <label>10 - Numero de la piece d'identité</label>
+                                                        <input type="text" name="idNumber" class="form-control" placeholder="Entrer ...">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- textarea -->
+                                                    <div class="form-group">
+                                                        <label>11 - Ajouter la photo de la piece d'identité</label>
+                                                        <div class="input-group">
+                                                            <div class="custom-file">
+                                                                <input type="file" class="custom-file-input" id="piece_identity" name="pieceIdentity">
+                                                                <label class="custom-file-label" for="piece_identity">Choose file</label>
+                                                            </div>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">Upload</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- textarea -->
+                                                    <div class="form-group">
+                                                        <label>12 - Ajouter la photo d'identité</label>
+                                                        <div class="input-group">
+                                                            <div class="custom-file">
+                                                                <input type="file" class="custom-file-input" id="photo_identity" name="photoIdentity">
+                                                                <label class="custom-file-label" for="photo_identity">Choose file</label>
+                                                            </div>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">Upload</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -209,7 +216,7 @@
 
 
                                                 <div class="icheck-primary d-inline">
-                                                    <input type="checkbox" name="confirm" id="checkboxPrimary3" >
+                                                    <input type="checkbox" name="confirm" id="checkboxPrimary3" name="confirmation">
                                                     <label for="checkboxPrimary3">
                                                         Je confiirme sur l'honneur la veracité des informations entrées.
                                                     </label>
@@ -218,11 +225,10 @@
                                         </div>
 
                                     </div>
-                                </form>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-info">Enregister et continuer</button>
+                                <button type="submit" class="btn btn-info">Enregister le client</button>
                             </div>
                         </div>
                         <!-- /.card -->
