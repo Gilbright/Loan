@@ -1,5 +1,50 @@
 {% extends 'pages/base_project_clients.html.twig' %}
 
+{% block finalAmoutSetting %}
+    {% if (project.finalAmount == 0 and (project.status == 'ETAPE D ENTRETIEN' or project.status == 'POST ENTRETIEN')) %}
+        {% block project_finale_price %}
+            <form method="post">
+                <div class="card {{ statusData[0] }}">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">
+                                <h3 class="card-title" style="color: red">Ajouter Le montant conclu</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--note -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <!-- text input -->
+                                <div class="form-group" style="color: red">
+                                    <label>Montant conclu comme pret </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-10">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="finalAmount" placeholder="Entrer ...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endblock %}
+    {% endif %}
+{% endblock %}
+
 {% block footer_block %}
     <div class="card-footer">
         <div class="row">
@@ -9,28 +54,31 @@
                     {% set projectStatus = project.status %}
                     {% if (projectStatus == 'ETAPE D ENTRETIEN' or projectStatus == 'POST ENTRETIEN') %}
                         {% set buttonValidationType = 'Valider definitivement' %}
-                        {% set buttonContinuationType = "Continuer l'evaluation de l'entretien apres"  %}
+                        {% set buttonContinuationType = "Continuer l'evaluation de l'entretien apres" %}
                         <!-- We have to change this two because they are related to interview continuation and validation. -->
                         {% set validationLink = "expert_validate_project" %}
                         {% set continuationLink = 'expert_post_interview' %}
 
                     {% else %}
                         {% set buttonValidationType = "Valider pour l'acces a l'entretien " %}
-                        {% set buttonContinuationType = "Continuer l'etude plus tard"  %}
+                        {% set buttonContinuationType = "Continuer l'etude plus tard" %}
                         {% set validationLink = "expert_send_to_interview" %}
                         {% set continuationLink = 'expert_continue_later' %}
                     {% endif %}
 
-                    <a type="button" class="btn btn-success col" href="{{ path( validationLink, {projectId: project.projectId} ) }}" >
+                    <a type="button" class="btn btn-success col"
+                       href="{{ path( validationLink, {projectId: project.projectId} ) }}">
                         <i class="fas fa-plus"></i>
                         <span>{{ buttonValidationType }}</span>
                     </a>
-                    <a type="button" class="btn btn-warning col" href="{{ path(continuationLink, {projectId: project.projectId}) }}" >
+                    <a type="button" class="btn btn-warning col"
+                       href="{{ path(continuationLink, {projectId: project.projectId}) }}">
                         <i class="fas fa-plus"></i>
                         <span>{{ buttonContinuationType }}</span>
                     </a>
 
-                    <a type="button" class="btn btn-danger col" href="{{ path('expert_reject_project', {projectId: project.projectId}) }}" >
+                    <a type="button" class="btn btn-danger col"
+                       href="{{ path('expert_reject_project', {projectId: project.projectId}) }}">
                         <i class="fas fa-times-circle"></i>
                         <span>Rejeter le projet</span>
                     </a>

@@ -41,6 +41,7 @@ class MailerManager
             ])
         ;
 
-        $this->mailerSender->send($mailObject);
+        //@Todo We will reopen, client mail are not real mail. ça cause des errors...
+       // $this->mailerSender->send($mailObject);
     }
 }

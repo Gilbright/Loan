@@ -53,7 +53,7 @@ class BossController extends AbstractController
     public function bossView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager, FinanceManager $financeManager): Response
     {
         $project = $projectManager->getProjectById($projectId);
-        $projectTeam = $clientManager->getClients($projectId);
+        $projectTeam = $clientManager->getClientsByProjectId($projectId);
         $projectNotes = $noteManager->getNotesByProjectId($projectId);
         $financialDetails = $financeManager->getFinancialDetailsByProjectId($projectId);
 

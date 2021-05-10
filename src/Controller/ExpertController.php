@@ -30,12 +30,23 @@ class ExpertController extends AbstractController
      */
     public function expWaitingAnalysis(ProjectManager $projectManager, ClientManager $clientManager): Response
     {
+        $_projects = [];
+        $_teamLeads = [];
+
         $projects = $projectManager->getProjectsByStatus(Status::EXP_WAITING_FOR_ANALYSIS);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
+        foreach ($projects as $index => $project){
+            if (!$teamLeads[$index]){
+                continue;
+            }
+            $_projects[] = $project;
+            $_teamLeads[] = $teamLeads[$index];
+        }
+
         return $this->render('pages/status/exp_waiting_for_analysis.html.twig', [
-            'projects' => $projects,
-            'teamLeads' => $teamLeads
+            'projects' => $_projects,
+            'teamLeads' => $_teamLeads
         ]);
     }
 
@@ -52,7 +63,7 @@ class ExpertController extends AbstractController
     public function expertView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager, EntityManagerInterface $entityManager): Response
     {
         $project = $projectManager->getProjectById($projectId);
-        $projectTeam = $clientManager->getClients($projectId);
+        $projectTeam = $clientManager->getClientsByProjectId($projectId);
         $projectNotes = $noteManager->getNotesByProjectId($projectId);
 
         if ($request->isMethod('POST')) {

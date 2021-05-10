@@ -1,5 +1,14 @@
 {% extends 'layout.html.twig' %}
 
+ {% block stylesheets %}
+     {{ parent() }}
+     {{ encore_entry_link_tags('datatable') }}
+ {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('datatable') }}
+{% endblock %}
 {% block body %}
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -29,7 +38,7 @@
                     <div class="app-card app-card-orders-table shadow-sm mb-5">
                         <div class="app-card-body">
                             <div class="table-responsive">
-                                <table class="table text-left">
+                                <table id="projectTableId" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                         <th class="cell">Projet Id</th>

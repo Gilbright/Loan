@@ -76,11 +76,6 @@ class Project
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Client::class, mappedBy="projectId")
-     */
-    private $clients;
-
-    /**
      * @ORM\Column(type="text", nullable=false)
      */
     private $details;
@@ -90,10 +85,25 @@ class Project
      */
     private $notes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Client::class, mappedBy="projectId")
+     */
+    private $clients;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : false})
+     */
+    private $isFinished;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $completionDate;
+
     public function __construct()
     {
-        $this->clients = new ArrayCollection();
         $this->notes = new ArrayCollection();
+        $this->clients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -235,36 +245,6 @@ class Project
     }
 
     /**
-     * @return Collection|Client[]
-     */
-    public function getClients(): Collection
-    {
-        return $this->clients;
-    }
-
-    public function addClient(Client $client): self
-    {
-        if (!$this->clients->contains($client)) {
-            $this->clients[] = $client;
-            $client->setProjectId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClient(Client $client): self
-    {
-        if ($this->clients->removeElement($client)) {
-            // set the owning side to null (unless already changed)
-            if ($client->getProjectId() === $this) {
-                $client->setProjectId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function getDetails()
@@ -327,6 +307,57 @@ class Project
     public function setFinalAmount($finalAmount): self
     {
         $this->finalAmount = $finalAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Client[]
+     */
+    public function getClients(): Collection
+    {
+        return $this->clients;
+    }
+
+    public function addClient(Client $client): self
+    {
+        if (!$this->clients->contains($client)) {
+            $this->clients[] = $client;
+            $client->addProjectId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClient(Client $client): self
+    {
+        if ($this->clients->removeElement($client)) {
+            $client->removeProjectId($this);
+        }
+
+        return $this;
+    }
+
+    public function getIsFinished(): ?bool
+    {
+        return $this->isFinished;
+    }
+
+    public function setIsFinished(?bool $isFinished): self
+    {
+        $this->isFinished = $isFinished;
+
+        return $this;
+    }
+
+    public function getCompletionDate(): ?\DateTimeInterface
+    {
+        return $this->completionDate;
+    }
+
+    public function setCompletionDate(?\DateTimeInterface $completionDate): self
+    {
+        $this->completionDate = $completionDate;
 
         return $this;
     }

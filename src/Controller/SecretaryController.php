@@ -43,21 +43,28 @@ class SecretaryController extends AbstractController
      * @param Request $request
      * @param ClientManager $clientManager
      * @param string $projectId
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     public function listClient(Request $request, ClientManager $clientManager, string $projectId, EntityManagerInterface $entityManager): Response
     {
-        $clients = $clientManager->getClients($projectId);
+        $clients = $clientManager->getClientsByProjectId($projectId);
 
         if ($request->isMethod('POST')) {
+            if (isset($request->request->all()['IdNumber'])){
+                $idDocNumber = $request->request->all()['IdNumber'];
+                $clientManager->setClientProjectId($idDocNumber, $projectId);
+
+                return $this->redirectToRoute('app_sec_list_client',['projectId' => $projectId]);
+            }
+
             /** @var Client $teamLeadClient */
-            $teamLeadClient = $clientManager->getClientById(current($clients)['id']);
+            $teamLeadClient = $clientManager->getClientById($clients->first()->getId());
             $teamLeadClient->setIsTeamLead(true);
             $entityManager->flush();
 
             return $this->redirectToRoute('admin');
         }
-
 
         return $this->render('forms/registered_clients_infos.html.twig', [
             'clientsData' => $clients,
@@ -83,20 +90,37 @@ class SecretaryController extends AbstractController
     }
 
     /**
-     * @Route("/secretary/registerClient/{projectId}", name="app_sec_register_client")
+     * @Route("/secretary/addClient", name="app_sec_add_client")
      * @param Request $request
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function registerClient(Request $request, ClientManager $clientManager, string $projectId): Response
+    public function AddClient(Request $request, ClientManager $clientManager): Response
     {
         if ($request->isMethod('POST')) {
-            $clientManager->execute($request->request->all(), $projectId);
-            return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
+            $clientManager->addClient($request->request->all());
+
+            return $this->redirectToRoute('admin');
         }
 
         return $this->render('forms/register_client.html.twig');
     }
+
+//    /**
+//     * @Route("/secretary/registerClient/{projectId}", name="app_sec_register_client")
+//     * @param Request $request
+//     * @param ClientManager $clientManager
+//     * @return Response
+//     */
+//    public function registerClient(Request $request, ClientManager $clientManager, string $projectId): Response
+//    {
+//        if ($request->isMethod('POST')) {
+//            $clientManager->execute($request->request->all(), $projectId);
+//            return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
+//        }
+//
+//        return $this->render('forms/register_client.html.twig');
+//    }
 
     /**
      * @Route("/secretary/view/{projectId}", name="app_sec_view")
@@ -110,7 +134,7 @@ class SecretaryController extends AbstractController
     public function secView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager): Response
     {
         $project = $projectManager->getProjectById($projectId);
-        $projectTeam = $clientManager->getClients($projectId);
+        $projectTeam = $clientManager->getClientsByProjectId($projectId);
         $projectNotes = $noteManager->getNotesByProjectId($projectId);
 
         if ($request->isMethod('POST')) {
