@@ -1,0 +1,147 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>General Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">General Form</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- right column -->
+                <div class="col-lg-12">
+
+
+                    <!-- general form elements disabled -->
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="card-title">Veuillez entrer les informations de l'opération
+                                        d'épargne.</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--formulaire des informations de cotisation et ou defalcation -->
+                        <div class="card-body">
+                            <form method="post">
+                                <div class="row">
+                                    <div class="col">
+
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Numero de la piece d'identité</label>
+                                            <input type="text" class="form-control" name="IdNumber"
+                                                   placeholder="Entrer le numero de la piece d'identité du client concerné">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label> Type d'opération</label>
+                                            <select class="form-control select2 select2-hidden-accessible"
+                                                    style="width: 100%;" data-select2-id="1" tabindex="-1"
+                                                    aria-hidden="true" name="type">
+                                                <option data-select2-id="cotisation" value="cotisation">Cotisation
+                                                </option>
+                                                <option selected="selected" value="defalcation"
+                                                        data-select2-id="defalcation">Défalcation
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Mois de l'opération</label>
+                                            <input type="text" name="month" class="form-control"
+                                                   placeholder="Entrer le mois si c'est une cotisation">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Montant</label>
+                                            <input type="number" name="amount" class="form-control"
+                                                   placeholder="Entrer ...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <!-- textarea -->
+                                        <div class="form-group">
+                                            <label>Ajouter une piece justificative</label>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="piece_identity"
+                                                           name="proofDocument">
+                                                    <label class="custom-file-label" for="piece_identity">Choose
+                                                        file</label>
+                                                </div>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">Upload</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <!-- textarea -->
+                                        <div class="form-group">
+                                            <label>Details supplementaires</label>
+                                            <textarea class="form-control" name="details" rows="8"
+                                                      placeholder="Entrer tout autre detail relatif a l'operation..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-info">Enregistrer</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!--/.col (right) -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+

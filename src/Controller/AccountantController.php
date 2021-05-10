@@ -7,8 +7,10 @@ use App\Service\ClientManager;
 use App\Service\FinanceManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
+use App\Service\SavingManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,7 +59,7 @@ class AccountantController extends AbstractController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $data['project'] = $project;
-            if (isset($data['noteContent'])){
+            if (isset($data['noteContent'])) {
                 $noteManager->execute($data);
             } elseif (isset($data['paymentDetails'])) {
                 $projectManager->changeProjectStatus(Status::ACC_VALIDATED_FINANCED, $projectId);
@@ -133,5 +135,25 @@ class AccountantController extends AbstractController
         return $this->render('tables/financial_report.html.twig', [
             'financialDetails' => $financialDetails
         ]);
+    }
+
+    /**
+     * @Route ("/accountant/savingAction", name="app_acc_saving_action")
+     * @param Request $request
+     * @param ClientManager $clientManager
+     */
+    public function accSavingAction(Request $request,ClientManager $clientManager, SavingManager $savingManager)
+    {
+        // in case the accountant has entered the information to save
+        if ($request->isMethod('POST')) {
+            $savingArray = $request->request->all();
+
+            $savingManager->addSaving($savingArray,$clientManager);
+
+           return $this->redirectToRoute('admin');
+        }
+
+        //when clicked directly on "Action d'epargne"
+        return $this->render('forms/register_saving_operation.html.twig');
     }
 }
