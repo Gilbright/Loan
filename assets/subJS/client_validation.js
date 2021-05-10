@@ -15,8 +15,7 @@ $(function () {
                 required: true,
             },
             nationality: {
-                required: true,
-                number: true
+                required: true
             },
             phoneNumber: {
                 required: true,

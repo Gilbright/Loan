@@ -81,11 +81,6 @@ class Client
     private $idDocumentPictureLink;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="clients")
-     */
-    private $projectId;
-
-    /**
      * @ORM\Column(type="string")
      */
     private $birthDate;
@@ -116,9 +111,15 @@ class Client
      */
     private $balance;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Project::class, inversedBy="clients")
+     */
+    private $projectId;
+
     public function __construct()
     {
         $this->savingDetails = new ArrayCollection();
+        $this->projectId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -283,18 +284,6 @@ class Client
         }
     }
 
-    public function getProjectId(): ?Project
-    {
-        return $this->projectId;
-    }
-
-    public function setProjectId(?Project $projectId): self
-    {
-        $this->projectId = $projectId;
-
-        return $this;
-    }
-
     public function getBirthDate(): ?string
     {
         return $this->birthDate;
@@ -403,6 +392,30 @@ class Client
     public function setBalance(?float $balance): self
     {
         $this->balance = $balance;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjectId(): Collection
+    {
+        return $this->projectId;
+    }
+
+    public function addProjectId(Project $projectId): self
+    {
+        if (!$this->projectId->contains($projectId)) {
+            $this->projectId[] = $projectId;
+        }
+
+        return $this;
+    }
+
+    public function removeProjectId(Project $projectId): self
+    {
+        $this->projectId->removeElement($projectId);
 
         return $this;
     }
