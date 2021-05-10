@@ -100,4 +100,23 @@ class EmployeeManager
             ->setParameter('roles', '%"' . $role . '"%')
             ->getQuery()->getResult();
     }
+
+    public function updateEmployeeInfos(array $data, Employee $employee): void
+    {
+        $employee
+            ->setPhoneNumber($data['phoneNumber'])
+            ->setEmail($data['email'])
+        ;
+
+        if ($data['address']){
+            $employee->setAddress($data['address']);
+        }
+
+        if ($data['password']){
+            $password = $this->passwordEncoder->encodePassword($employee, $data['password']);
+            $employee->setPassword($password);
+        }
+
+        $this->entityManager->flush();
+    }
 }

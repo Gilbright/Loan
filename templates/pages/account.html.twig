@@ -33,28 +33,28 @@
 
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                    <b>Name</b>
+                                    <b>Nom et Prenom</b>
                                     <br>{{ user.nameSurname}}
                                 </li>
                                 <li class="list-group-item">
                                     <b>Email</b>
                                     <br>{{ user.email}}
-                                    <a class="float-right btn-sm app-btn-secondary" href="#">Modifier</a>
+                                    <a class="float-right btn-sm app-btn-secondary" href="{{ path('app_account_updates') }}">Modifier</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Phone</b>
+                                    <b>Numéro de telephone</b>
                                     <br>{{ user.phoneNumber}}
-                                    <a class="float-right btn-sm app-btn-secondary" href="#">Modifier</a>
+                                    <a class="float-right btn-sm app-btn-secondary" href="{{ path('app_account_updates') }}">Modifier</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Adress</b>
+                                    <b>Adresse</b>
                                     <br>{{ user.address}}
-                                    <a class="float-right btn-sm app-btn-secondary" href="#">Modifier</a>
+                                    <a class="float-right btn-sm app-btn-secondary" href="{{ path('app_account_updates') }}">Modifier</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Paasword</b>
+                                    <b>Mots de passe</b>
                                     <br>. . . . . . . . . .
-                                    <a class="float-right btn-sm app-btn-secondary" href="#">Modifier</a>
+                                    <a class="float-right btn-sm app-btn-secondary" href="{{ path('app_account_updates') }}">Modifier</a>
                                 </li>
                             </ul>
 
