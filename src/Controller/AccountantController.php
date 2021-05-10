@@ -57,7 +57,7 @@ class AccountantController extends AbstractController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $data['project'] = $project;
-            if (isset($data['noteContent'])){
+            if (isset($data['noteContent'])) {
                 $noteManager->execute($data);
             } elseif (isset($data['paymentDetails'])) {
                 $projectManager->changeProjectStatus(Status::ACC_VALIDATED_FINANCED, $projectId);
@@ -137,10 +137,21 @@ class AccountantController extends AbstractController
 
     /**
      * @Route ("/accountant/savingAction", name="app_acc_saving_action")
+     * @param Request $request
      * @param ClientManager $clientManager
      */
-    public function accSavingAction(ClientManager $clientManager){
+    public function accSavingAction(Request $request, ClientManager $clientManager)
+    {
+        // in case the accountant has entered the information to save
+        if ($request->isMethod('POST')){
 
+
+
+            dd($request, $request->request, $request->request->all());
+        }
+
+        //when clicked directly on "Action d'epargne"
+        return $this->render('forms/register_saving_operation.html.twig');
     }
 
 }
