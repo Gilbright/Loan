@@ -141,11 +141,13 @@ class ClientManager
     {
         $teamLeads = [];
 
+        /** @var Project $project */
         foreach ($projects as $project) {
-            $teamLeads[] = $this->clientRepository->findOneBy([
-                'projectId' => $project->getId(),
-                'isTeamLead' => 1
-            ]);
+            foreach ($project->getClients() as $client) {
+                if ($client->getIsTeamLead()) {
+                    $teamLeads[] = $client;
+                }
+            }
         }
 
         return $teamLeads;

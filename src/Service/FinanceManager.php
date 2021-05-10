@@ -70,6 +70,7 @@ class FinanceManager
             ->setType($type)
             ->setAmount((float)$data['amount'])
             ->setProjectId($project)
+            ->setFinanceDetailDocument($data['financeDetailDoc'])
             ->setAmountLeftToBePaidToUs($this->calculateAmountLeftToBePaidToUs($project, (float)$data['amount'], strtolower($data['dropdownName'])))
             ->setAmountLeftToBeSentByUs($this->calculateAmountLeftToBeSentByUs($project, (float)$data['amount'], strtolower($data['dropdownName'])))
             ->setExtra($data['paymentDetails'])
