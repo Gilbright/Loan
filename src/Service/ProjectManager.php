@@ -54,11 +54,14 @@ class ProjectManager
 
         $projectEntity->setProjectId($projectId)
             ->setStatus(Status::EXP_WAITING_FOR_ANALYSIS)
-            ->setRepaymentDuration((int)$this->repaymentDurationCalculator($data)) // RepaymentDuration is in months
+            ->setRepaymentDuration((int)$this->repaymentDurationCalculator($data))
+
+            //TODO revoir le hesaplama RepaymentDuration is in months
             ->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths'])
             ->setModalityAmount((float)$data['modalityAmount'])
             ->setAmount((float)$data['amountWanted'])
             ->setFinalAmount(0)
+            ->setIsFinished(false)
             ->setName($data['projectName'])
             ->setDetails($data['projectDetails']);
 
@@ -72,7 +75,8 @@ class ProjectManager
     {
         $monthlyPay = $data['modalityAmount'] / $data['modalityNumberOfMonths'];
 
-        return $data['amountWanted'] / $monthlyPay;
+        $result =  $data['amountWanted'] / $monthlyPay;
+        return $result > 24 ? 25 : $result;
     }
 
     public function getProjectsByStatus(string $status): array

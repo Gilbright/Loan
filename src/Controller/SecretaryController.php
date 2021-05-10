@@ -59,7 +59,7 @@ class SecretaryController extends AbstractController
             }
 
             /** @var Client $teamLeadClient */
-            $teamLeadClient = $clientManager->getClientById(current($clients)['id']);
+            $teamLeadClient = $clientManager->getClientById($clients->first()->getId());
             $teamLeadClient->setIsTeamLead(true);
             $entityManager->flush();
 
@@ -106,21 +106,21 @@ class SecretaryController extends AbstractController
         return $this->render('forms/register_client.html.twig');
     }
 
-    /**
-     * @Route("/secretary/registerClient/{projectId}", name="app_sec_register_client")
-     * @param Request $request
-     * @param ClientManager $clientManager
-     * @return Response
-     */
-    public function registerClient(Request $request, ClientManager $clientManager, string $projectId): Response
-    {
-        if ($request->isMethod('POST')) {
-            $clientManager->execute($request->request->all(), $projectId);
-            return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
-        }
-
-        return $this->render('forms/register_client.html.twig');
-    }
+//    /**
+//     * @Route("/secretary/registerClient/{projectId}", name="app_sec_register_client")
+//     * @param Request $request
+//     * @param ClientManager $clientManager
+//     * @return Response
+//     */
+//    public function registerClient(Request $request, ClientManager $clientManager, string $projectId): Response
+//    {
+//        if ($request->isMethod('POST')) {
+//            $clientManager->execute($request->request->all(), $projectId);
+//            return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
+//        }
+//
+//        return $this->render('forms/register_client.html.twig');
+//    }
 
     /**
      * @Route("/secretary/view/{projectId}", name="app_sec_view")
