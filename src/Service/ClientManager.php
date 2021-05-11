@@ -98,9 +98,17 @@ class ClientManager
         return $this->clientRepository->find($clientId);
     }
 
-    public function getClientByIdNumber(string $clientIdNumber)
+    public function getClientByIdNumber(string $clientIdNumber): Client
     {
-        return $this->clientRepository->findOneBy(['idDocNumber' => $clientIdNumber]);
+        $client = $this->clientRepository->findOneBy(['idDocNumber' => $clientIdNumber]);
+
+        if (! $client instanceof Client){
+            //@Todo client not fount exception
+
+            throw new EntityNotFoundException('Client not found');
+        }
+
+        return $client;
     }
 
     public function setClientProjectId(string $clientIdNumber, string $projectId): void
@@ -179,5 +187,28 @@ class ClientManager
 
         $this->entityManager->persist($clientEntity);
         $this->entityManager->flush();
+    }
+
+    public function isEligible(array $clientAmountArray){
+        $currentClient = $this->getClientByIdNumber($clientAmountArray['IdNumber']);
+        if (!$currentClient instanceof Client) {
+            //@Todo client not fount exception
+
+            throw new EntityNotFoundException('Client not found');
+        }
+
+        $amount = (float)$clientAmountArray['amount'];
+
+        foreach ($currentClient->getProjectId() as $project){
+            if (!$project->getIsFinished()){
+                return false;
+            }
+        }
+
+        if ($amount/10 > $currentClient->getBalance()){
+            return false;
+        }
+
+        return true;
     }
 }

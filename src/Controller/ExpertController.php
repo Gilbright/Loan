@@ -37,7 +37,7 @@ class ExpertController extends AbstractController
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
         foreach ($projects as $index => $project){
-            if (!$teamLeads[$index]){
+            if (!isset($teamLeads[$index])){
                 continue;
             }
             $_projects[] = $project;

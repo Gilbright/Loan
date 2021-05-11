@@ -47,7 +47,7 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Numero de la piece d'identité</label>
-                                            <input type="text" class="form-control" name="IdNumber"
+                                            <input type="text" class="form-control" name="IdNumber" required="true"
                                                    placeholder="Entrer le numero de la piece d'identité du client concerné">
                                         </div>
                                     </div>
@@ -75,7 +75,7 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Mois de l'opération</label>
-                                            <input type="text" name="month" class="form-control"
+                                            <input type="text" name="month" required="true" class="form-control"
                                                    placeholder="Entrer le mois si c'est une cotisation">
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Montant</label>
-                                            <input type="number" name="amount" class="form-control"
+                                            <input type="number" name="amount" required="true" class="form-control"
                                                    placeholder="Entrer ...">
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@
                                             <label>Ajouter une piece justificative</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" id="piece_identity"
+                                                    <input type="file" class="custom-file-input" required="true" id="piece_identity"
                                                            name="proofDocument">
                                                     <label class="custom-file-label" for="piece_identity">Choose
                                                         file</label>

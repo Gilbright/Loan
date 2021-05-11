@@ -65,7 +65,11 @@
                                 </tr>
                                 <tr>
                                     <td><b>Duree&nbspde&nbspremboursement</b></td>
-                                    <td> {{ project.repaymentDuration }} mois</td>
+                                    {% if project.repaymentDuration > 24 %}
+                                        <td style="color: red"> {{ project.repaymentDuration }} mois</td>
+                                    {% else %}
+                                        <td> {{ project.repaymentDuration }} mois</td>
+                                    {% endif %}
                                 </tr>
                                 <tr>
                                     <td><b>Modalite et echeance</b></td>
