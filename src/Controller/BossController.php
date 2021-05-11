@@ -11,6 +11,7 @@ use App\Service\ProjectManager;
 use App\Service\SavingManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,10 +31,15 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossWaitingConfirmation(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossWaitingConfirmation(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::BOS_MANAGER_ANALYSIS);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_MANAGER_ANALYSIS, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::BOS_MANAGER_ANALYSIS);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/bos_manager_analysis.html.twig', [
             'projects' => $projects,
@@ -115,10 +121,15 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossAnalysisOn(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossAnalysisOn(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::BOS_MANAGER_ANALYSIS_GOING_ON);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_MANAGER_ANALYSIS_GOING_ON, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::BOS_MANAGER_ANALYSIS_GOING_ON);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('/pages/status/bos_analysis_going_on.html.twig', [
             'projects' => $projects,
@@ -132,10 +143,15 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossBeenValidated(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossBeenValidated(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::BOS_BEEN_VALIDATED);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_BEEN_VALIDATED, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::BOS_BEEN_VALIDATED);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/bos_been_validated.html.twig', [
             'projects' => $projects,
@@ -149,10 +165,15 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossValidatedFinanced(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossValidatedFinanced(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::ACC_VALIDATED_FINANCED);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::ACC_VALIDATED_FINANCED, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::ACC_VALIDATED_FINANCED);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/bos_validated_financed.html.twig', [
             'projects' => $projects,
@@ -166,10 +187,15 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossValidatedLacking(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossValidatedLacking(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::ACC_LACKING_FUND);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::ACC_LACKING_FUND, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::ACC_LACKING_FUND);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/bos_lacking_fund.html.twig', [
             'projects' => $projects,
@@ -183,10 +209,15 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossToReview(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossToReview(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::BOS_TO_BE_REANALYZED);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_TO_BE_REANALYZED, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::BOS_TO_BE_REANALYZED);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/bos_to_be_reanalysed.html.twig', [
             'projects' => $projects,
@@ -200,10 +231,15 @@ class BossController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function bossRejectedProjects(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function bossRejectedProjects(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::EXP_REJECTED);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_REJECTED, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::EXP_REJECTED);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/exp_rejected.html.twig', [
             'projects' => $projects,
@@ -265,9 +301,20 @@ class BossController extends AbstractController
      * @param FinanceManager $financeManager
      * @return Response
      */
-    public function bossFinancialReport(ProjectManager $projectManager, FinanceManager $financeManager)
+    public function bossFinancialReport(Request $request, ProjectManager $projectManager, FinanceManager $financeManager)
     {
-        $financialDetails = $financeManager->getFinancialDetails();
+        if ($request->isMethod('POST')) {
+            $startDate = new \DateTime($request->request->all()['startDate']);
+            $endDate = new \DateTime($request->request->all()['endDate']);
+
+            if ($endDate < $startDate) {
+                throw new Exception("la date finale ne peut pas preceder la date initiale");
+            }
+
+            $financialDetails = $financeManager->getFinanceReportInDateRange($startDate, $endDate);
+        } else {
+            $financialDetails = $financeManager->getFinancialDetails();
+        }
 
         return $this->render('tables/financial_report.html.twig', [
             'financialDetails' => $financialDetails
@@ -278,15 +325,23 @@ class BossController extends AbstractController
      * @Route ("/boss/savingReport", name="app_boss_saving_report")
      * @param SavingManager $savingManager
      */
-    public function bossSavingReport(SavingManager $savingManager): Response
+    public function bossSavingReport(Request $request, SavingManager $savingManager): Response
     {
-        $savingDetails = $savingManager->getSavingDetails();
+        if ($request->isMethod('POST')) {
+            $startDate = new \DateTime($request->request->all()['startDate']);
+            $endDate = new \DateTime($request->request->all()['endDate']);
+
+            if ($endDate < $startDate) {
+                throw new Exception("la date finale ne peut pas preceder la date initiale");
+            }
+
+            $savingDetails = $savingManager->getSavingInDateRange($startDate, $endDate);
+        } else {
+            $savingDetails = $savingManager->getSavingDetails();
+        }
 
         return $this->render('tables/saving_report.html.twig', ['savingDetails' => $savingDetails]);
     }
-
-
-
 
 
     //TODO: The BOSS must add a note before validating or rejecting any project !!!!!*******

@@ -28,10 +28,15 @@ class AccountantController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function accWaitingForFinance(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function accWaitingForFinance(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::BOS_BEEN_VALIDATED);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_BEEN_VALIDATED, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::BOS_BEEN_VALIDATED);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/acc_waiting_finance.html.twig', [
             'projects' => $projects,
@@ -83,10 +88,15 @@ class AccountantController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function accValidatedFinanced(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function accValidatedFinanced(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::ACC_VALIDATED_FINANCED);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::ACC_VALIDATED_FINANCED, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::ACC_VALIDATED_FINANCED);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/acc_validated_financed.html.twig', [
             'projects' => $projects,
@@ -100,10 +110,15 @@ class AccountantController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function accListLacFund(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function accListLacFund(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::ACC_LACKING_FUND);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::ACC_LACKING_FUND, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::ACC_LACKING_FUND);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/acc_lacking_fund.html.twig', [
             'projects' => $projects,
@@ -128,9 +143,20 @@ class AccountantController extends AbstractController
      * @param FinanceManager $financeManager
      * @return Response
      */
-    public function accFinancialReport(ProjectManager $projectManager, FinanceManager $financeManager)
+    public function accFinancialReport(Request $request, ProjectManager $projectManager, FinanceManager $financeManager)
     {
-        $financialDetails = $financeManager->getFinancialDetails();
+        if ($request->isMethod('POST')) {
+            $startDate = new \DateTime($request->request->all()['startDate']);
+            $endDate = new \DateTime($request->request->all()['endDate']);
+
+            if ($endDate < $startDate) {
+                throw new Exception("la date finale ne peut pas preceder la date initiale");
+            }
+
+            $financialDetails = $financeManager->getFinanceReportInDateRange($startDate, $endDate);
+        } else {
+            $financialDetails = $financeManager->getFinancialDetails();
+        }
 
         return $this->render('tables/financial_report.html.twig', [
             'financialDetails' => $financialDetails
@@ -141,9 +167,20 @@ class AccountantController extends AbstractController
      * @Route ("/accountant/savingReport", name="app_acc_saving_report")
      * @param SavingManager $savingManager
      */
-    public function accSavingReport(SavingManager $savingManager): Response
+    public function accSavingReport(Request $request, SavingManager $savingManager): Response
     {
-        $savingDetails = $savingManager->getSavingDetails();
+        if ($request->isMethod('POST')) {
+            $startDate = new \DateTime($request->request->all()['startDate']);
+            $endDate = new \DateTime($request->request->all()['endDate']);
+
+            if ($endDate < $startDate) {
+                throw new Exception("la date finale ne peut pas preceder la date initiale");
+            }
+
+            $savingDetails = $savingManager->getSavingInDateRange($startDate, $endDate);
+        } else {
+            $savingDetails = $savingManager->getSavingDetails();
+        }
 
         return $this->render('tables/saving_report.html.twig', ['savingDetails' => $savingDetails]);
     }
