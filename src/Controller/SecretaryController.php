@@ -10,6 +10,7 @@ use App\Service\ProjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,11 +52,11 @@ class SecretaryController extends AbstractController
         $clients = $clientManager->getClientsByProjectId($projectId);
 
         if ($request->isMethod('POST')) {
-            if (isset($request->request->all()['IdNumber'])){
+            if (isset($request->request->all()['IdNumber'])) {
                 $idDocNumber = $request->request->all()['IdNumber'];
                 $clientManager->setClientProjectId($idDocNumber, $projectId);
 
-                return $this->redirectToRoute('app_sec_list_client',['projectId' => $projectId]);
+                return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
             }
 
             /** @var Client $teamLeadClient */
@@ -76,12 +77,13 @@ class SecretaryController extends AbstractController
      * @Route ("/secretary/checkEligibility", name="app_sec_eligibility" )
      *
      */
-    public function secEligibilityCheck(ClientManager $clientManager, Request $request){
+    public function secEligibilityCheck(ClientManager $clientManager, Request $request)
+    {
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $result = $clientManager->isEligible($request->request->all());
 
-            return $this->render('forms/client_eligibility_form.html.twig',['isEligible' => $result]);
+            return $this->render('forms/client_eligibility_form.html.twig', ['isEligible' => $result]);
         }
 
         return $this->render('forms/client_eligibility_form.html.twig');
@@ -93,9 +95,29 @@ class SecretaryController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function secWaitingControl(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function secWaitingControl(ProjectManager $projectManager, ClientManager $clientManager, Request $request): Response
     {
+        if ($request->isMethod('POST')) {
+            $startDate = new \DateTime($request->request->all()['startDate']);
+            $endDate = new \DateTime($request->request->all()['endDate']);
+
+            if ($endDate < $startDate) {
+                throw new Exception("la date finale ne peut pas preceder la date initiale");
+            }
+
+            $projects = $projectManager->getProjectsInDateRangeByStatus(Status::EXP_WAITING_FOR_ANALYSIS, $startDate, $endDate);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+
+            return $this->render('pages/status/sec_waiting_for_control.html.twig', [
+                'projects' => $projects,
+                'teamLeads' => $teamLeads
+            ]);
+        }
+
         $projects = $projectManager->getProjectsByStatus(Status::SEC_WAITING_FOR_CONTROL);
+        $projects = $projectManager->removeProjectWithoutClient($projects);
         $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
         return $this->render('pages/status/sec_waiting_for_control.html.twig', [

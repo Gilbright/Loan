@@ -10,6 +10,7 @@ use App\Helper\MailReceiverHelper;
 use App\Helper\Status;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ProjectResolver;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -89,6 +90,29 @@ class ProjectManager
             ['status' => $status],
             ['createdAt' => 'DESC']
         );
+    }
+
+    public function getProjectsInDateRangeByStatus(string $status, \DateTime $startDate, \DateTime $endDate){
+        return $this->projectRepository->createQueryBuilder('p')
+            ->andWhere('p.status = :status')
+            ->setParameter('status', $status)
+            ->andWhere('p.updatedAt BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function removeProjectWithoutClient(array $projects){
+        $projectsArray = [];
+        /** @var Project $project */
+        foreach ($projects as $project) {
+            if (!$project->getClients()->isEmpty()){
+                $projectsArray[] = $project;
+            }
+        }
+
+        return $projectsArray;
     }
 
     public function getProjectById(string $projectId = null): ?Project

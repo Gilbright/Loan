@@ -171,7 +171,7 @@ class FinanceManager
     public function getFinancialDetails(): array
     {
         try {
-            return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC'], 50);
+            return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC']);
         }catch (\Throwable $exception){
             return [];
         }
