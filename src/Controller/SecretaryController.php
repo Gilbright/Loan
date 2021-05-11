@@ -97,28 +97,13 @@ class SecretaryController extends AbstractController
      */
     public function secWaitingControl(ProjectManager $projectManager, ClientManager $clientManager, Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            $startDate = new \DateTime($request->request->all()['startDate']);
-            $endDate = new \DateTime($request->request->all()['endDate']);
-
-            if ($endDate < $startDate) {
-                throw new Exception("la date finale ne peut pas preceder la date initiale");
-            }
-
-            $projects = $projectManager->getProjectsInDateRangeByStatus(Status::EXP_WAITING_FOR_ANALYSIS, $startDate, $endDate);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::SEC_WAITING_FOR_CONTROL, $projectManager, $clientManager)){
+            [$projects, $teamLeads] = $arr;
+        } else{
+            $projects = $projectManager->getProjectsByStatus(Status::SEC_WAITING_FOR_CONTROL);
             $projects = $projectManager->removeProjectWithoutClient($projects);
-
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
-
-            return $this->render('pages/status/sec_waiting_for_control.html.twig', [
-                'projects' => $projects,
-                'teamLeads' => $teamLeads
-            ]);
         }
-
-        $projects = $projectManager->getProjectsByStatus(Status::SEC_WAITING_FOR_CONTROL);
-        $projects = $projectManager->removeProjectWithoutClient($projects);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
 
         return $this->render('pages/status/sec_waiting_for_control.html.twig', [
             'projects' => $projects,
@@ -196,10 +181,15 @@ class SecretaryController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function secInterviewStep(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function secInterviewStep(ProjectManager $projectManager, ClientManager $clientManager, Request $request): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_INTERVIEW_STEP, $projectManager, $clientManager)){
+            [$projects, $teamLeads] = $arr;
+        } else{
+            $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/sec_interview_step.html.twig', [
             'projects' => $projects,
