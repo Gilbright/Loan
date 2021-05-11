@@ -59,7 +59,7 @@ $(function () {
                 minlength: jQuery.validator.format("At least {0} characters required!")
             },
             birthDate: {
-                required: "Please write project details"
+                required: "Please write a valide birthday"
             },
             gender: "Please choose your gender",
             nationality: {
