@@ -15,6 +15,9 @@ $(function () {
                 required: true,
                 number: true
             },
+            businessPlanDoc: {
+                required: true
+            },
             modalityNumberOfMonths: {
                 required: true,
                 number: true
@@ -38,6 +41,9 @@ $(function () {
                 required: "Please modalityAmount",
                 number: "Must be a valid number"
             },
+            businessPlanDoc: {
+                required: "Please choose your business plan document"
+            }    ,
             modalityNumberOfMonths: {
                 required: "Please write modalityNumberOfMonths",
                 number: "Must be a valid number"

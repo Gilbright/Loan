@@ -64,6 +64,8 @@ class ProjectManager
             ->setAmount((float)$data['amountWanted'])
             ->setFinalAmount(0)
             ->setIsFinished(false)
+            ->setBusinessPlanDocument($data['businessPlanDoc'])
+            ->setDetailsExtraDocument($data['detailsExtraDoc'])
             ->setName($data['projectName'])
             ->setDetails($data['projectDetails']);
 
