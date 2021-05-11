@@ -8,6 +8,7 @@ use App\Service\EmployeeManager;
 use App\Service\FinanceManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
+use App\Service\SavingManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -273,6 +274,16 @@ class BossController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route ("/boss/savingReport", name="app_boss_saving_report")
+     * @param SavingManager $savingManager
+     */
+    public function bossSavingReport(SavingManager $savingManager): Response
+    {
+        $savingDetails = $savingManager->getSavingDetails();
+
+        return $this->render('tables/saving_report.html.twig', ['savingDetails' => $savingDetails]);
+    }
 
 
 
