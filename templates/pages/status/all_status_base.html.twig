@@ -41,7 +41,7 @@
                     <!-- general form elements disabled -->
                     <div class="card card-warning">
 
-                        <!--LE tableau des data des clients du team -->
+                        <!--LE tableau  -->
                         <div class="card-body">
                             <form method="post">
                                 <div class="row">
@@ -100,7 +100,6 @@
                 </div>
                 <!--/.col (right) -->
             </div>
-            <!--Fin du formulaire de start and endDate -->
             <div class="row">
                 <div class="col">
                     <div class="app-card app-card-orders-table shadow-sm mb-5">
@@ -108,9 +107,9 @@
                             <div class="table-responsive">
                                 <table id="projectTableId" class="table table-bordered table-striped">
                                     <thead>
-                                        <tr>
+                                    <tr>
                                         <th class="cell">Projet Id</th>
-                                        <th class="cell">Nom du projet </th>
+                                        <th class="cell">Nom du projet</th>
                                         <th class="cell">Leader du projet</th>
                                         <th class="cell">Date</th>
                                         <th class="cell">Statut</th>
@@ -120,21 +119,25 @@
                                     </thead>
                                     <tbody>
                                     {% for index, project in projects %}
-                                            <tr>
-                                                <td class="cell">{{ project.projectId }}</td>
-                                                <td class="cell"><span class="truncate">{{ project.name }}</span></td>
-                                                <td class="cell">{{ teamLeads[index].nameSurname }}</td>
-                                                <td class="cell"><span>{{ project.updatedAt|date('d-m-Y') }}</span></td>
-                                                <td class="cell"><span class="{{ project.status|get_badge(project.status) }}">{{ project.status }}</span></td>
-                                                <td class="cell">{{ project.amount }}</td>
-                                                <td class="cell">
-                                                    {% block button_block %}
-                                                         <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-dot-circle-o"></i>
-                                                            Verifier </button>
-                                                    {% endblock %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
+                                        <tr>
+                                            <td class="cell">{{ project.projectId }}</td>
+                                            <td class="cell"><span class="truncate">{{ project.name }}</span></td>
+                                            <td class="cell">{{ teamLeads[index].nameSurname }}</td>
+                                            <td class="cell"><span>{{ project.updatedAt|date('d-m-Y') }}</span></td>
+                                            <td class="cell"><span
+                                                        class="{{ project.status|get_badge(project.status) }}">{{ project.status }}</span>
+                                            </td>
+                                            <td class="cell">{{ project.amount }}</td>
+                                            <td class="cell">
+                                                {% block button_block %}
+                                                    <button type="submit" class="btn btn-info btn-sm"><i
+                                                                class="fa fa-dot-circle-o"></i>
+                                                        Verifier
+                                                    </button>
+                                                {% endblock %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
                             </div><!--//table-responsive-->

@@ -97,9 +97,9 @@ class SecretaryController extends AbstractController
      */
     public function secWaitingControl(ProjectManager $projectManager, ClientManager $clientManager, Request $request): Response
     {
-        if ($arr = $projectManager->listProjectsByDates($request, Status::SEC_WAITING_FOR_CONTROL, $projectManager, $clientManager)){
+        if ($arr = $projectManager->listProjectsByDates($request, Status::SEC_WAITING_FOR_CONTROL, $projectManager, $clientManager)) {
             [$projects, $teamLeads] = $arr;
-        } else{
+        } else {
             $projects = $projectManager->getProjectsByStatus(Status::SEC_WAITING_FOR_CONTROL);
             $projects = $projectManager->removeProjectWithoutClient($projects);
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
@@ -183,9 +183,9 @@ class SecretaryController extends AbstractController
      */
     public function secInterviewStep(ProjectManager $projectManager, ClientManager $clientManager, Request $request): Response
     {
-        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_INTERVIEW_STEP, $projectManager, $clientManager)){
+        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_INTERVIEW_STEP, $projectManager, $clientManager)) {
             [$projects, $teamLeads] = $arr;
-        } else{
+        } else {
             $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
             $projects = $projectManager->removeProjectWithoutClient($projects);
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);

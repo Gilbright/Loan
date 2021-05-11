@@ -30,9 +30,9 @@ class ExpertController extends AbstractController
      */
     public function expWaitingAnalysis(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_WAITING_FOR_ANALYSIS, $projectManager, $clientManager)){
+        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_WAITING_FOR_ANALYSIS, $projectManager, $clientManager)) {
             [$projects, $teamLeads] = $arr;
-        } else{
+        } else {
             $projects = $projectManager->getProjectsByStatus(Status::EXP_WAITING_FOR_ANALYSIS);
             $projects = $projectManager->removeProjectWithoutClient($projects);
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
@@ -64,10 +64,10 @@ class ExpertController extends AbstractController
             $data = $request->request->all();
             $data['project'] = $project;
 
-            if (isset($data['noteContent'])){
+            if (isset($data['noteContent'])) {
                 $noteManager->execute($data);
-            }elseif (isset($data['finalAmount'])) {
-                $project->setFinalAmount((float) $data['finalAmount']);
+            } elseif (isset($data['finalAmount'])) {
+                $project->setFinalAmount((float)$data['finalAmount']);
 
                 $entityManager->flush();
             }
@@ -124,9 +124,9 @@ class ExpertController extends AbstractController
      */
     public function expAnalysisOn(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_ANALYSIS_ON_GOING, $projectManager, $clientManager)){
+        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_ANALYSIS_ON_GOING, $projectManager, $clientManager)) {
             [$projects, $teamLeads] = $arr;
-        } else{
+        } else {
             $projects = $projectManager->getProjectsByStatus(Status::EXP_ANALYSIS_ON_GOING);
             $projects = $projectManager->removeProjectWithoutClient($projects);
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
@@ -149,13 +149,13 @@ class ExpertController extends AbstractController
         $arrPostInterview = $projectManager->listProjectsByDates($request, Status::EXP_POST_INTERVIEW, $projectManager, $clientManager);
         $arrInterview = $projectManager->listProjectsByDates($request, Status::EXP_INTERVIEW_STEP, $projectManager, $clientManager);
 
-        if ($arrPostInterview || $arrInterview){
+        if ($arrPostInterview || $arrInterview) {
             [$projects, $teamLeads] = $arrInterview;
             [$postInterviewProjects, $postIntTeamLeads] = $arrPostInterview;
 
             $projects = array_merge($postInterviewProjects, $projects);
             $teamLeads = array_merge($postIntTeamLeads, $teamLeads);
-        } else{
+        } else {
             $postInterviewProjects = $projectManager->getProjectsByStatus(Status::EXP_POST_INTERVIEW);
             $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
 
@@ -178,9 +178,9 @@ class ExpertController extends AbstractController
      */
     public function expToReview(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_TO_BE_REANALYZED, $projectManager, $clientManager)){
+        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_TO_BE_REANALYZED, $projectManager, $clientManager)) {
             [$projects, $teamLeads] = $arr;
-        } else{
+        } else {
             $projects = $projectManager->getProjectsByStatus(Status::BOS_TO_BE_REANALYZED);
             $projects = $projectManager->removeProjectWithoutClient($projects);
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
