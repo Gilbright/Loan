@@ -1,0 +1,283 @@
+{% extends 'layout.html.twig' %}
+
+ {% block stylesheets %}
+     {{ parent() }}
+     {{ encore_entry_link_tags('datatable') }}
+ {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('datatable') }}
+{% endblock %}
+
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>General Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">General Form</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    {% block readResForm %}
+                        <!-- general form elements disabled -->
+                        <div class="card card-warning">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="card-title">Veuillez Entrer le numero de la piece d'identité du client </h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--LE tableau des data des clients du team -->
+                            <div class="card-body">
+                                <form method="post">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <!-- text input -->
+                                            <div class="form-group">
+                                                <input type="text" required="true" class="form-control"
+                                                       name="clientIdNumber"
+                                                       placeholder="Entrer Entrer le numero de la piece d'identité">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-info">Consulter</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    {% endblock %}
+                </div>
+            </div>
+
+            {% if client is defined %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        {%block readResClient  %}
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="card-title">Information Sur Le Client: </h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--LE coprs du tableau des infos du client -->
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td><b>Nom et Prenom</b></td>
+                                            <td>{{ client.nameSurname }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Numéro de la piece d'identité</b></td>
+                                            <td>{{ client.idDocNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Nationalite</b></td>
+                                            <td>{{ client.nationality }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Numéro de telephone</b></td>
+                                            <td>{{ client.phoneNumber }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Email</b></td>
+                                            <td>{{ client.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Profession</b></td>
+                                            <td>{{ client.profession }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Date de Naissance</b></td>
+                                            <td>{{ client.birthDate }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Revenu Mensuel</b></td>
+                                            <td>{{ client.monthlyIncome }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Genre</b></td>
+                                            <td>{{ client.gender }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Balance</b></td>
+                                            <td>{{ client.balance }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Addresse</b></td>
+                                            <td>{{ client.address }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endblock %}
+                    </div>
+                </div>
+                <!-- /.row -->
+                <div class="row">
+                    <!-- right column -->
+                    <div class="col-lg-12">
+                        {% for project in projects %}
+                            {% set statusData = [ project.status| get_card(project.status)] %}
+                            <!-- TABLEAU DES INFOS DU PROJET -->
+                            <div class="card {{ statusData[0] }}">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3 class="card-title">Statut du Projet: {{ project.status }}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--LE coprs du tableau des infos du projet -->
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td><b>ID du projet</b></td>
+                                            <td>{{ project.projectId }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Nom du projet</b></td>
+                                            <td>{{ project.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Details complet du projet</b></td>
+                                            <td>
+                                                {{ project.details }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Pret voulu</b></td>
+                                            <td>{{ project.amount }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Pret conclu</b></td>
+                                            <td>{{ project.finalAmount }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Duree&nbspde&nbspremboursement</b></td>
+                                            {% if project.repaymentDuration > 24 %}
+                                                <td style="color: red"> {{ project.repaymentDuration }} mois</td>
+                                            {% else %}
+                                                <td> {{ project.repaymentDuration }} mois</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td><b>Modalite et echeance</b></td>
+                                            <td>{{ project.modalityAmount }} chaque {{ project.modalityPaymentFrequency }}
+                                                mois
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.card -->
+                        {% endfor %}
+
+                        <!-- list detail Financier -->
+                        <!-- list detail Financier -->
+                        {% block finance_detail_block %}
+
+                        {% endblock %}
+
+                        <!-- Ajouter un detail Financier -->
+                        {% block finance_block %}
+
+                        {% endblock %}
+
+                        <!-- /.card -->
+
+                        <!-- Ajouter une Note -->
+                        {% block note_block %}
+
+                        {% endblock %}
+                        <!-- /.card -->
+
+                        <!-- add project finale price-->
+                        {% block finalAmoutSetting %}
+
+                        {% endblock %}
+
+                    </div>
+                    <!--/.col (right) -->
+                </div>
+                <!-- /.row -->
+               {% if  savingDetails|length > 0 %}
+                   <div class="row">
+                       <div class="col-lg-12">
+                           <div class="app-card app-card-orders-table shadow-sm mb-5">
+                               <div class="app-card-header">
+                                   <div class="row">
+                                       <div class="col">
+                                           <h3 class="card-title">Saving Details</h3>
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <!--LE body du tableau -->
+                               <div class="app-card-body table-responsive p-0">
+                                   <div class="table-responsive">
+
+                                   </div>
+                                   <table id="financialReportTableId" class="table table-bordered table-striped">
+                                       <thead>
+                                       <tr>
+                                           <th>Type</th>
+                                           <th>Montant</th>
+                                           <th>Mois payé</th>
+                                           <th>Details</th>
+                                           <th>Date D'enregistement</th>
+                                       </tr>
+                                       </thead>
+                                       <tbody>
+                                       {% for savingDetail in savingDetails %}
+                                           <tr>
+                                               <td>{{ savingDetail.type }}</td>
+                                               <td>{{ savingDetail.amount }}</td>
+                                               <td>{{ savingDetail.paidMonth }}</td>
+                                               <td>{{ savingDetail.extra }}</td>
+                                               <td>{{ savingDetail.createdAt | format('d-m-y') }}</td>
+                                           </tr>
+                                       {% endfor %}
+                                       </tbody>
+                                   </table>
+                               </div>
+                           </div>
+                           <!-- /.card -->
+                       </div>
+                   </div>
+               {% endif %}
+            {% endif %}
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
