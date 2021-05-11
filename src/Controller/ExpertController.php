@@ -28,25 +28,19 @@ class ExpertController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function expWaitingAnalysis(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function expWaitingAnalysis(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $_projects = [];
-        $_teamLeads = [];
-
-        $projects = $projectManager->getProjectsByStatus(Status::EXP_WAITING_FOR_ANALYSIS);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
-
-        foreach ($projects as $index => $project){
-            if (!isset($teamLeads[$index])){
-                continue;
-            }
-            $_projects[] = $project;
-            $_teamLeads[] = $teamLeads[$index];
+        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_WAITING_FOR_ANALYSIS, $projectManager, $clientManager)){
+            [$projects, $teamLeads] = $arr;
+        } else{
+            $projects = $projectManager->getProjectsByStatus(Status::EXP_WAITING_FOR_ANALYSIS);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
         }
 
         return $this->render('pages/status/exp_waiting_for_analysis.html.twig', [
-            'projects' => $_projects,
-            'teamLeads' => $_teamLeads
+            'projects' => $projects,
+            'teamLeads' => $teamLeads
         ]);
     }
 
@@ -128,10 +122,15 @@ class ExpertController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function expAnalysisOn(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function expAnalysisOn(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::EXP_ANALYSIS_ON_GOING);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_ANALYSIS_ON_GOING, $projectManager, $clientManager)){
+            [$projects, $teamLeads] = $arr;
+        } else{
+            $projects = $projectManager->getProjectsByStatus(Status::EXP_ANALYSIS_ON_GOING);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/exp_analysis_on_going.html.twig', [
             'projects' => $projects,
@@ -145,12 +144,25 @@ class ExpertController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function expInterviewStep(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function expInterviewStep(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $postInterviewProjects = $projectManager->getProjectsByStatus(Status::EXP_POST_INTERVIEW);
-        $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
-        $projects = array_merge($postInterviewProjects, $projects);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        $arrPostInterview = $projectManager->listProjectsByDates($request, Status::EXP_POST_INTERVIEW, $projectManager, $clientManager);
+        $arrInterview = $projectManager->listProjectsByDates($request, Status::EXP_INTERVIEW_STEP, $projectManager, $clientManager);
+
+        if ($arrPostInterview || $arrInterview){
+            [$projects, $teamLeads] = $arrInterview;
+            [$postInterviewProjects, $postIntTeamLeads] = $arrPostInterview;
+
+            $projects = array_merge($postInterviewProjects, $projects);
+            $teamLeads = array_merge($postIntTeamLeads, $teamLeads);
+        } else{
+            $postInterviewProjects = $projectManager->getProjectsByStatus(Status::EXP_POST_INTERVIEW);
+            $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
+
+            $projects = array_merge($postInterviewProjects, $projects);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/exp_interview_step.html.twig', [
             'projects' => $projects,
@@ -164,10 +176,15 @@ class ExpertController extends AbstractController
      * @param ClientManager $clientManager
      * @return Response
      */
-    public function expToReview(ProjectManager $projectManager, ClientManager $clientManager): Response
+    public function expToReview(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $projects = $projectManager->getProjectsByStatus(Status::BOS_TO_BE_REANALYZED);
-        $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_TO_BE_REANALYZED, $projectManager, $clientManager)){
+            [$projects, $teamLeads] = $arr;
+        } else{
+            $projects = $projectManager->getProjectsByStatus(Status::BOS_TO_BE_REANALYZED);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
 
         return $this->render('pages/status/exp_to_be_reanalysed.html.twig', [
             'projects' => $projects,
@@ -190,6 +207,7 @@ class ExpertController extends AbstractController
      * @Route ("/expert/validateProject/{projectId}", name="expert_validate_project")
      * @param string $projectId
      * @param ProjectManager $projectManager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function expValidateProject(string $projectId, ProjectManager $projectManager)
     {
@@ -198,5 +216,4 @@ class ExpertController extends AbstractController
     }
 
     //TODO: The expert must add a note before validating or rejecting any project !!!!!******* TODO !!!!
-
 }
