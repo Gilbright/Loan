@@ -138,19 +138,30 @@ class AccountantController extends AbstractController
     }
 
     /**
+     * @Route ("/accountant/savingReport", name="app_acc_saving_report")
+     * @param SavingManager $savingManager
+     */
+    public function accSavingReport(SavingManager $savingManager): Response
+    {
+        $savingDetails = $savingManager->getSavingDetails();
+
+        return $this->render('tables/saving_report.html.twig', ['savingDetails' => $savingDetails]);
+    }
+
+    /**
      * @Route ("/accountant/savingAction", name="app_acc_saving_action")
      * @param Request $request
      * @param ClientManager $clientManager
      */
-    public function accSavingAction(Request $request,ClientManager $clientManager, SavingManager $savingManager)
+    public function accSavingAction(Request $request, ClientManager $clientManager, SavingManager $savingManager)
     {
         // in case the accountant has entered the information to save
         if ($request->isMethod('POST')) {
             $savingArray = $request->request->all();
 
-            $savingManager->addSaving($savingArray,$clientManager);
+            $savingManager->addSaving($savingArray, $clientManager);
 
-           return $this->redirectToRoute('admin');
+            return $this->redirectToRoute('admin');
         }
 
         //when clicked directly on "Action d'epargne"

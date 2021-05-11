@@ -35,6 +35,15 @@ class SavingManager
         $this->entityManager = $entityManager;
     }
 
+    public function getSavingDetails(): array
+    {
+        try {
+            return $this->savingRepository->findBy([],['updatedAt' => 'DESC']);
+        } catch (\Throwable $exception){
+            return [];
+        }
+    }
+
     public function addSaving(array $savingArray, ClientManager $clientManager)
     {
         $currentClient = $clientManager->getClientByIdNumber($savingArray['IdNumber']);

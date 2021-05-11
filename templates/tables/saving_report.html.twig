@@ -37,7 +37,7 @@
                         <div class="app-card-header">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="card-title" >Details Financiers</h3>
+                                    <h3 class="card-title" >Details d'épargne</h3>
                                 </div>
                             </div>
                         </div>
@@ -50,29 +50,25 @@
                             <table id="financialReportTableId" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>ID du projet</th>
-                                    <th>Nom du projet</th>
-                                    <th>Type</th>
+                                    <th>ID du client</th>
+                                    <th>Nom du client</th>
+                                    <th>Type d'opération</th>
                                     <th>Montant</th>
-                                    <th>Enregistré par</th>
-                                    <th>Date d'operation</th>
-                                    <th>Reste a debourser </th>
-                                    <th>Reste a rembourser</th>
+                                    <th>Mois de l'operation</th>
                                     <th>Details</th>
+                                    <th>Date d'enrégistrement</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for financialDetail in financialDetails %}
+                                {% for savingDetail in savingDetails %}
                                     <tr>
-                                        <td>{{ financialDetail.projectId.projectId }}</td>
-                                        <td>{{ financialDetail.projectId.name }}</td>
-                                        <td>{{ financialDetail.type | getType(financialDetail.type) }}</td>
-                                        <td>{{ financialDetail.amount }}</td>
-                                        <td>{{ financialDetail.operationExecutor.nameSurname }}</td>
-                                        <td>{{ financialDetail.updatedAt | date('d-m-Y H:i:s') }}</td>
-                                        <td>{{ financialDetail.amountLeftToBeSentByUs }}</td>
-                                        <td>{{ financialDetail.amountLeftToBePaidToUs }}</td>
-                                        <td>{{ financialDetail.extra }}</td>
+                                        <td>{{ savingDetail.clientId.idDocNumber }}</td>
+                                        <td>{{ savingDetail.clientId.nameSurname }}</td>
+                                        <td>{{ savingDetail.type }}</td>
+                                        <td>{{ savingDetail.amount }}</td>
+                                        <td>{{ savingDetail.paidMonth }}</td>
+                                        <td>{{ savingDetail.extra }}</td>
+                                        <td>{{ savingDetail.updatedAt | date('d-m-Y H:i:s') }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
