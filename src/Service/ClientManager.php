@@ -180,4 +180,27 @@ class ClientManager
         $this->entityManager->persist($clientEntity);
         $this->entityManager->flush();
     }
+
+    public function isEligible(array $clientAmountArray){
+        $currentClient = $this->getClientByIdNumber($clientAmountArray['IdNumber']);
+        if (!$currentClient instanceof Client) {
+            //@Todo client not fount exception
+
+            throw new EntityNotFoundException('Client not found');
+        }
+
+        $amount = (float)$clientAmountArray['amount'];
+
+        foreach ($currentClient->getProjectId() as $project){
+            if (!$project->getIsFinished()){
+                return false;
+            }
+        }
+
+        if ($amount/10 > $currentClient->getBalance()){
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -73,6 +73,21 @@ class SecretaryController extends AbstractController
     }
 
     /**
+     * @Route ("/secretary/checkEligibility", name="app_sec_eligibility" )
+     *
+     */
+    public function secEligibilityCheck(ClientManager $clientManager, Request $request){
+
+        if ($request->isMethod('POST')){
+            $result = $clientManager->isEligible($request->request->all());
+
+            return $this->render('forms/client_eligibility_form.html.twig',['isEligible' => $result]);
+        }
+
+        return $this->render('forms/client_eligibility_form.html.twig');
+    }
+
+    /**
      * @Route("/secretary/waintingControl", name="app_sec_waiting_control")
      * @param ProjectManager $projectManager
      * @param ClientManager $clientManager
