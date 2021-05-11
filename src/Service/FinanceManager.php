@@ -19,6 +19,7 @@ use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\FinancialDetailResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
+use mysql_xdevapi\Exception;
 use Symfony\Component\Security\Core\Security;
 
 class FinanceManager
@@ -169,6 +170,10 @@ class FinanceManager
 
     public function getFinancialDetails(): array
     {
-        return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC'], 50);
+        try {
+            return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC'], 50);
+        }catch (\Throwable $exception){
+            return [];
+        }
     }
 }

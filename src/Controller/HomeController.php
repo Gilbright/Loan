@@ -42,6 +42,7 @@ class HomeController extends AbstractController
      * @param Request $request
      * @param ClientManager $clientManager
      * @return Response
+     * @throws \Doctrine\ORM\EntityNotFoundException
      */
     public function consultStatus(ProjectManager $projectManager, FinanceManager $financeManager, NoteManager $noteManager, Request $request, ClientManager $clientManager): Response
     {
@@ -62,5 +63,32 @@ class HomeController extends AbstractController
         }
 
         return $this->render('pages/consult_status.html.twig');
+    }
+
+    /**
+     * @Route("/readresclient", name="app_consult_status_client")
+     * @param ProjectManager $projectManager
+     * @param FinanceManager $financeManager
+     * @param NoteManager $noteManager
+     * @param Request $request
+     * @param ClientManager $clientManager
+     * @return Response
+     * @throws \Doctrine\ORM\EntityNotFoundException
+     */
+    public function consultStatusClient(ProjectManager $projectManager, FinanceManager $financeManager, NoteManager $noteManager, Request $request, ClientManager $clientManager): Response
+    {
+        if ($request->isMethod('POST')) {
+            $clientIdNumber = $request->request->all()['clientIdNumber'];
+
+            $client = $clientManager->getClientByIdNumber($clientIdNumber);
+
+            return $this->render('pages/consult_status_client.html.twig', [
+                'client' => $client,
+                'projects' => $client->getProjectId(),
+                'savingDetails' => $client->getSavingDetails()
+            ]);
+        }
+
+        return $this->render('pages/consult_status_client.html.twig');
     }
 }

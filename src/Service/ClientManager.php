@@ -98,9 +98,17 @@ class ClientManager
         return $this->clientRepository->find($clientId);
     }
 
-    public function getClientByIdNumber(string $clientIdNumber)
+    public function getClientByIdNumber(string $clientIdNumber): Client
     {
-        return $this->clientRepository->findOneBy(['idDocNumber' => $clientIdNumber]);
+        $client = $this->clientRepository->findOneBy(['idDocNumber' => $clientIdNumber]);
+
+        if (! $client instanceof Client){
+            //@Todo client not fount exception
+
+            throw new EntityNotFoundException('Client not found');
+        }
+
+        return $client;
     }
 
     public function setClientProjectId(string $clientIdNumber, string $projectId): void
