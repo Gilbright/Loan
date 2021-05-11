@@ -11,6 +11,8 @@ use App\Helper\Status;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ProjectResolver;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class ProjectManager
 {
@@ -87,9 +89,14 @@ class ProjectManager
         );
     }
 
-    public function getProjectById(string $projectId = null)
+    public function getProjectById(string $projectId = null): ?Project
     {
-        return $this->projectRepository->findOneBy(['projectId' => $projectId]);
+        $project = $this->projectRepository->findOneBy(['projectId' => $projectId]);
+
+        if (!$project instanceof Project){
+            throw new EntityNotFoundException("Il n'exite pas de projet concordant avec ce identifiant! Veuillez corriger.");
+        }
+        return $project;
     }
 
     public function changeProjectStatus(string $newStatus, string $projectId)
