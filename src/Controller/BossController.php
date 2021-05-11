@@ -301,9 +301,20 @@ class BossController extends AbstractController
      * @param FinanceManager $financeManager
      * @return Response
      */
-    public function bossFinancialReport(ProjectManager $projectManager, FinanceManager $financeManager)
+    public function bossFinancialReport(Request $request, ProjectManager $projectManager, FinanceManager $financeManager)
     {
-        $financialDetails = $financeManager->getFinancialDetails();
+        if ($request->isMethod('POST')) {
+            $startDate = new \DateTime($request->request->all()['startDate']);
+            $endDate = new \DateTime($request->request->all()['endDate']);
+
+            if ($endDate < $startDate) {
+                throw new Exception("la date finale ne peut pas preceder la date initiale");
+            }
+
+            $financialDetails = $financeManager->getFinanceReportInDateRange($startDate, $endDate);
+        } else {
+            $financialDetails = $financeManager->getFinancialDetails();
+        }
 
         return $this->render('tables/financial_report.html.twig', [
             'financialDetails' => $financialDetails

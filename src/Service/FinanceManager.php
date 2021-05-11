@@ -168,6 +168,16 @@ class FinanceManager
         return $financialDetailsByType;
     }
 
+    public function getFinanceReportInDateRange(\DateTime $startDate, \DateTime $endDate){
+        return $this->financeDetailRepository->createQueryBuilder('f')
+            ->andWhere('f.updatedAt BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function getFinancialDetails(): array
     {
         try {
