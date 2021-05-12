@@ -121,6 +121,7 @@ class ProjectManager
         if ($request->isMethod('POST')) {
             $startDate = new \DateTime($request->request->all()['startDate']);
             $endDate = new \DateTime($request->request->all()['endDate']);
+            $endDate = $endDate->modify('+1 day');
 
             if ($endDate < $startDate) {
                 throw new Exception("la date finale ne peut pas preceder la date initiale");
