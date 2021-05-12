@@ -80,6 +80,8 @@ class FinanceManager
 
         $this->entityManager->persist($financeDetail);
         $this->entityManager->flush();
+
+        return $financeDetail;
     }
 
     public function getFinancialDetailsByProjectId(string $projectId)
@@ -169,10 +171,12 @@ class FinanceManager
     }
 
     public function getFinanceReportInDateRange(\DateTime $startDate, \DateTime $endDate){
+        $newEndDate = $endDate->modify('+1 day');
+
         return $this->financeDetailRepository->createQueryBuilder('f')
             ->andWhere('f.updatedAt BETWEEN :start AND :end')
             ->setParameter('start', $startDate)
-            ->setParameter('end', $endDate)
+            ->setParameter('end', $newEndDate)
             ->getQuery()
             ->getResult();
     }

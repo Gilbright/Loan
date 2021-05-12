@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Helper\Status;
 use App\Service\ClientManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,6 +62,10 @@ class ExpertController extends AbstractController
         $projectTeam = $clientManager->getClientsByProjectId($projectId);
         $projectNotes = $noteManager->getNotesByProjectId($projectId);
 
+        if (!$project instanceof Project){
+            throw new EntityNotFoundException("Ce Projet n'a pas été retrouvé");
+        }
+
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $data['project'] = $project;
@@ -67,7 +73,17 @@ class ExpertController extends AbstractController
             if (isset($data['noteContent'])) {
                 $noteManager->execute($data);
             } elseif (isset($data['finalAmount'])) {
+
                 $project->setFinalAmount((float)$data['finalAmount']);
+                $project->setModalityAmount((float)$data['modalityAmount']);
+                $project->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths']);
+
+                $repaymentArray = ['modalityAmount' => (float)$data['modalityAmount'],
+                    'modalityNumberOfMonths' => (int)$data['modalityNumberOfMonths'],
+                    'amountWanted' => (float)$data['finalAmount']
+                    ];
+
+                $project->setRepaymentDuration($projectManager->repaymentDurationCalculator($repaymentArray));
 
                 $entityManager->flush();
             }

@@ -77,11 +77,12 @@ class ProjectManager
         return $projectEntity->getProjectId();
     }
 
-    private function repaymentDurationCalculator(array $data): float
+    public function repaymentDurationCalculator(array $data): float
     {
         $monthlyPay = $data['modalityAmount'] / $data['modalityNumberOfMonths'];
 
-        $result = $data['amountWanted'] / $monthlyPay;
+        $result = ceil($data['amountWanted'] / $monthlyPay);
+
         return $result > 24 ? 25 : $result;
     }
 
@@ -123,6 +124,7 @@ class ProjectManager
         if ($request->isMethod('POST')) {
             $startDate = new \DateTime($request->request->all()['startDate']);
             $endDate = new \DateTime($request->request->all()['endDate']);
+            $endDate = $endDate->modify('+1 day');
 
             if ($endDate < $startDate) {
                 throw new Exception("la date finale ne peut pas preceder la date initiale");
