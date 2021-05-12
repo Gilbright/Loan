@@ -27,6 +27,7 @@ Encore
     .addEntry('input_form', './assets/input_form.js')
     .addEntry('form_validation', './assets/form_validation.js')
     .addEntry('datatable', './assets/datatable.js')
+    .addEntry('login_demo', './assets/login_demo.js')
 
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
