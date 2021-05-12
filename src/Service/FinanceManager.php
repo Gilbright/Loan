@@ -80,6 +80,8 @@ class FinanceManager
 
         $this->entityManager->persist($financeDetail);
         $this->entityManager->flush();
+
+        return $financeDetail;
     }
 
     public function getFinancialDetailsByProjectId(string $projectId)

@@ -248,6 +248,29 @@ class BossController extends AbstractController
     }
 
     /**
+     * @Route ("/boss/completedProjects", name="app_boss_completed_projects")
+     * @param Request $request
+     * @param ProjectManager $projectManager
+     * @param ClientManager $clientManager
+     * @return Response
+     */
+    public function bossCompletedProjects(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
+    {
+        if ($arr = $projectManager->listProjectsByDates($request, Status::PROJECT_COMPLETED, $projectManager, $clientManager)) {
+            [$projects, $teamLeads] = $arr;
+        } else {
+            $projects = $projectManager->getProjectsByStatus(Status::PROJECT_COMPLETED);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+        }
+
+        return $this->render('pages/status/exp_rejected.html.twig', [
+            'projects' => $projects,
+            'teamLeads' => $teamLeads
+        ]);
+    }
+
+    /**
      * @Route ("/boss/resendToExpert/{projectId}", name="boss_resend_to_expert")
      * @param string $projectId
      * @param ProjectManager $projectManager

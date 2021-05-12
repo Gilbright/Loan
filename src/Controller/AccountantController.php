@@ -68,7 +68,12 @@ class AccountantController extends AbstractController
                 $noteManager->execute($data);
             } elseif (isset($data['paymentDetails'])) {
                 $projectManager->changeProjectStatus(Status::ACC_VALIDATED_FINANCED, $projectId);
-                $financeManager->excecute($data);
+                $financeDetail = $financeManager->excecute($data);
+
+                if (0.0 === $financeDetail->getAmountLeftToBePaidToUs() && 0.0 === $financeDetail->getAmountLeftToBeSentByUs()){
+                    $projectManager->changeProjectStatus(Status::PROJECT_COMPLETED, $projectId);
+                    $project->setIsFinished(true)->setCompletionDate(new \DateTime());
+                }
             }
 
             return $this->redirectToRoute('app_acc_view', ['projectId' => $projectId]);

@@ -75,11 +75,12 @@ class ProjectManager
         return $projectEntity->getProjectId();
     }
 
-    private function repaymentDurationCalculator(array $data): float
+    public function repaymentDurationCalculator(array $data): float
     {
         $monthlyPay = $data['modalityAmount'] / $data['modalityNumberOfMonths'];
 
-        $result = $data['amountWanted'] / $monthlyPay;
+        $result = ceil($data['amountWanted'] / $monthlyPay);
+
         return $result > 24 ? 25 : $result;
     }
 
