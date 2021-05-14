@@ -16,12 +16,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>General Form</h1>
+                    <h1>Nouveau Projet</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">General Form</li>
+                        <li class="breadcrumb-item active">Nouveau Projet</li>
                     </ol>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                                     <div class="col">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Echeance de remboursement (Exemple: 10000 chaque 2 mois )</label>
+                                            <label>Echeance de remboursement (Exemple: 10000 FCFA chaque 2 mois )</label>
                                             <div class="row">
                                                 <div class="col-sm-auto">
                                                     <input type="number" class="form-control" name="modalityAmount"
@@ -86,7 +86,7 @@
                                                     <label>Chaque</label>
                                                 </div>
                                                 <div class="col-sm-auto">
-                                                    <input type="number" class="form-control" name="modalityNumberOfMonths"
+                                                    <input type="number" min="1" class="form-control" name="modalityNumberOfMonths"
                                                            id="modalityNumberOfMonthsId" placeholder="Entrer ...">
                                                 </div>
                                                 <div class="col-sm-auto">
@@ -105,7 +105,7 @@
 
 
                                             <div class="icheck-primary d-inline">
-                                                <input type="checkbox" id="checkboxPrimary3" name="confirmation">
+                                                <input type="checkbox" required="true" id="checkboxPrimary3" name="confirmation">
                                                 <label for="checkboxPrimary3">
                                                     Je confiirme sur l'honneur la verracité des informations
                                                     entrées.

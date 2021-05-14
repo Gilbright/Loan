@@ -16,16 +16,45 @@
                     <!--note -->
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-2">
-                                <!-- text input -->
-                                <div class="form-group" style="color: red">
-                                    <label>Montant conclu comme pret </label>
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <!-- text input -->
+                                        <div class="form-group" style="color: red">
+                                            <label>Montant conclu comme pret </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" required="true" name="finalAmount" placeholder="Entrer ...">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-10">
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="finalAmount" placeholder="Entrer ...">
+                                <div class="row">
+                                    <div class="col">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label style="color: red">Echeance de remboursement conclu (Exemple: 10000 FCFA chaque 2 mois )</label>
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <input type="number" class="form-control" name="modalityAmount" required="true"
+                                                           id="modalityAmountId" placeholder="Entrer ...">
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <label>Chaque</label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="number" min="1" class="form-control" name="modalityNumberOfMonths" required="true"
+                                                           id="modalityNumberOfMonthsId" placeholder="Entrer ...">
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <label>Mois</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

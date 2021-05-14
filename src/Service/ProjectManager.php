@@ -10,9 +10,11 @@ use App\Helper\MailReceiverHelper;
 use App\Helper\Status;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ProjectResolver;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProjectManager
 {
@@ -73,11 +75,12 @@ class ProjectManager
         return $projectEntity->getProjectId();
     }
 
-    private function repaymentDurationCalculator(array $data): float
+    public function repaymentDurationCalculator(array $data): float
     {
         $monthlyPay = $data['modalityAmount'] / $data['modalityNumberOfMonths'];
 
-        $result =  $data['amountWanted'] / $monthlyPay;
+        $result = ceil($data['amountWanted'] / $monthlyPay);
+
         return $result > 24 ? 25 : $result;
     }
 
@@ -89,11 +92,58 @@ class ProjectManager
         );
     }
 
+    public function getProjectsInDateRangeByStatus(string $status, \DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->projectRepository->createQueryBuilder('p')
+            ->andWhere('p.status = :status')
+            ->setParameter('status', $status)
+            ->andWhere('p.updatedAt BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function removeProjectWithoutClient(array $projects)
+    {
+        $projectsArray = [];
+        /** @var Project $project */
+        foreach ($projects as $project) {
+            if (!$project->getClients()->isEmpty()) {
+                $projectsArray[] = $project;
+            }
+        }
+
+        return $projectsArray;
+    }
+
+    public function listProjectsByDates(Request $request, string $status, ProjectManager $projectManager, ClientManager $clientManager)
+    {
+        if ($request->isMethod('POST')) {
+            $startDate = new \DateTime($request->request->all()['startDate']);
+            $endDate = new \DateTime($request->request->all()['endDate']);
+            $endDate = $endDate->modify('+1 day');
+
+            if ($endDate < $startDate) {
+                throw new Exception("la date finale ne peut pas preceder la date initiale");
+            }
+
+            $projects = $projectManager->getProjectsInDateRangeByStatus($status, $startDate, $endDate);
+            $projects = $projectManager->removeProjectWithoutClient($projects);
+
+            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+
+            return [$projects, $teamLeads];
+        }
+
+        return null;
+    }
+
     public function getProjectById(string $projectId = null): ?Project
     {
         $project = $this->projectRepository->findOneBy(['projectId' => $projectId]);
 
-        if (!$project instanceof Project){
+        if (!$project instanceof Project) {
             throw new EntityNotFoundException("Il n'exite pas de projet concordant avec ce identifiant! Veuillez corriger.");
         }
         return $project;
@@ -109,7 +159,7 @@ class ProjectManager
         $project->setStatus($newStatus);
 
         // if that status change is concerned by an update mail sending, then we do it here.
-        if ($mailReceivers){
+        if ($mailReceivers) {
             foreach ($mailReceivers as $receiver) {
                 $employees = $this->employeeManager->getEmployeesByRole($receiver);
 

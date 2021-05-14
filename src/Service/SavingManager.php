@@ -44,6 +44,17 @@ class SavingManager
         }
     }
 
+    public function getSavingInDateRange(\DateTime $startDate, \DateTime $endDate){
+        $newEndDate = $endDate->modify('+1 day');
+
+        return $this->savingRepository->createQueryBuilder('s')
+            ->andWhere('s.updatedAt BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $newEndDate)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function addSaving(array $savingArray, ClientManager $clientManager)
     {
         $currentClient = $clientManager->getClientByIdNumber($savingArray['IdNumber']);

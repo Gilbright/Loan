@@ -29,4 +29,6 @@ class Status
     public const ACC_VALIDATED_FINANCED = 'VALIDE FINANCE';
 
     public const BOS_TO_BE_REANALYZED = 'PROJET A REVOIR';
+
+    public const PROJECT_COMPLETED = 'PROJET FINI';
 }

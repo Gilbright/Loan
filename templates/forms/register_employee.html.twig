@@ -16,12 +16,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>General Form</h1>
+                    <h1>Nouveau Employé</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">General Form</li>
+                        <li class="breadcrumb-item active">Nouveau Employé</li>
                     </ol>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                                                     <div class="form-group">
                                                         <label>1 - Nom et prenoms</label>
                                                         <input type="text" class="form-control" name="nameSurname"
-                                                              required placeholder="Entrer ...">
+                                                               required="true" placeholder="Entrer ...">
                                                     </div>
                                                 </div>
                                             </div>
@@ -67,9 +67,7 @@
                                                     <span class="input-group-text"><i
                                                                 class="far fa-calendar-alt"></i></span>
                                                     </div>
-                                                    <input type="text" name="birthDate" class="form-control"
-                                                           data-inputmask-alias="datetime"
-                                                           data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                                    <input type="date" required="true" name="birthDate" class="form-control">
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>
@@ -95,7 +93,7 @@
                                                     <div class="form-group">
                                                         <label>4 - Nationalité</label>
                                                         <input type="text" name="nationality" class="form-control"
-                                                               placeholder="Entrer ...">
+                                                               required="true" placeholder="Entrer ...">
                                                     </div>
                                                 </div>
                                             </div>
@@ -110,9 +108,7 @@
                                                                 <span class="input-group-text"><i
                                                                             class="fas fa-phone"></i></span>
                                                             </div>
-                                                            <input type="text" name="phoneNumber" class="form-control"
-                                                                   data-inputmask='"mask": "99 - 99 - 99 - 99"'
-                                                                   data-mask>
+                                                            <input required="true" type="number" name="phoneNumber" class="form-control">
                                                         </div>
 
                                                     </div>
@@ -130,7 +126,7 @@
                                                             <span class="input-group-text"><i
                                                                         class="fas fa-envelope"></i></span>
                                                             </div>
-                                                            <input type="email" name="email" class="form-control"
+                                                            <input type="email" required="true" name="email" class="form-control"
                                                                    placeholder="Email">
                                                         </div>
 
@@ -164,7 +160,7 @@
                                                     <div class="form-group">
                                                         <label>8 - Numéro de la piece d'identité </label>
                                                         <input type="text" class="form-control" name="idDocNumber"
-                                                               placeholder="Entrer ...">
+                                                               required="true"  placeholder="Entrer ...">
                                                     </div>
                                                 </div>
                                             </div>
@@ -177,7 +173,7 @@
                                                         <div class="input-group">
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input"
-                                                                       id="exampleInputFile">
+                                                                       required="true"   id="exampleInputFile">
                                                                 <label class="custom-file-label" for="exampleInputFile">Choose
                                                                     file</label>
                                                             </div>
@@ -197,7 +193,7 @@
                                                         <div class="input-group">
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input"
-                                                                       id="exampleInputFile">
+                                                                       required="true"   id="exampleInputFile">
                                                                 <label class="custom-file-label" for="exampleInputFile">Choose
                                                                     file</label>
                                                             </div>
@@ -215,7 +211,7 @@
                                                     <div class="form-group">
                                                         <label>11 - Addresse </label>
                                                         <textarea class="form-control" name="address" rows="3"
-                                                                  placeholder="Entrer ..."></textarea>
+                                                                  required="true"      placeholder="Entrer ..."></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -226,7 +222,7 @@
                                                     <div class="form-group clearfix">
 
                                                         <div class="icheck-primary d-inline">
-                                                            <input type="checkbox" name="confirm" id="checkboxPrimary3">
+                                                            <input type="checkbox" required="true" name="confirm" id="checkboxPrimary3">
                                                             <label for="checkboxPrimary3">
                                                                 Nous confirmons la veracité des informations entrées.
                                                             </label>

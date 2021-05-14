@@ -5,12 +5,12 @@ $(function () {
                 required: true,
                 minlength: 2
             },
-            birthDate: {
-                //customdate: true
-                required: true,
-                date : true,
-                dateITA : true
-            },
+            // birthDate: {
+            //     //customdate: true
+            //     required: true,
+            //     date : true,
+            //     dateITA : true
+            // },
             gender:{
                 required: true,
             },
@@ -58,9 +58,9 @@ $(function () {
                 required: "Please a valid project name",
                 minlength: jQuery.validator.format("At least {0} characters required!")
             },
-            birthDate: {
-                required: "Please write a valide birthday"
-            },
+           // birthDate: {
+           //     required: "Please write a valide birthday"
+           // },
             gender: "Please choose your gender",
             nationality: {
                 required: "Please write your nationality",

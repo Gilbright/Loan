@@ -80,6 +80,8 @@ class FinanceManager
 
         $this->entityManager->persist($financeDetail);
         $this->entityManager->flush();
+
+        return $financeDetail;
     }
 
     public function getFinancialDetailsByProjectId(string $projectId)
@@ -168,10 +170,22 @@ class FinanceManager
         return $financialDetailsByType;
     }
 
+    public function getFinanceReportInDateRange(\DateTime $startDate, \DateTime $endDate){
+        $newEndDate = $endDate->modify('+1 day');
+
+        return $this->financeDetailRepository->createQueryBuilder('f')
+            ->andWhere('f.updatedAt BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $newEndDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function getFinancialDetails(): array
     {
         try {
-            return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC'], 50);
+            return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC']);
         }catch (\Throwable $exception){
             return [];
         }
