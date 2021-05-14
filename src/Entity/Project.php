@@ -100,6 +100,16 @@ class Project
      */
     private $completionDate;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $businessPlanDocument;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $detailsExtraDocument;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
@@ -358,6 +368,30 @@ class Project
     public function setCompletionDate(?\DateTimeInterface $completionDate): self
     {
         $this->completionDate = $completionDate;
+
+        return $this;
+    }
+
+    public function getBusinessPlanDocument(): ?string
+    {
+        return $this->businessPlanDocument;
+    }
+
+    public function setBusinessPlanDocument(string $businessPlanDocument): self
+    {
+        $this->businessPlanDocument = $businessPlanDocument;
+
+        return $this;
+    }
+
+    public function getDetailsExtraDocument(): ?string
+    {
+        return $this->detailsExtraDocument;
+    }
+
+    public function setDetailsExtraDocument(?string $detailsExtraDocument): self
+    {
+        $this->detailsExtraDocument = $detailsExtraDocument;
 
         return $this;
     }

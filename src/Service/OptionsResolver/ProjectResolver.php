@@ -20,12 +20,14 @@ class ProjectResolver extends AbstractOptionResolver
                 'amountWanted',
                 'modalityAmount',
                 'modalityNumberOfMonths',
+                'businessPlanDoc',
                 'confirmation'
             ])
             ->setAllowedTypes('projectName', 'string')
             ->setAllowedTypes('projectDetails', 'string')
             ->setAllowedTypes('amountWanted', ['float', 'int', 'string'])
             ->setAllowedTypes('modalityAmount',  ['float', 'int', 'string'])
+            ->setAllowedTypes('businessPlanDoc',  'string')
             ->setAllowedTypes('modalityNumberOfMonths', ['int', 'string'])
             ->setAllowedTypes('confirmation' , 'string')
             ->resolve($data)
