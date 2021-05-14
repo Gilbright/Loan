@@ -40,7 +40,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/account", name="app_account")
+     * @Route("/employee/account", name="app_account")
      */
     public function account(): Response
     {
@@ -50,7 +50,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/account-updates", name="app_account_updates")
+     * @Route("/employee/account-updates", name="app_account_updates")
      * @param Request $request
      * @param EmployeeManager $employeeManager
      * @return Response
