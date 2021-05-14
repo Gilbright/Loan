@@ -1,0 +1,103 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Formulaire d'éligibilité</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Formulaire d'éligibilité</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- right column -->
+                <div class="col-lg-12">
+
+
+                    <!-- general form elements disabled -->
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="card-title">Veuillez Entrer le numero de la piece d'identité du client et
+                                        le montant du pret voulu pour le projet.</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--LE tableau des data des clients du team -->
+                        <div class="card-body">
+                            <form method="post">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <input type="text" required="true" class="form-control" name="IdNumber"
+                                                   placeholder="Entrer le numero de la piece d'identité">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <input type="text" required="true" class="form-control" name="amount"
+                                                   placeholder="Entrer le montant du pret voulu">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-info">Verifier</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+
+                    {% if isEligible is defined %}
+                        {% if isEligible == false %}
+                            {% set type = 'danger' %}
+                            {% set response = 'Non, vous n etes pas eligible pour ce pret.' %}
+                        {% else %}
+                            {% set type = 'success' %}
+                            {% set response = 'Oui, vous etes eligible pour ce pret.' %}
+                        {% endif %}
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card bg-{{ type }}">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Resultat</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        {{ response }}
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                </div>
+                <!--/.col (right) -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+

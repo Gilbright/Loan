@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -79,11 +81,6 @@ class Client
     private $idDocumentPictureLink;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="clients")
-     */
-    private $projectId;
-
-    /**
      * @ORM\Column(type="string")
      */
     private $birthDate;
@@ -103,6 +100,27 @@ class Client
      * @ORM\Column(type="string", length=255)
      */
     private $idDocNumber;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SavingDetail::class, mappedBy="clientId", orphanRemoval=true)
+     */
+    private $savingDetails;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $balance;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Project::class, inversedBy="clients")
+     */
+    private $projectId;
+
+    public function __construct()
+    {
+        $this->savingDetails = new ArrayCollection();
+        $this->projectId = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -266,18 +284,6 @@ class Client
         }
     }
 
-    public function getProjectId(): ?Project
-    {
-        return $this->projectId;
-    }
-
-    public function setProjectId(?Project $projectId): self
-    {
-        $this->projectId = $projectId;
-
-        return $this;
-    }
-
     public function getBirthDate(): ?string
     {
         return $this->birthDate;
@@ -344,6 +350,72 @@ class Client
     public function setIdDocNumber($idDocNumber): self
     {
         $this->idDocNumber = $idDocNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SavingDetail[]
+     */
+    public function getSavingDetails(): Collection
+    {
+        return $this->savingDetails;
+    }
+
+    public function addSavingDetail(SavingDetail $savingDetail): self
+    {
+        if (!$this->savingDetails->contains($savingDetail)) {
+            $this->savingDetails[] = $savingDetail;
+            $savingDetail->setClientId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSavingDetail(SavingDetail $savingDetail): self
+    {
+        if ($this->savingDetails->removeElement($savingDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($savingDetail->getClientId() === $this) {
+                $savingDetail->setClientId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBalance(): ?float
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(?float $balance): self
+    {
+        $this->balance = $balance;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjectId(): Collection
+    {
+        return $this->projectId;
+    }
+
+    public function addProjectId(Project $projectId): self
+    {
+        if (!$this->projectId->contains($projectId)) {
+            $this->projectId[] = $projectId;
+        }
+
+        return $this;
+    }
+
+    public function removeProjectId(Project $projectId): self
+    {
+        $this->projectId->removeElement($projectId);
 
         return $this;
     }

@@ -23,7 +23,8 @@ class TypeColorHelper
         Status::BOS_BEEN_VALIDATED => 'card-success',
         Status::ACC_VALIDATED_FINANCED => 'card-teal',
         Status::ACC_LACKING_FUND => 'card-fuchsia',
-        Status::BOS_TO_BE_REANALYZED => 'card-orange'
+        Status::BOS_TO_BE_REANALYZED => 'card-orange',
+        Status::PROJECT_COMPLETED => 'card-gray'
     ];
     public const BADGES = [
         Status::SEC_WAITING_FOR_CONTROL => 'badge badge-pill bg-navy',
@@ -37,7 +38,8 @@ class TypeColorHelper
         Status::BOS_BEEN_VALIDATED => 'badge badge-pill bg-success',
         Status::ACC_VALIDATED_FINANCED => 'badge badge-pill bg-teal',
         Status::ACC_LACKING_FUND => 'badge badge-pill bg-fuchsia',
-        Status::BOS_TO_BE_REANALYZED => 'badge badge-pill bg-orange'
+        Status::BOS_TO_BE_REANALYZED => 'badge badge-pill bg-orange',
+        Status::PROJECT_COMPLETED => 'badge badge-pill bg-secondary'
     ];
 
     public static function findCardColor($status){

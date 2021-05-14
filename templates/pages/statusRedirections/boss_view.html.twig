@@ -9,7 +9,7 @@
                     {% set projectStatus = project.status %}
 
 
-                    {% if projectStatus == 'VALIDE' or projectStatus == 'VALIDE FINANCE'  or projectStatus == 'PROJET MANQUANT DE FONDS' or projectStatus == 'REJETE' %}
+                    {% if projectStatus == 'VALIDE' or projectStatus == 'VALIDE FINANCE'  or projectStatus == 'PROJET MANQUANT DE FONDS' or projectStatus == 'REJETE' or projectStatus == 'PROJET FINI' %}
                         <a type="button" class="btn btn-secondary float-right"
                            href="{{ path('admin') }}">
                             <i class="fas fa-times-circle"></i>

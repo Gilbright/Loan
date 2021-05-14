@@ -41,25 +41,29 @@ class NoteManager
         $this->security = $security;
     }
 
-    public function execute (array $data){
+    public function execute(array $data)
+    {
         $content = $data['noteContent'];
-        /** @var Employee $employee */
-        $employee = $this->security->getUser();
-        $authorRole = current(array_filter($employee->getRoles(), function ($role){
-            return $role !== 'ROLE_USER';
-        }));
+        if ($content) {
+            /** @var Employee $employee */
+            $employee = $this->security->getUser();
+            $authorRole = current(array_filter($employee->getRoles(), function ($role) {
+                return $role !== 'ROLE_USER';
+            }));
 
-        $noteEntity = (new Note())
-            ->setAuthorRole(RoleTranslator::translate($authorRole))
-            ->setContent($content)
-            ->setEmployee($employee)
-            ->setProject($data['project']);
+            $noteEntity = (new Note())
+                ->setAuthorRole(RoleTranslator::translate($authorRole))
+                ->setContent($content)
+                ->setEmployee($employee)
+                ->setProject($data['project']);
 
-        $this->entityManager->persist($noteEntity);
-        $this->entityManager->flush();
+            $this->entityManager->persist($noteEntity);
+            $this->entityManager->flush();
+        }
     }
 
-    public function getNotesByProjectId(string $projectId){
+    public function getNotesByProjectId(string $projectId)
+    {
         return $this->entityManager->createQueryBuilder()
             ->select('n')
             ->from(Note::class, 'n')

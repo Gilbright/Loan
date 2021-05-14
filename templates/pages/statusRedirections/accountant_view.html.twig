@@ -26,17 +26,17 @@
                     </thead>
                     <tbody>
                     {% for financeDetail in financeDetails %}
-                        {% if  financeDetail.amountLeftToBePaidToUs == project.finalAmount  %}
-                            {% set amountInfos = 'Remboursement non amorçé'  %}
+                        {% if  financeDetail.amountLeftToBePaidToUs == project.finalAmount %}
+                            {% set amountInfos = 'Remboursement non amorçé' %}
                         {% else %}
-                            {% set amountInfos = financeDetail.amountLeftToBePaidToUs  %}
+                            {% set amountInfos = financeDetail.amountLeftToBePaidToUs %}
                         {% endif %}
                         <tr>
                             <td>{{ financeDetail.operationExecutor.nameSurname }}</td>
-                            <td>{{ financeDetail.type | getType(financeDetail.type)}}</td>
+                            <td>{{ financeDetail.type | getType(financeDetail.type) }}</td>
                             <td>{{ financeDetail.amount }}</td>
                             <td>{{ financeDetail.amountLeftToBeSentByUs }}</td>
-                            <td>{{  amountInfos }}</td>
+                            <td>{{ amountInfos }}</td>
                             <td>{{ financeDetail.createdAt|date('d-m-Y H:i:s') }}</td>
                         </tr>
                     {% endfor %}
@@ -48,52 +48,75 @@
 {% endblock %}
 
 {% block finance_block %}
-    <form method="post">
-        <div class="card {{ statusData[0] }}">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col">
-                        <h3 class="card-title">Ajouter un raport financier</h3>
+    {% if project.isFinished == 'false' %}
+        <form method="post">
+            <div class="card {{ statusData[0] }}">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="card-title">Ajouter un raport financier</h3>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <form>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Type de depense</label>
-                                    <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" name="dropdownName">
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Type de depense</label>
+                                    <select class="form-control select2 select2-hidden-accessible" style="width: 100%;"
+                                            data-select2-id="1" tabindex="-1" aria-hidden="true" name="dropdownName">
                                         <option data-select2-id="1">Entree</option>
                                         <option selected="selected" data-select2-id="2">Sortie</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Montant a payer</label>
+                                    <input type="number" name="amount" required="true" class="form-control"
+                                           placeholder="Entrer le montant...">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Montant a payer</label>
-                                <input type="number" name="amount" class="form-control" placeholder="Entrer le montant...">
+
+                        <div class="row">
+                            <div class="col">
+                                <!-- textarea -->
+                                <div class="form-group">
+                                    <label> Ajouter un document justificatif </label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" required="true" class="custom-file-input"
+                                                   id="financeDetailDoc" name="financeDetailDoc">
+                                            <label class="custom-file-label" for="financeDetailDoc">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <!-- textarea -->
-                            <div class="form-group">
-                                <label>Detail du payment</label>
-                                <textarea class="form-control" rows="3" name="paymentDetails"
-                                          placeholder="Entrez ..."></textarea>
+
+                        <div class="row">
+                            <div class="col">
+                                <!-- textarea -->
+                                <div class="form-group">
+                                    <label>Detail du payment</label>
+                                    <textarea class="form-control" rows="3" name="paymentDetails" required="true"
+                                              placeholder="Entrez ..."></textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer">
-                <div class="col-lg-12">
-                    <div class="btn-group w-100">
-                        <button type="submit" class="btn btn-info col">
-                            <i class="fas fa-plus"></i>
-                            <span>Enregister ce rapport</span></button>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="col-lg-12">
+                        <div class="btn-group w-100">
+                            <button type="submit" class="btn btn-info col">
+                                <i class="fas fa-plus"></i>
+                                <span>Enregister ce rapport</span></button>
 
                             <a type="button" class="btn btn-danger col"
                                href="{{ path('acc_lack_fund', {projectId: project.projectId}) }}">
@@ -101,12 +124,13 @@
                                 <span>Notifier que le projet manque de fonds</span>
                             </a>
 
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    {% endif %}
 
 {% endblock %}
 

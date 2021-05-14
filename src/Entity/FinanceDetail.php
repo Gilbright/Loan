@@ -65,6 +65,11 @@ class FinanceDetail
      */
     private $operationExecutor;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $financeDetailDocument;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -187,6 +192,18 @@ class FinanceDetail
     public function setOperationExecutor(?Employee $operationExecutor): self
     {
         $this->operationExecutor = $operationExecutor;
+
+        return $this;
+    }
+
+    public function getFinanceDetailDocument(): ?string
+    {
+        return $this->financeDetailDocument;
+    }
+
+    public function setFinanceDetailDocument(?string $financeDetailDocument): self
+    {
+        $this->financeDetailDocument = $financeDetailDocument;
 
         return $this;
     }

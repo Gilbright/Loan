@@ -65,7 +65,11 @@
                                 </tr>
                                 <tr>
                                     <td><b>Duree&nbspde&nbspremboursement</b></td>
-                                    <td> {{ project.repaymentDuration }} mois</td>
+                                    {% if project.repaymentDuration > 24 %}
+                                        <td style="color: red"> {{ project.repaymentDuration }} mois</td>
+                                    {% else %}
+                                        <td> {{ project.repaymentDuration }} mois</td>
+                                    {% endif %}
                                 </tr>
                                 <tr>
                                     <td><b>Modalite et echeance</b></td>
@@ -113,7 +117,7 @@
                                                 <td>{{ financeDetail.amount }}</td>
                                                 <td>{{ financeDetail.amountLeftToBeSentByUs }}</td>
                                                 <td>{{ financeDetail.amountLeftToBePaidToUs }}</td>
-                                                <td>{{ financeDetail.createdAt|date('d-m-Y') }}</td>
+                                                <td>{{ financeDetail.updatedAt|date('d-m-Y H:m:s') }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -203,48 +207,10 @@
                     <!-- /.card -->
 
                     <!-- add project finale price-->
-                    {% if (project.finalAmount == 0 and (project.status == 'ETAPE D ENTRETIEN' or project.status == 'POST ENTRETIEN')) %}
-                        {% block project_finale_price %}
-                            <form method="post">
-                                <div class="card {{ statusData[0] }}">
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <div class="col">
-                                                <h3 class="card-title">Ajouter Le montant conclu</h3>
-                                            </div>
-                                        </div>
-                                    </div>
+                    {% block finalAmoutSetting %}
 
-                                    <!--note -->
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-2">
-                                                <!-- text input -->
-                                                <div class="form-group">
-                                                    <label>Montant conclu comme pret </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-10">
-                                                <!-- text input -->
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" name="finalAmount" placeholder="Entrer ...">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                    {% endblock %}
 
-                                    <div class="card-footer">
-                                        <div class="row">
-                                            <div class="col">
-                                                <button type="submit" class="btn btn-secondary"> Sauvegarder</button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        {% endblock %}
-                    {% endif %}
 
 
                     <!-- TABLEAU DES MEMBRES DU GROUPE -->
@@ -286,7 +252,8 @@
                                         <td><b> {{ property }} </b></td>
 
                                         {% for client in projectTeam %}
-                                            <td>{{ client[key] }}</td>
+                                            {% set clientKey = {key, client} %}
+                                            <td>{{ clientKey | getField(clientKey) }}</td>
 
                                         {% endfor %}
 

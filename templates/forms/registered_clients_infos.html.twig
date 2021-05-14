@@ -31,19 +31,45 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="card-title">Informations des membres du groupe (Veuillez inserer les
-                                        informations du leader de l'equipe en premier).</h3>
-                                </div>
-                                <div class="col">
-                                    <a href="{{ path('app_sec_register_client', {'projectId':projectId}) }}"
-                                       type="button" class="btn btn-info float-right">Ajouter un membre</a>
+                                    <h3 class="card-title">Veuillez Entrer le numero de la piece d'identité du leader de
+                                        l'equipe en premier.</h3>
                                 </div>
                             </div>
                         </div>
 
                         <!--LE tableau des data des clients du team -->
-                        <div class="card-body table-responsive p-0">
-                            {% if clientsData %}
+                        <div class="card-body">
+                            <form method="post">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="IdNumber"
+                                                   required="true" placeholder="Entrer le numero de la piece d'identité">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-info">Ajouter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+
+                    {% if clientsData|length > 0 %}
+                        <div class="card card-warning">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="card-title">Informations des membres du groupe .</h3>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!--LE tableau des data des clients du team -->
+                            <div class="card-body table-responsive p-0">
                                 <table class="table table-hover text-nowrap">
                                     <thead>
                                     <tr>
@@ -66,19 +92,15 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
-                            {% endif %}
-                        </div>
-                        <div class="card-footer">
-                            <form method="post">
-                                {% if clientsData %}
-                                    <button type="submit" class="btn btn-info float-right">Enregister et continuer
-                                    </button>
-                                {% endif %}
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /.card -->
 
+                            </div>
+                            <div class="card-footer">
+                                <form method="post">
+                                    <button type="submit" class="btn btn-info btn-block">Enregister</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
                 <!--/.col (right) -->
             </div>

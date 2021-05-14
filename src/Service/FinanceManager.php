@@ -19,6 +19,7 @@ use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\FinancialDetailResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
+use mysql_xdevapi\Exception;
 use Symfony\Component\Security\Core\Security;
 
 class FinanceManager
@@ -70,6 +71,7 @@ class FinanceManager
             ->setType($type)
             ->setAmount((float)$data['amount'])
             ->setProjectId($project)
+            ->setFinanceDetailDocument($data['financeDetailDoc'])
             ->setAmountLeftToBePaidToUs($this->calculateAmountLeftToBePaidToUs($project, (float)$data['amount'], strtolower($data['dropdownName'])))
             ->setAmountLeftToBeSentByUs($this->calculateAmountLeftToBeSentByUs($project, (float)$data['amount'], strtolower($data['dropdownName'])))
             ->setExtra($data['paymentDetails'])
@@ -78,6 +80,8 @@ class FinanceManager
 
         $this->entityManager->persist($financeDetail);
         $this->entityManager->flush();
+
+        return $financeDetail;
     }
 
     public function getFinancialDetailsByProjectId(string $projectId)
@@ -166,8 +170,24 @@ class FinanceManager
         return $financialDetailsByType;
     }
 
+    public function getFinanceReportInDateRange(\DateTime $startDate, \DateTime $endDate){
+        $newEndDate = $endDate->modify('+1 day');
+
+        return $this->financeDetailRepository->createQueryBuilder('f')
+            ->andWhere('f.updatedAt BETWEEN :start AND :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $newEndDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function getFinancialDetails(): array
     {
-        return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC'], 50);
+        try {
+            return $this->financeDetailRepository->findBy([], ['updatedAt' => 'DESC']);
+        }catch (\Throwable $exception){
+            return [];
+        }
     }
 }
