@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.2",
-        "admin-lte": "^3.0"
+        "admin-lte": "^3.0",
+        "bootstrap-select-country": "^4.2.0"
     }
 }

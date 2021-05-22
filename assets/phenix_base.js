@@ -11,7 +11,9 @@ import './styles/phenix_base.scss';
 // start the Stimulus application
 import './bootstrap';
 
+import 'bootstrap-select-country/dist/js/bootstrap-select-country.min.js'
 import 'admin-lte/dist/js/adminlte.min.js'
+import 'admin-lte/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js'
 
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
