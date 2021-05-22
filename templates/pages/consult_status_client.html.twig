@@ -264,7 +264,7 @@
                                                <td>{{ savingDetail.amount }}</td>
                                                <td>{{ savingDetail.paidMonth }}</td>
                                                <td>{{ savingDetail.extra }}</td>
-                                               <td>{{ savingDetail.createdAt | format('d-m-y') }}</td>
+                                               <td>{{ savingDetail.createdAt |date('d-m-Y H:m:s') }}</td>
                                            </tr>
                                        {% endfor %}
                                        </tbody>

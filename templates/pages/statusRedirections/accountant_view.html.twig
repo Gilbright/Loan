@@ -48,7 +48,8 @@
 {% endblock %}
 
 {% block finance_block %}
-    {% if project.isFinished == 'false' %}
+
+    {% if project.isFinished == false or  project.isFinished == 'false' %}
         <form method="post">
             <div class="card {{ statusData[0] }}">
                 <div class="card-header">
