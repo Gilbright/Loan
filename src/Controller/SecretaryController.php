@@ -7,6 +7,7 @@ use App\Helper\Status;
 use App\Service\ClientManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
+use App\Service\UploaderHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,9 +29,14 @@ class SecretaryController extends AbstractController
      * @param ProjectManager $projectManager
      * @return Response
      */
-    public function index(Request $request, ProjectManager $projectManager): Response
+    public function index(Request $request, ProjectManager $projectManager, UploaderHelper $uploaderHelper): Response
     {
         if ($request->isMethod('POST')) {
+            foreach ($request->files->all() as $item){
+                $result = $uploaderHelper->uploadPhenixFile($item);
+            }
+
+            dd($request->files->all());
             $projectId = $projectManager->execute($request->request->all());
 
             return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);

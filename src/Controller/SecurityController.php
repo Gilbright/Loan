@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Employee;
 use App\Service\EmployeeManager;
+use App\Service\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,10 +43,13 @@ class SecurityController extends AbstractController
     /**
      * @Route("/employee/account", name="app_account")
      */
-    public function account(): Response
+    public function account(UploaderHelper $uploaderHelper): Response
     {
         return $this->render('pages/account.html.twig',
-            ['user' => $this->getUser()]
+            [
+                'user' => $this->getUser(),
+                'imageUrl' => 'Demonstration/mail-2-60a13ac8f11a8.jpeg'
+            ]
         );
     }
 
