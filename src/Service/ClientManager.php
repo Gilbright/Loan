@@ -165,6 +165,12 @@ class ClientManager
     {
         $data = ClientResolver::resolve($data);
 
+        $clientCheck = $this->getClientByIdNumber($data['idNumber']);
+
+        if ($clientCheck instanceof Client){
+            throw new \Exception('Il existe déja un client avect le meme numéro de piece d\'identité, Essayé avec une autre piece d\'identité..');
+        }
+
         $gender = $data['gender'] === 'Homme' ? 'H' : 'F';
 
         $clientEntity = new Client();
