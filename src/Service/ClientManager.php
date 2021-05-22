@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Client;
 use App\Entity\Project;
+use App\Helper\CountryHelper;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ClientResolver;
@@ -161,17 +162,17 @@ class ClientManager
         return $teamLeads;
     }
 
-    public function addClient(array $data)
+    public function addClient(array $data): void
     {
         $data = ClientResolver::resolve($data);
 
-        $clientCheck = $this->getClientByIdNumber($data['idNumber']);
+        $clientCheck = $this->clientRepository->findOneBy(['idDocNumber' => $data['idNumber']]);
 
         if ($clientCheck instanceof Client){
             throw new \Exception('Il existe déja un client avect le meme numéro de piece d\'identité, Essayé avec une autre piece d\'identité..');
         }
 
-        $gender = $data['gender'] === 'Homme' ? 'H' : 'F';
+        $nationality = CountryHelper::getCountryFullName($data['nationality']);
 
         $clientEntity = new Client();
 
@@ -183,9 +184,9 @@ class ClientManager
             ->setIdDocumentPictureLink("link there")
             ->setIdPictureLink("link here")
             ->setIdDocNumber($data['idNumber'])
-            ->setNationality($data['nationality'])
+            ->setNationality($nationality)
             ->setIsTeamLead(false)
-            ->setGender($gender)
+            ->setGender($data['gender'])
             ->setProfession($data['profession'])
             ->setMonthlyIncome($data['monthlyIncome'])
             ->setBirthDate($data['birthDate'])
