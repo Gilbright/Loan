@@ -29,17 +29,24 @@ class GetClientField extends AbstractExtension
 
     public function doSomething(array $clientKey)
     {
+        /** Client $client */
+
+        /** @var  Client $client */
         [$key, $client] = array_values($clientKey);
 
         switch ($key){
             case 'nameSurname':
                 return $client->getNameSurname();
+            case 'idDocNumber':
+                return $client->getIdDocNumber();
             case 'phoneNumber':
                 return $client->getPhoneNumber();
             case 'email':
                 return $client->getEmail();
             case 'nationality':
                 return $client->getNationality();
+            case 'gender':
+                return $client->getGender();
             case 'address':
                 return $client->getAddress();
             case 'monthlyIncome':
