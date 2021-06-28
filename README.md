@@ -1,2 +1,2 @@
-# Pins
+# Loan
 Share Pin Project
