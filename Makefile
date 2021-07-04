@@ -22,7 +22,10 @@ setup:		## Prepare and run docker environment
 	docker-compose up -d
 
 prepare: 	## Composer install
-	docker exec -it ${CONTAINER_NAME} composer install
+	docker exec -it ${CONTAINER_NAME} composer install || true
+	bin/console doctrine:database:create || true
+	bin/console doctrine:schema:create  || true
+	bin/console doctrine:f:l
 
 cc:  		## Cache clear
 	docker exec -it ${CONTAINER_NAME} bin/console cache:clear
