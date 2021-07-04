@@ -1,32 +1,61 @@
-version: "3.1"
-services:
-  phenix-nginx:
-    container_name: loan-nginx
-    build: docker/nginx
-    working_dir: /application
-    restart: on-failure
-    volumes:
-      - .:/application:cached
-      - ./var/nginx_logs:/var/log/nginx
-      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ~/.ssh/:/root/.ssh/
-    labels:
-      - traefik.http.routers.loan-nginx.rule=Host(`loan.box`)
+version: '3'
 
-  phenix-fpm:
-    container_name: loan-fpm
-    build: docker/php-fpm
-    working_dir: /application
-    restart: on-failure
+services:
+  nginx:
+    container_name: app-app-loan-nginx
+    build: docker/nginx
+    working_dir: /var/www/app
+    ports:
+      - '8888:80'
     volumes:
-      - .:/application:cached
-      - ./var/log:/application/var/log
-      - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
-      - ~/.ssh/:/root/.ssh/
-    labels:
-      - traefik.enable=false
+      - ./:/var/www/app
+      - ./docker/nginx/default-compose.conf:/etc/nginx/conf.d/default-compose.conf
+    networks:
+      - app-loan-network
+
+  php:
+    container_name: app-loan-fpm
+    build: docker/php
+    working_dir: /var/www/app
+    volumes:
+      - ./:/var/www/app
+    networks:
+      - app-loan-network
+
+  mysql:
+    container_name: app-loan-mysql
+    build: docker/mysql
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    volumes:
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-loan-network
+
+  phpmyadmin:
+    container_name: app-loan-phpmyadmin
+    build: docker/phpmyadmin
+    restart: on-failure
+    ports:
+      - 7676:80
+    environment:
+      - PMA_HOST=mysql
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./docker/phpmyadmin/upload.ini:/usr/local/etc/php/php.ini
+    networks:
+      - app-loan-network
+
+  maildev:
+    image: maildev/maildev
+    container_name: maildev_docker
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - 9959:80
+    restart: on-failure
+    networks:
+      - app-loan-network
 
 networks:
-  default:
-    external:
-      name: nirvana
+  app-loan-network:
