@@ -72,7 +72,6 @@ class AccountantController extends AbstractController
 
                 if (0.0 === $financeDetail->getAmountLeftToBePaidToUs() && 0.0 === $financeDetail->getAmountLeftToBeSentByUs()){
                     $projectManager->changeProjectStatus(Status::PROJECT_COMPLETED, $projectId);
-                    $project->setIsFinished(true)->setCompletionDate(new \DateTime());
                 }
             }
 
