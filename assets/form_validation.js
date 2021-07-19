@@ -12,5 +12,7 @@ import './subJS/project_validation.js'
 
 import './subJS/client_validation.js'
 
+import './subJS/employee_validation.js'
+
 import './input_form.js'
 

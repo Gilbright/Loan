@@ -58,7 +58,7 @@ class EmployeeManager
             ->setIdPictureLink("link here")
             ->setNationality($data['nationality'])
             ->setGender($gender)
-            ->setIdDocNumber($data['idDocNumber'])
+            ->setIdDocNumber($data['idNumber'])
             ->setRoles($this->roleParser($data['role']))
             ->setPassword($encodedPassword)
             ->setBirthDate($data['birthDate']);

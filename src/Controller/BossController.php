@@ -9,6 +9,7 @@ use App\Service\FinanceManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
 use App\Service\SavingManager;
+use App\Service\UploaderHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -297,9 +298,13 @@ class BossController extends AbstractController
      * @param Request $request
      * @param EmployeeManager $employeeManager
      */
-    public function bossAddEmployee(Request $request, EmployeeManager $employeeManager)
+    public function bossAddEmployee(Request $request, EmployeeManager $employeeManager, UploaderHelper $uploaderHelper)
     {
         if ($request->isMethod('POST')) {
+            foreach ($request->files->all() as $item){
+                $result = $uploaderHelper->uploadPhenixFile($item);
+            }
+
             $employeeManager->execute($request->request->all());
             return $this->redirectToRoute('app_boss_list_employees');
         }

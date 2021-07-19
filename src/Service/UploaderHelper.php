@@ -44,7 +44,7 @@ class UploaderHelper
             $originalFilename = $file->getFilename();
         }
 
-        $newFilename = Urlizer::urlize(pathinfo($originalFilename, PATHINFO_FILENAME)).'-'.uniqid().'.'.$file->guessExtension();
+        $newFilename = Urlizer::urlize(pathinfo($originalFilename, PATHINFO_FILENAME)).'-'.uniqid('', true).'.'.$file->guessExtension();
 
         $stream = fopen($file->getPathname(), 'r');
 

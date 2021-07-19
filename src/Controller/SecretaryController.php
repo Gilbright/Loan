@@ -36,7 +36,6 @@ class SecretaryController extends AbstractController
                 $result = $uploaderHelper->uploadPhenixFile($item);
             }
 
-            dd($request->files->all());
             $projectId = $projectManager->execute($request->request->all());
 
             return $this->redirectToRoute('app_sec_list_client', ['projectId' => $projectId]);
@@ -126,6 +125,7 @@ class SecretaryController extends AbstractController
     public function AddClient(Request $request, ClientManager $clientManager): Response
     {
         if ($request->isMethod('POST')) {
+            dd($request->files->all());
             $clientManager->addClient($request->request->all());
 
             return $this->redirectToRoute('admin');

@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94ffb656e5b2be36da74f9fbc57e9662",
-    "content-hash": "5a417ccd1997659a4d2946c8c4cfe9fd",
+    "content-hash": "5612eb8ede8224f08b2e319e0771dbe3",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -8032,6 +8031,10 @@
                 "file uploads",
                 "upload"
             ],
+            "support": {
+                "issues": "https://github.com/dustin10/VichUploaderBundle/issues",
+                "source": "https://github.com/dustin10/VichUploaderBundle/tree/master"
+            },
             "time": "2020-07-09T07:29:07+00:00"
         },
         {
