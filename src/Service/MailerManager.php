@@ -18,6 +18,7 @@ use Symfony\Component\Mime\Email;
 
 class MailerManager
 {
+    const FROM_ADDRESS = 'loanphenix@gmail.com';
     /**
      * @var MailerInterface $mailerSender
      */
@@ -31,7 +32,7 @@ class MailerManager
     public function sendMailNotification(Project $project,Employee $employee)
     {
         $mailObject = (new TemplatedEmail())
-            ->from('loanphenix@gmail.com')
+            ->from(self::FROM_ADDRESS)
             ->to($employee->getEmail())
             ->subject('Notification sur le statut du projet ' . $project->getProjectId())
             ->htmlTemplate('mails/employee_mail.html.twig')
@@ -42,6 +43,6 @@ class MailerManager
         ;
 
         //@Todo We will reopen, client mail are not real mail. ça cause des errors...
-       // $this->mailerSender->send($mailObject);
+        $this->mailerSender->send($mailObject);
     }
 }
