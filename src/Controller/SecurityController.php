@@ -48,7 +48,7 @@ class SecurityController extends AbstractController
         return $this->render('pages/account.html.twig',
             [
                 'user' => $this->getUser(),
-                'imageUrl' => 'Demonstration/mail-2-60a13ac8f11a8.jpeg'
+                'imageUrl' => 'Demonstration/account-60a8e3095ecdf.png'
             ]
         );
     }

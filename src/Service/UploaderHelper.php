@@ -24,16 +24,20 @@ class UploaderHelper
     private $requestStackContext;
 
     private $uploadedAssetsBaseUrl;
+
+    private $publicAssetBaseUrl;
+
     /**
      * UploaderHelper constructor.
      * @param FilesystemInterface $publicUploadsFilesystem
      * @param RequestStackContext $requestStackContext
      * @param string $uploadedAssetsBaseUrl
      */
-    public function __construct(FilesystemInterface $publicUploadsFilesystem, RequestStackContext $requestStackContext)
+    public function __construct(FilesystemInterface $publicUploadsFilesystem, RequestStackContext $requestStackContext, string $uploadedAssetsBaseUrl)
     {
         $this->filesystem = $publicUploadsFilesystem;
         $this->requestStackContext = $requestStackContext;
+        $this->publicAssetBaseUrl = $uploadedAssetsBaseUrl;
     }
 
     public function uploadPhenixFile(File $file): string
@@ -73,6 +77,6 @@ class UploaderHelper
     public function getImagePath(string $path): string
     {
         return $this->requestStackContext
-            ->getBasePath().'uploads/'.$path;
+                ->getBasePath().$this->publicAssetBaseUrl.'/'.$path;
     }
 }
