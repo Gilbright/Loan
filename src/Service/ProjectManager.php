@@ -160,6 +160,10 @@ class ProjectManager
 
         $project->setStatus($newStatus);
 
+        if ($newStatus === Status::PROJECT_COMPLETED){
+            $project->setIsFinished(true)->setCompletionDate(new \DateTime());
+        }
+
         // if that status change is concerned by an update mail sending, then we do it here.
         if ($mailReceivers) {
             foreach ($mailReceivers as $receiver) {

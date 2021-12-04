@@ -19,8 +19,6 @@ use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\FinancialDetailResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
-use mysql_xdevapi\Exception;
-use Symfony\Component\Security\Core\Security;
 
 class FinanceManager
 {
@@ -33,35 +31,27 @@ class FinanceManager
     /** @var ProjectRepository $projectRepository */
     private $projectRepository;
 
-    /** @var Security $security*/
-    private $security;
-
     /** @var FinanceDetailRepository $financeDetailRepository*/
     private $financeDetailRepository;
 
     /**
-     * ProjectManager constructor.
+     * FinanceManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param ClientRepository $clientRepository
      * @param ProjectRepository $projectRepository
-     * @param Security $security
      * @param FinanceDetailRepository $financeDetailRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, ProjectRepository $projectRepository, Security $security, FinanceDetailRepository $financeDetailRepository)
+    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, ProjectRepository $projectRepository, FinanceDetailRepository $financeDetailRepository)
     {
         $this->entityManager = $entityManager;
         $this->clientRepository = $clientRepository;
         $this->projectRepository = $projectRepository;
-        $this->security = $security;
         $this->financeDetailRepository = $financeDetailRepository;
     }
 
     public function excecute(array $data)
     {
         $data = FinancialDetailResolver::resolve($data);
-
-        /** @var Employee $employee */
-        $employee = $this->security->getUser();
 
         $financeDetail =  new FinanceDetail();
         $project = $data['project'];
@@ -75,7 +65,6 @@ class FinanceManager
             ->setAmountLeftToBePaidToUs($this->calculateAmountLeftToBePaidToUs($project, (float)$data['amount'], strtolower($data['dropdownName'])))
             ->setAmountLeftToBeSentByUs($this->calculateAmountLeftToBeSentByUs($project, (float)$data['amount'], strtolower($data['dropdownName'])))
             ->setExtra($data['paymentDetails'])
-            ->setOperationExecutor($employee)
         ;
 
         $this->entityManager->persist($financeDetail);
