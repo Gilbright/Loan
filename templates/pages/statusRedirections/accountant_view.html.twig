@@ -1,7 +1,7 @@
 {% extends 'pages/base_project_clients.html.twig' %}
 
 {% block finance_detail_block %}
-    {% if financeDetails %}
+    {% if financeDetails and financeDetails is not empty %}
         <div class="card {{ statusData[0] }}">
             <div class="card-header">
                 <div class="row">
@@ -72,7 +72,7 @@
                                             data-select2-id="1" tabindex="-1" aria-hidden="true" name="dropdownName">
                                         <option data-select2-id="1">Entree</option>
 
-                                        {% if financeDetail.amountLeftToBeSentByUs != 0.0 %}
+                                        {% if financeDetail is defined and financeDetail.amountLeftToBeSentByUs != 0.0 %}
                                             <option selected="selected" data-select2-id="2">Sortie</option>
                                         {% endif %}
                                     </select>
