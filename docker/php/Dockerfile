@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine
+FROM php:8.0.5-fpm-alpine
 
 WORKDIR "/var/www/app"
 
@@ -21,7 +21,7 @@ RUN apk add --no-cache vim
 RUN docker-php-ext-install intl
 RUN docker-php-ext-install bcmath
 RUN docker-php-ext-install opcache
-RUN docker-php-ext-install zip
+#RUN docker-php-ext-install zip
 RUN docker-php-ext-install gmp
 RUN docker-php-ext-install pcntl
 
