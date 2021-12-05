@@ -90,7 +90,7 @@
                                         <tbody>
                                         <tr>
                                             <td><b>Nom et Prenom</b></td>
-                                            <td>{{ client.nameSurname }}</td>
+                                            <td>{{ client.fullName }}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Numéro de la piece d'identité</b></td>
@@ -161,7 +161,7 @@
                                         <tbody>
                                         <tr>
                                             <td><b>ID du projet</b></td>
-                                            <td>{{ project.projectId }}</td>
+                                            <td>{{ project.projectMasterId.requestId }}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Nom du projet</b></td>

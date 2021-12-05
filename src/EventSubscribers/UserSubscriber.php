@@ -11,6 +11,9 @@ namespace App\EventSubscribers;
 
 use App\Entity\FinanceDetail;
 use App\Entity\Note;
+use App\Entity\PaymentDetails;
+use App\Entity\SavingDetails;
+use App\Entity\Users;
 use App\Helper\RoleTranslator;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\EventSubscriber;
@@ -47,21 +50,29 @@ class UserSubscriber implements EventSubscriber
     {
         $entity = $args->getObject();
 
-        if ($entity instanceof FinanceDetail) {
-            $entity->setOperationExecutor($this->security->getUser());
+        /** @var Users $currentUser */
+        $currentUser = $this->security->getUser();
+
+        if ($entity instanceof SavingDetails) {
+            $entity->setUser($currentUser);
+
+            return;
+        }
+
+        if ($entity instanceof PaymentDetails) {
+            $entity->setUser($currentUser);
+
             return;
         }
 
         if ($entity instanceof Note) {
-            $employee = $this->security->getUser();
-
-            $authorRole = current(array_filter($employee->getRoles(), static function ($role) {
+            $authorRole = current(array_filter($currentUser->getRoles(), static function ($role) {
                 return $role !== 'ROLE_USER';
             }));
 
             $entity
-                ->setEmployee($employee)
-                ->setAuthorRole(RoleTranslator::translate($authorRole))
+                ->setUser($currentUser)
+                ->setUserRoleTranslate(RoleTranslator::translate($authorRole))
             ;
         }
     }

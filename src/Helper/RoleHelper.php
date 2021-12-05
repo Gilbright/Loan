@@ -15,7 +15,16 @@ class RoleHelper
 
     public const EXPERT = 'ROLE_EXPERT';
 
+    public const SECRETARY = 'ROLE_SECRETARY';
+
     public const ACCOUNTANT = 'ROLE_ACCOUNTANT';
 
-    public const SECRETARY = 'ROLE_SECRETARY';
+
+    public const BOSS_FR       = 'directeur';
+
+    public const EXPERT_FR     = 'expert';
+
+    public const SECRETARY_FR  = 'secretaire';
+
+    public const ACCOUNTANT_FR = 'tresorier';
 }

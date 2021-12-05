@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/", name="app_login")
+     * @Route("/login", name="app_login")
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
     public function accountUpdates(Request $request, EmployeeManager $employeeManager): Response
     {
         if ($request->isMethod('POST')){
-            $employeeManager->updateEmployeeInfos($request->request->all(), $this->getUser());
+            $employeeManager->updateUserInfos($request->request->all(), $this->getUser());
 
             return $this->redirectToRoute('app_account');
         }

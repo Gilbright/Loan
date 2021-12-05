@@ -8,34 +8,28 @@
 
 namespace App\Service;
 
-
 use App\Entity\Client;
-use App\Entity\SavingDetail;
-use App\Repository\ClientRepository;
-use App\Repository\SavingDetailRepository;
+use App\Entity\SavingDetails;
+use App\Repository\SavingDetailsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class SavingManager
 {
-    /** @var EntityManagerInterface $entityManager */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    /** @var SavingDetailRepository $savingRepository */
-    private $savingRepository;
+    private SavingDetailsRepository $savingRepository;
 
-    /** @var ClientRepository $clientRepository */
-    private $clientRepository;
+    private ClientManager $clientManager;
 
-    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, SavingDetailRepository $savingDetailRepository)
+    public function __construct(EntityManagerInterface $entityManager, SavingDetailsRepository $savingDetailRepository, ClientManager $clientManager)
     {
-        $this->clientRepository = $clientRepository;
         $this->savingRepository = $savingDetailRepository;
         $this->entityManager = $entityManager;
+        $this->clientManager = $clientManager;
     }
 
-    public function getSavingDetails(): array
+    public function getAllSavingDetails(): array
     {
         try {
             return $this->savingRepository->findBy([],['updatedAt' => 'DESC']);
@@ -45,48 +39,41 @@ class SavingManager
     }
 
     public function getSavingInDateRange(\DateTime $startDate, \DateTime $endDate){
-        $newEndDate = $endDate->modify('+1 day');
-
         return $this->savingRepository->createQueryBuilder('s')
             ->andWhere('s.updatedAt BETWEEN :start AND :end')
             ->setParameter('start', $startDate)
-            ->setParameter('end', $newEndDate)
+            ->setParameter('end', $endDate->modify('+1 day'))
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
-    public function addSaving(array $savingArray, ClientManager $clientManager)
+    public function addSaving(array $savingArray)
     {
-        $currentClient = $clientManager->getClientByIdNumber($savingArray['IdNumber']);
+        $clientInfos = $this->clientManager->getClientByIdNumber($savingArray['IdNumber']);
 
-        if (!$currentClient instanceof Client) {
+        if (!$clientInfos instanceof Client) {
             throw new EntityNotFoundException("Ce identifiant ne correspond a aucun client, veuillez le corriger");
             //TODO: Exception management
         }
 
-        $savingDetail = new SavingDetail();
-
-        $savingDetail->setAmount($savingArray['amount'])
-            ->setClientId($currentClient)
-            ->setDetailDocumentLink($savingArray['proofDocument'])
+        $savingDetail = (new SavingDetails())
+            ->setAmount($savingArray['amount'])
+            ->setClient($clientInfos)
+            ->setDetailDocUrl($savingArray['proofDocument'])
             ->setPaidMonth($savingArray['month'])
             ->setType($savingArray['type'])
-            ->setExtra($savingArray['details']);
+            ->setExtra($savingArray['details'])
+        ;
 
-        $this->entityManager->persist($savingDetail);
-
-        //updating the current client's balance
+        //updating the client's balance
         if ('cotisation' === $savingArray['type']) {
-            $currentClient->setBalance($currentClient->getBalance() + $savingArray['amount']);
+            $clientInfos->setBalance($clientInfos->getBalance() + (float)$savingArray['amount']);
         } elseif ('defalcation' === $savingArray['type']) {
-            $currentClient->setBalance($currentClient->getBalance() - $savingArray['amount']);
-        } else {
-            throw new Exception("Vous devez choisir soit la cotisation ou defalcation comme type");
-
-            //TODO : Manage exception throwing
+            $clientInfos->setBalance($clientInfos->getBalance() - (float)$savingArray['amount']);
         }
 
+        $this->entityManager->persist($savingDetail);
         $this->entityManager->flush();
     }
-
 }

@@ -1,7 +1,7 @@
 {% extends 'pages/status/all_status_base.html.twig' %}
 
 {% block button_block %}
-        <a href="{{ path('app_expert_view', {projectId: project.projectId })  }}">
+        <a href="{{ path('app_expert_view', {requestId: project.projectMasterId.requestId })  }}">
             <button type="button" class="btn btn-info btn-sm"  ><i class="fa fa-dot-circle-o"></i>
              Continuer avec le processus d'entretien
             </button>

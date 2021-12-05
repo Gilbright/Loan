@@ -73,7 +73,7 @@
                             <table id="financialReportTableId" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>ID du projet</th>
+                                    <th>Identifiant</th>
                                     <th>Nom du projet</th>
                                     <th>Type</th>
                                     <th>Montant</th>
@@ -87,14 +87,14 @@
                                 <tbody>
                                 {% for financialDetail in financialDetails %}
                                     <tr>
-                                        <td>{{ financialDetail.projectId.projectId }}</td>
-                                        <td>{{ financialDetail.projectId.name }}</td>
+                                        <td>{{ financialDetail.projectMasterId.requestId }}</td>
+                                        <td>{{ financialDetail.projectMasterId.projectId.name }}</td>
                                         <td>{{ financialDetail.type | getType(financialDetail.type) }}</td>
                                         <td>{{ financialDetail.amount }}</td>
-                                        <td>{{ financialDetail.operationExecutor.nameSurname }}</td>
+                                        <td>{{ financialDetail.userId.fullName }}</td>
                                         <td>{{ financialDetail.updatedAt | date('d-m-Y H:i:s') }}</td>
-                                        <td>{{ financialDetail.amountLeftToBeSentByUs }}</td>
-                                        <td>{{ financialDetail.amountLeftToBePaidToUs }}</td>
+                                        <td>{{ financialDetail.amountToSend }}</td>
+                                        <td>{{ financialDetail.amountToReceive }}</td>
                                         <td>{{ financialDetail.extra }}</td>
                                     </tr>
                                 {% endfor %}
@@ -109,6 +109,4 @@
         </div><!--//app-wrapper-->
     </section>
     <!-- /.content -->
-
-
 {% endblock %}

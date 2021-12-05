@@ -10,8 +10,6 @@ namespace App\Controller;
 
 
 use App\Service\ClientManager;
-use App\Service\FinanceManager;
-use App\Service\NoteManager;
 use App\Service\ProjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/", name="admin")
      */
     public function adminGo(): Response
     {
@@ -37,28 +35,25 @@ class HomeController extends AbstractController
     /**
      * @Route("/readres", name="app_consult_status")
      * @param ProjectManager $projectManager
-     * @param FinanceManager $financeManager
-     * @param NoteManager $noteManager
      * @param Request $request
-     * @param ClientManager $clientManager
      * @return Response
      * @throws \Doctrine\ORM\EntityNotFoundException
      */
-    public function consultStatus(ProjectManager $projectManager, FinanceManager $financeManager, NoteManager $noteManager, Request $request, ClientManager $clientManager): Response
+    public function consultStatus(ProjectManager $projectManager, Request $request): Response
     {
         if ($request->isMethod('POST')) {
-            $projectId = $request->request->all()['projectId'];
-            $project = $projectManager->getProjectById($projectId);
+            $requestId = $request->request->all()['requestId'];
 
-            $projectTeam = $clientManager->getClientsByProjectId($projectId);
-            $projectNotes = $noteManager->getNotesByProjectId($projectId);
-            $financialDetails = $financeManager->getFinancialDetailsByProjectId($projectId);
+            $projectMaster = $projectManager->getProjectMasterById($requestId);
+            $projectTeam    = $projectMaster->getClients();
+            $projectNotes   = $projectMaster->getProject()->getNotes();
+            $paymentDetails = $projectMaster->getPaymentDetails();
 
             return $this->render('pages/consult_status.html.twig', [
-                'project' => $project,
-                'projectTeam' => $projectTeam,
-                'projectNotes' => $projectNotes,
-                'financeDetails' => $financialDetails
+                'project'       => $projectMaster->getProject(),
+                'projectTeam'   => $projectTeam,
+                'projectNotes'  => $projectNotes,
+                'financeDetails' => $paymentDetails
             ]);
         }
 
@@ -67,15 +62,12 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/readresclient", name="app_consult_status_client")
-     * @param ProjectManager $projectManager
-     * @param FinanceManager $financeManager
-     * @param NoteManager $noteManager
      * @param Request $request
      * @param ClientManager $clientManager
      * @return Response
      * @throws \Doctrine\ORM\EntityNotFoundException
      */
-    public function consultStatusClient(ProjectManager $projectManager, FinanceManager $financeManager, NoteManager $noteManager, Request $request, ClientManager $clientManager): Response
+    public function consultStatusClient(Request $request, ClientManager $clientManager): Response
     {
         if ($request->isMethod('POST')) {
             $clientIdNumber = $request->request->all()['clientIdNumber'];
@@ -83,8 +75,8 @@ class HomeController extends AbstractController
             $client = $clientManager->getClientByIdNumber($clientIdNumber);
 
             return $this->render('pages/consult_status_client.html.twig', [
-                'client' => $client,
-                'projects' => $client->getProjectId(),
+                'client'        => $client,
+                'projects'      => $clientManager->getClientProjects($client->getProjectMasters()),
                 'savingDetails' => $client->getSavingDetails()
             ]);
         }

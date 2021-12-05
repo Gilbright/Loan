@@ -108,7 +108,7 @@
                                 <table id="projectTableId" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th class="cell">Projet Id</th>
+                                        <th class="cell">Identifiant</th>
                                         <th class="cell">Nom du projet</th>
                                         <th class="cell">Leader du projet</th>
                                         <th class="cell">Date</th>
@@ -120,9 +120,9 @@
                                     <tbody>
                                     {% for index, project in projects %}
                                         <tr>
-                                            <td class="cell">{{ project.projectId }}</td>
+                                            <td class="cell">{{ project.projectMasterId.requestId }}</td>
                                             <td class="cell"><span class="truncate">{{ project.name }}</span></td>
-                                            <td class="cell">{{ teamLeads[index].nameSurname }}</td>
+                                            <td class="cell">{{ teamLeads[index].fullName }}</td>
                                             <td class="cell"><span>{{ project.updatedAt|date('d-m-Y H:m:s') }}</span></td>
                                             <td class="cell"><span
                                                         class="{{ project.status|get_badge(project.status) }}">{{ project.status }}</span>
