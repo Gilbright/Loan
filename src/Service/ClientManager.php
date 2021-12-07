@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Query\Expr\Join;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -148,7 +149,15 @@ class ClientManager
 
         $amount = (float)$clientAmountArray['amount'];
 
-        foreach ($client->getProjectMasters() as $projectMaster){
+        $projectMasterArray = $client->getProjectMasters();
+
+        //TODO: this is where we are working now colleciton to array
+        if ($projectMasterArray instanceof PersistentCollection){
+            $projectMasterArray = (array)$projectMasterArray;
+        }
+
+        //dd($projectMasterArray);
+        foreach ($projectMasterArray as $projectMaster){
             if (!$projectMaster->getIsFinished()){
                 return false;
             }

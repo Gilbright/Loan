@@ -96,18 +96,18 @@
                     {% endif %}
 
                     <a type="button" class="btn btn-success col"
-                       href="{{ path( validationLink, {requestId: project.projectMasterId.requestId} ) }}">
+                       href="{{ path( validationLink, {requestId: project.projectMaster.requestId} ) }}">
                         <i class="fas fa-plus"></i>
                         <span>{{ buttonValidationType }}</span>
                     </a>
                     <a type="button" class="btn btn-warning col"
-                       href="{{ path(continuationLink, {requestId: project.projectMasterId.requestId}) }}">
+                       href="{{ path(continuationLink, {requestId: project.projectMaster.requestId}) }}">
                         <i class="fas fa-plus"></i>
                         <span>{{ buttonContinuationType }}</span>
                     </a>
 
                     <a type="button" class="btn btn-danger col"
-                       href="{{ path('expert_reject_project', {requestId: project.projectMasterId.requestId}) }}">
+                       href="{{ path('expert_reject_project', {requestId: project.projectMaster.requestId}) }}">
                         <i class="fas fa-times-circle"></i>
                         <span>Rejeter le projet</span>
                     </a>

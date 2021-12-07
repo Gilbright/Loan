@@ -120,7 +120,7 @@
                                     <tbody>
                                     {% for index, project in projects %}
                                         <tr>
-                                            <td class="cell">{{ project.projectMasterId.requestId }}</td>
+                                            <td class="cell">{{ project.projectMaster.requestId }}</td>
                                             <td class="cell"><span class="truncate">{{ project.name }}</span></td>
                                             <td class="cell">{{ teamLeads[index].fullName }}</td>
                                             <td class="cell"><span>{{ project.updatedAt|date('d-m-Y H:m:s') }}</span></td>

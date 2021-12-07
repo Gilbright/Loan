@@ -1,6 +1,6 @@
 security:
     encoders:
-        App\Entity\Employee:
+        App\Entity\Users:
             algorithm: auto
 
 

@@ -318,9 +318,9 @@ class Client
     }
 
     /**
-     * @return Collection|ProjectMaster[]
+     * @return ArrayCollection|ProjectMaster[]
      */
-    public function getProjectMasters(): Collection
+    public function getProjectMasters()
     {
         return $this->projectMasters;
     }

@@ -53,6 +53,10 @@ class UserSubscriber implements EventSubscriber
         /** @var Users $currentUser */
         $currentUser = $this->security->getUser();
 
+        if (!$currentUser){
+            return;
+        }
+
         if ($entity instanceof SavingDetails) {
             $entity->setUser($currentUser);
 

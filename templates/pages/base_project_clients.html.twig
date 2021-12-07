@@ -43,7 +43,7 @@
                                 <tbody>
                                 <tr>
                                     <td><b>Identifiant</b></td>
-                                    <td>{{ project.projectMasterId.requestId }}</td>
+                                    <td>{{ project.projectMaster.requestId }}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Nom du projet</b></td>
@@ -157,7 +157,7 @@
                                 <tbody>
                                 {% for note in projectNotes %}
                                     <tr>
-                                        <td>{{ note.userId.fullName }}</td>
+                                        <td>{{ note.user.fullName }}</td>
                                         <td>{{ note.userRoleTranslate }}</td>
                                         <td>{{ note.updatedAt|date('d-m-Y H:i:s') }}</td>
                                         <td>{{ note.content }}</td>

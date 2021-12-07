@@ -9,17 +9,19 @@ use App\Entity\Project;
 use App\Entity\ProjectMaster;
 use App\Entity\SavingDetails;
 use App\Entity\Users;
+use App\Helper\RoleTranslator;
 use App\Helper\Status;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
 class LoanFictures extends Fixture
 {
     private $passwordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordHasherInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
     }
@@ -28,6 +30,12 @@ class LoanFictures extends Fixture
     {
         $faker = Factory::create('tr_TR');
 
+        $roles = ['ROLE_BOSS',
+            'ROLE_EXPERT',
+            'ROLE_ACCOUNTANT',
+            'ROLE_SECRETARY'
+        ];
+
         $user = new Users();
         $email = $faker->companyEmail;
         $user
@@ -35,6 +43,7 @@ class LoanFictures extends Fixture
             ->setIdDocNumber($faker->uuid)
             ->setGender('Male')
             ->setAddress($faker->address)
+            ->setNationality($faker->country)
             ->setPhoneNumber($faker->phoneNumber)
             ->setEmail($email)
             ->setBirthdate($faker->dateTimeBetween('-30 years', '-20 years', null))
@@ -43,10 +52,38 @@ class LoanFictures extends Fixture
             ->setLastLogin(new \DateTime())
             ->setPhotoUrl('default')
             ->setUsername($email)
-            ->setRoles(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'])
-        ;
+            ->setRoles([$roles[3]]);
 
-        $user->setPassword($this->passwordEncoder->encodePassword($user, '123456'));
+        $user->setPassword($this->passwordEncoder->hashPassword($user, '123456'));
+
+
+
+        for ($i=0; $i<4; $i++){
+
+            $useri = new Users();
+            $email = $faker->companyEmail;
+            $useri
+                ->setFullName($faker->lastName . $faker->firstNameMale)
+                ->setIdDocNumber($faker->uuid)
+                ->setGender('Male')
+                ->setAddress($faker->address)
+                ->setNationality($faker->country)
+                ->setPhoneNumber($faker->phoneNumber)
+                ->setEmail($email)
+                ->setBirthdate($faker->dateTimeBetween('-30 years', '-20 years', null))
+                ->setIdDocUrl('default')
+                ->setIsActive(false)
+                ->setLastLogin(new \DateTime())
+                ->setPhotoUrl('default')
+                ->setUsername($email)
+                ->setRoles([$roles[$i]]);
+
+            $useri->setPassword($this->passwordEncoder->hashPassword($user, '123456'));
+
+            $manager->persist($useri);
+        }
+
+
 
         for ($a = 0; $a <= random_int(3, 7); ++$a) {
             $projectMaster = new ProjectMaster();
@@ -55,7 +92,7 @@ class LoanFictures extends Fixture
                 ->setEvaluation(null)
                 ->setIsAbandoned(false)
                 ->setIsFinished(false)
-                ->setRequestId('ph_'.$faker->ean8);
+                ->setRequestId('ph_' . $faker->ean8);
 
             $project = new Project();
             $amount = $faker->randomFloat(10, 200000, 500000);
@@ -71,8 +108,7 @@ class LoanFictures extends Fixture
                 ->setModalityAmount(50000)
                 ->setModalityPaymentFrequency(2)
                 ->setProjectMaster($projectMaster)
-                ->setRepaymentDuration(ceil($amount / 2 / 50000))
-            ;
+                ->setRepaymentDuration(ceil($amount / 2 / 50000));
 
             for ($i = 0; $i <= random_int(1, 5); ++$i) {
                 $client = new Client();
@@ -100,11 +136,12 @@ class LoanFictures extends Fixture
                     ->setMonthlyIncome(350000)
                     ->setNationality($faker->country)
                     ->setProfession($faker->jobTitle)
-                    ->addProjectMaster($projectMaster)
-                ;
+                    ->setIsTeamLead(false)
+                    ->addProjectMaster($projectMaster);
 
                 if (0 === $i) {
                     $projectMaster->setTeamLeadDocId($client->getIdDocNumber());
+                    $client->setIsTeamLead(true);
                 }
 
                 $savingDetails = new SavingDetails();
@@ -115,8 +152,7 @@ class LoanFictures extends Fixture
                     ->setClient($client)
                     ->setDetailDocUrl('default')
                     ->setPaidMonth(1)
-                    ->setUser($user)
-                ;
+                    ->setUser($user);
 
                 $manager->persist($client);
                 $manager->persist($savingDetails);
@@ -131,15 +167,14 @@ class LoanFictures extends Fixture
                 ->setUser($user)
                 ->setAmountToReceive(0)
                 ->setAmountToSend($project->getAmount())
-                ->setType(false)
-            ;
+                ->setType(false);
 
             $note = new Note();
             $note
                 ->setUser($user)
                 ->setProject($project)
-                ->setContent($faker->realText())
-            ;
+                ->setUserRoleTranslate(RoleTranslator::translate($roles[3]))
+                ->setContent($faker->realText());
 
             $manager->persist($projectMaster);
             $manager->persist($project);
@@ -152,5 +187,7 @@ class LoanFictures extends Fixture
         // $manager->persist($product);
 
         $manager->flush();
+
     }
+
 }
