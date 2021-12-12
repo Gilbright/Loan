@@ -29,7 +29,7 @@ class ProjectMaster
     private $project;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Client::class, inversedBy="projectMasters")
+     * @ORM\ManyToMany(targetEntity=Client::class, mappedBy="projectMasters")
      */
     private $clients;
 
@@ -103,6 +103,7 @@ class ProjectMaster
     {
         if (!$this->clients->contains($client)) {
             $this->clients[] = $client;
+            $client->addProjectMaster($this);
         }
 
         return $this;

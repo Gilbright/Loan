@@ -136,8 +136,9 @@ class ClientManager
             ->setGender($gender)
             ->setProfession($data['profession'])
             ->setMonthlyIncome($data['monthlyIncome'])
-            ->setBirthDate($data['birthDate'])
-            ->setBalance(0);
+            ->setBirthDate(new \DateTimeImmutable($data['birthDate']))
+            ->setBalance(0)
+        ;
 
         $this->entityManager->persist($clientEntity);
         $this->entityManager->flush();
@@ -149,15 +150,7 @@ class ClientManager
 
         $amount = (float)$clientAmountArray['amount'];
 
-        $projectMasterArray = $client->getProjectMasters();
-
-        //TODO: this is where we are working now colleciton to array
-        if ($projectMasterArray instanceof PersistentCollection){
-            $projectMasterArray = (array)$projectMasterArray;
-        }
-
-        //dd($projectMasterArray);
-        foreach ($projectMasterArray as $projectMaster){
+        foreach ($client->getProjectMasters() as $projectMaster){
             if (!$projectMaster->getIsFinished()){
                 return false;
             }

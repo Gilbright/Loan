@@ -104,7 +104,7 @@ class Client
     private $savingDetails;
 
     /**
-     * @ORM\ManyToMany(targetEntity=ProjectMaster::class, mappedBy="client")
+     * @ORM\ManyToMany(targetEntity=ProjectMaster::class, inversedBy="client")
      */
     private $projectMasters;
 
@@ -318,7 +318,7 @@ class Client
     }
 
     /**
-     * @return ArrayCollection|ProjectMaster[]
+     * @return Collection|ProjectMaster[]
      */
     public function getProjectMasters()
     {
@@ -329,7 +329,7 @@ class Client
     {
         if (!$this->projectMasters->contains($projectMaster)) {
             $this->projectMasters[] = $projectMaster;
-            $projectMaster->addClient($this);
+            //$projectMaster->addClient($this);
         }
 
         return $this;

@@ -63,7 +63,8 @@ class SavingManager
             ->setDetailDocUrl($savingArray['proofDocument'])
             ->setPaidMonth($savingArray['month'])
             ->setType($savingArray['type'])
-            ->setExtra($savingArray['details'])
+            ->setDetails($savingArray['details'])
+            ->setExtra([]);
         ;
 
         //updating the client's balance

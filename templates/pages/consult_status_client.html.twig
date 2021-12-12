@@ -114,7 +114,7 @@
                                         </tr>
                                         <tr>
                                             <td><b>Date de Naissance</b></td>
-                                            <td>{{ client.birthDate }}</td>
+                                            <td>{{ client.birthDate|date("m-d-Y") }}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Revenu Mensuel</b></td>
@@ -263,7 +263,7 @@
                                                <td>{{ savingDetail.type }}</td>
                                                <td>{{ savingDetail.amount }}</td>
                                                <td>{{ savingDetail.paidMonth }}</td>
-                                               <td>{{ savingDetail.extra }}</td>
+                                               <td>{{ savingDetail.extra | join(', ')}}</td>
                                                <td>{{ savingDetail.createdAt |date('d-m-Y H:m:s') }}</td>
                                            </tr>
                                        {% endfor %}

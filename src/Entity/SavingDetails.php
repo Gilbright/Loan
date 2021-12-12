@@ -47,6 +47,11 @@ class SavingDetails
     private $extra = [];
 
     /**
+     * @ORM\Column(type="text", nullable=false)
+     */
+    private $details;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="savingDetails")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -143,6 +148,25 @@ class SavingDetails
     public function setUser(?Users $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    /**
+     * @param string $details
+     * @return $this
+     */
+    public function setDetails(string $details): self
+    {
+        $this->details = $details;
 
         return $this;
     }
