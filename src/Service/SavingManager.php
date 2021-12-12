@@ -52,11 +52,6 @@ class SavingManager
     {
         $clientInfos = $this->clientManager->getClientByIdNumber($savingArray['IdNumber']);
 
-        if (!$clientInfos instanceof Client) {
-            throw new EntityNotFoundException("Ce identifiant ne correspond a aucun client, veuillez le corriger");
-            //TODO: Exception management
-        }
-
         $savingDetail = (new SavingDetails())
             ->setAmount($savingArray['amount'])
             ->setClient($clientInfos)
