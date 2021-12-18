@@ -42,12 +42,12 @@ class SecretaryController extends AbstractController
      * @Route("/secretary/clients/{requestId}", name="app_sec_list_client")
      * @param Request $request
      * @param ClientManager $clientManager
+     * @param ProjectManager $projectManager
      * @param string $requestId
-     * @param EntityManagerInterface $entityManager
      * @return Response
      * @throws \Doctrine\ORM\EntityNotFoundException
      */
-    public function listClient(Request $request, ClientManager $clientManager, string $requestId): Response
+    public function listClient(Request $request, ClientManager $clientManager, ProjectManager $projectManager, string $requestId): Response
     {
         $clients = $clientManager->getClientsByRequestId($requestId);
 
@@ -61,9 +61,8 @@ class SecretaryController extends AbstractController
 
             /** @var Client $teamLeadClient */
             $teamLeadClient = $clientManager->getClientById($clients->first()->getId());
-            $teamLeadClient->setIsTeamLead(true);
 
-            $clientManager->doFlush();
+            $projectManager->setTeamLeadDoc($teamLeadClient, $requestId);
 
             return $this->redirectToRoute('admin');
         }
@@ -82,7 +81,6 @@ class SecretaryController extends AbstractController
      */
     public function secEligibilityCheck(ClientManager $clientManager, Request $request): Response
     {
-
         if ($request->isMethod('POST')) {
             $result = $clientManager->isEligible($request->request->all());
 

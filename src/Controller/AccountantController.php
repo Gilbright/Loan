@@ -61,6 +61,7 @@ class AccountantController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            $data['requestId'] = $projectMaster->getRequestId();
             $data['project'] = $projectMaster->getProject();
 
             if (isset($data['noteContent'])) {
@@ -71,9 +72,9 @@ class AccountantController extends AbstractController
                 $paymentManager->excecute($data);
 
                 if (
-                    0.0 === round($paymentManager->calculateAmountToReceive($projectMaster), 2)
+                    0.00 === round($paymentManager->calculateAmountToReceive($projectMaster), 2)
                     &&
-                    0.0 === round($paymentManager->calculateAmountToSend($projectMaster, 2))
+                    0.00 === round($paymentManager->calculateAmountToSend($projectMaster, 2))
                 ) {
                     $projectManager->changeProjectStatus(Status::PROJECT_COMPLETED, $requestId);
                 }

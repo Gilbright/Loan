@@ -156,7 +156,7 @@ class ClientManager
             }
         }
 
-        if ($amount/10 > $client->getBalance()){
+        if (round($amount/10, 2) > round($client->getBalance(), 2)){
             return false;
         }
 

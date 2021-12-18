@@ -114,6 +114,7 @@
                                         <th class="cell">Date</th>
                                         <th class="cell">Statut</th>
                                         <th class="cell">Montant voulu</th>
+                                        <th class="cell">Montant conclu</th>
                                         <th class="cell"></th>
                                     </tr>
                                     </thead>
@@ -128,6 +129,7 @@
                                                         class="{{ project.status|get_badge(project.status) }}">{{ project.status }}</span>
                                             </td>
                                             <td class="cell">{{ project.amount }}</td>
+                                            <td class="cell">{{ project.finalAmount }}</td>
                                             <td class="cell">
                                                 {% block button_block %}
                                                     <button type="submit" class="btn btn-info btn-sm"><i

@@ -62,6 +62,11 @@ class PaymentDetails
      */
     private $paymentDetailDoc;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $details;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -166,6 +171,25 @@ class PaymentDetails
     public function setPaymentDetailDoc(string $paymentDetailDoc): self
     {
         $this->paymentDetailDoc = $paymentDetailDoc;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    /**
+     * @param string $details
+     * @return $this
+     */
+    public function setDetails(string $details): self
+    {
+        $this->details = $details;
 
         return $this;
     }

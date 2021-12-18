@@ -153,7 +153,7 @@
                                             <tbody>
                                             {% for financeDetail in financeDetails %}
                                                 <tr>
-                                                    <td>{{ financeDetail.userId.fullName }}</td>
+                                                    <td>{{ financeDetail.user.fullName }}</td>
                                                     <td>{{ financeDetail.type }}</td>
                                                     <td>{{ financeDetail.amount }}</td>
                                                     <td>{{ financeDetail.amountToSend }}</td>
@@ -191,8 +191,8 @@
                                         <tr>
                                             <th>Auteur</th>
                                             <th>Role</th>
-                                            <th>Date d'ajout</th>
                                             <th>Note</th>
+                                            <th>Date d'ajout</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -200,8 +200,8 @@
                                             <tr>
                                                 <td>{{ note.user.fullName }}</td>
                                                 <td>{{ note.userRoleTranslate }}</td>
-                                                <td>{{ note.updatedAt|date('d-m-Y H:i:s') }}</td>
                                                 <td>{{ note.content }}</td>
+                                                <td>{{ note.updatedAt|date('d-m-Y H:i:s') }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>

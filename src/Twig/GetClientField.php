@@ -33,7 +33,7 @@ class GetClientField extends AbstractExtension
             'nationality'   => $client->getNationality(),
             'address'       => $client->getAddress(),
             'monthlyIncome' => $client->getMonthlyIncome(),
-            'birthDate'     => $client->getBirthDate()->format('Y-m-d'),
+            'birthDate'     => $client->getBirthDate()->format('d-m-Y'),
             'profession'    => $client->getProfession(),
             default         => '',
         };

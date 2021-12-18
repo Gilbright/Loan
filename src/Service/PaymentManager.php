@@ -50,7 +50,7 @@ class PaymentManager
             ->setPaymentDetailDoc($data['financeDetailDoc'])
             ->setAmountToReceive($this->calculateAmountToReceive($projectMaster, (float)$data['amount'], strtolower($data['dropdownName'])))
             ->setAmountToSend($this->calculateAmountToSend($projectMaster, (float)$data['amount'], strtolower($data['dropdownName'])))
-            ->setExtra($data['paymentDetails']);
+            ->setDetails($data['paymentDetails']);
 
         $this->entityManager->persist($paymentDetails);
         $this->entityManager->flush();

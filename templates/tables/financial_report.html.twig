@@ -87,15 +87,15 @@
                                 <tbody>
                                 {% for financialDetail in financialDetails %}
                                     <tr>
-                                        <td>{{ financialDetail.projectMasterId.requestId }}</td>
-                                        <td>{{ financialDetail.projectMasterId.projectId.name }}</td>
+                                        <td>{{ financialDetail.projectMaster.requestId }}</td>
+                                        <td>{{ financialDetail.projectMaster.project.name }}</td>
                                         <td>{{ financialDetail.type | getType(financialDetail.type) }}</td>
                                         <td>{{ financialDetail.amount }}</td>
-                                        <td>{{ financialDetail.userId.fullName }}</td>
+                                        <td>{{ financialDetail.user.fullName }}</td>
                                         <td>{{ financialDetail.updatedAt | date('d-m-Y H:i:s') }}</td>
-                                        <td>{{ financialDetail.amountToSend }}</td>
-                                        <td>{{ financialDetail.amountToReceive }}</td>
-                                        <td>{{ financialDetail.extra }}</td>
+                                        <td>{{ financialDetail.amountToSend | getDisplay(financialDetail.amountToSend) }}</td>
+                                        <td>{{ financialDetail.amountToReceive | getDisplay(financialDetail.amountToReceive) }}</td>
+                                        <td>{{ financialDetail.details }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

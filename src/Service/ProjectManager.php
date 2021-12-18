@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\Client;
 use App\Entity\Project;
 use App\Entity\ProjectMaster;
 use App\Helper\MailReceiverHelper;
@@ -190,6 +191,18 @@ class ProjectManager
                 foreach ($users as $user) {
                     $this->mailerManager->sendMailNotification($projectMaster, $user);
                 }
+            }
+        }
+
+        $this->entityManager->flush();
+    }
+
+    public function setTeamLeadDoc(Client $client, $requestId)
+    {
+        foreach ($client->getProjectMasters() as $projectMaster) {
+            if ($projectMaster->getRequestId() === $requestId) {
+                $projectMaster->setTeamLeadDocId($client->getIdDocNumber());
+                $client->setIsTeamLead(true);
             }
         }
 

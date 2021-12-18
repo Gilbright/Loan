@@ -237,7 +237,7 @@
                                <div class="app-card-header">
                                    <div class="row">
                                        <div class="col">
-                                           <h3 class="card-title">Saving Details</h3>
+                                           <h3 class="card-title">Details d' épargne</h3>
                                        </div>
                                    </div>
                                </div>
@@ -260,11 +260,11 @@
                                        <tbody>
                                        {% for savingDetail in savingDetails %}
                                            <tr>
-                                               <td>{{ savingDetail.type }}</td>
+                                               <td>{{ savingDetail.type | getSavingType(savingDetail.type)  }}</td>
                                                <td>{{ savingDetail.amount }}</td>
                                                <td>{{ savingDetail.paidMonth }}</td>
-                                               <td>{{ savingDetail.extra | join(', ')}}</td>
-                                               <td>{{ savingDetail.createdAt |date('d-m-Y H:m:s') }}</td>
+                                               <td>{{ savingDetail.details}}</td>
+                                               <td>{{ savingDetail.createdAt | date('d-m-Y H:m:s') }}</td>
                                            </tr>
                                        {% endfor %}
                                        </tbody>

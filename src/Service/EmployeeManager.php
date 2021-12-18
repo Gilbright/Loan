@@ -48,6 +48,7 @@ class EmployeeManager
         $userEntity->setAddress($data['address'])
             ->setPhoneNumber($data['phoneNumber'])
             ->setEmail($data['email'])
+            ->setUsername($data['email'])
             ->setFullName($data['nameSurname'])
             ->setIdDocUrl("link there")
             ->setPhotoUrl("link here")
@@ -56,7 +57,8 @@ class EmployeeManager
             ->setIdDocNumber($data['idDocNumber'])
             ->setRoles($this->roleParser($data['role']))
             ->setPassword($encodedPassword)
-            ->setBirthDate($data['birthDate']);
+            ->setIsActive(true)
+            ->setBirthDate(new \DateTimeImmutable($data['birthDate']));
 
         $this->entityManager->persist($userEntity);
         $this->entityManager->flush();
