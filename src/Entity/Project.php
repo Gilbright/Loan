@@ -29,12 +29,12 @@ class Project
     private $name;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $amount;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $finalAmount;
 
@@ -44,7 +44,7 @@ class Project
     private $repaymentDuration;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="integer")
      */
     private $modalityAmount;
 
@@ -110,24 +110,24 @@ class Project
         return $this;
     }
 
-    public function getAmount(): ?string
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(string $amount): self
+    public function setAmount(int $amount): self
     {
         $this->amount = $amount;
 
         return $this;
     }
 
-    public function getFinalAmount(): ?string
+    public function getFinalAmount(): ?int
     {
         return $this->finalAmount;
     }
 
-    public function setFinalAmount(?string $finalAmount): self
+    public function setFinalAmount(?int $finalAmount): self
     {
         $this->finalAmount = $finalAmount;
 
@@ -146,12 +146,12 @@ class Project
         return $this;
     }
 
-    public function getModalityAmount(): ?string
+    public function getModalityAmount(): ?int
     {
         return $this->modalityAmount;
     }
 
-    public function setModalityAmount(string $modalityAmount): self
+    public function setModalityAmount(int $modalityAmount): self
     {
         $this->modalityAmount = $modalityAmount;
 

@@ -39,7 +39,7 @@ class Client
     private $email;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="integer")
      */
     private $monthlyIncome;
 
@@ -54,7 +54,7 @@ class Client
     private $gender;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="integer")
      */
     private $balance;
 
@@ -155,12 +155,12 @@ class Client
         return $this;
     }
 
-    public function getMonthlyIncome(): ?string
+    public function getMonthlyIncome(): ?int
     {
         return $this->monthlyIncome;
     }
 
-    public function setMonthlyIncome(string $monthlyIncome): self
+    public function setMonthlyIncome(int $monthlyIncome): self
     {
         $this->monthlyIncome = $monthlyIncome;
 
@@ -191,12 +191,12 @@ class Client
         return $this;
     }
 
-    public function getBalance(): ?string
+    public function getBalance(): ?int
     {
         return $this->balance;
     }
 
-    public function setBalance(string $balance): self
+    public function setBalance(int $balance): self
     {
         $this->balance = $balance;
 

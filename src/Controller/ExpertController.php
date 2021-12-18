@@ -69,13 +69,13 @@ class ExpertController extends AbstractController
                 $noteManager->execute($data);
             } elseif (isset($data['finalAmount'])) {
                 $project = $projectMaster->getProject();
-                $project->setFinalAmount((float)$data['finalAmount']);
-                $project->setModalityAmount((float)$data['modalityAmount']);
+                $project->setFinalAmount((int)$data['finalAmount']);
+                $project->setModalityAmount((int)$data['modalityAmount']);
                 $project->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths']);
 
                 $repaymentArray = [
-                    'amountWanted'           => (float)$data['finalAmount'],
-                    'modalityAmount'         => (float)$data['modalityAmount'],
+                    'amountWanted'           => (int)$data['finalAmount'],
+                    'modalityAmount'         => (int)$data['modalityAmount'],
                     'modalityNumberOfMonths' => (int)$data['modalityNumberOfMonths']
                 ];
 

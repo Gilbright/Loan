@@ -67,8 +67,8 @@ class ProjectManager
             ->setStatus(Status::EXP_WAITING_FOR_ANALYSIS)
             ->setRepaymentDuration((int)$this->repaymentDurationCalculator($data))
             ->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths']) //TODO revoir le hesaplama RepaymentDuration is in months
-            ->setModalityAmount((float)$data['modalityAmount'])
-            ->setAmount((float)$data['amountWanted'])
+            ->setModalityAmount((int)$data['modalityAmount'])
+            ->setAmount((int)$data['amountWanted'])
             ->setFinalAmount(0)
             ->setBusinessPlanDocUrl($data['businessPlanDoc'])
             ->setDetailsExtraDocUrl($data['detailsExtraDoc'])
@@ -89,7 +89,7 @@ class ProjectManager
         return $projectMaster->getRequestId();
     }
 
-    public function repaymentDurationCalculator(array $data): float
+    public function repaymentDurationCalculator(array $data): int
     {
         $monthlyPay = $data['modalityAmount'] / $data['modalityNumberOfMonths'];
 

@@ -91,7 +91,7 @@ class LoanFictures extends Fixture
             ;
 
             $project = new Project();
-            $amount = $faker->randomFloat(10, 200000, 500000);
+            $amount = $faker->randomNumber(6);
             $project
                 ->setStatus(Status::SEC_WAITING_FOR_CONTROL)
                 ->setName($faker->realText(20))

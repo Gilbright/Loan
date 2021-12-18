@@ -27,17 +27,17 @@ class PaymentDetails
     private $type;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="integer")
      */
     private $amount;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $amountToSend;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $amountToReceive;
 
@@ -84,36 +84,36 @@ class PaymentDetails
         return $this;
     }
 
-    public function getAmount(): ?string
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(string $amount): self
+    public function setAmount(int $amount): self
     {
         $this->amount = $amount;
 
         return $this;
     }
 
-    public function getAmountToSend(): ?string
+    public function getAmountToSend(): ?int
     {
         return $this->amountToSend;
     }
 
-    public function setAmountToSend(?string $amountToSend): self
+    public function setAmountToSend(?int $amountToSend): self
     {
         $this->amountToSend = $amountToSend;
 
         return $this;
     }
 
-    public function getAmountToReceive(): ?string
+    public function getAmountToReceive(): ?int
     {
         return $this->amountToReceive;
     }
 
-    public function setAmountToReceive(?string $amountToReceive): self
+    public function setAmountToReceive(?int $amountToReceive): self
     {
         $this->amountToReceive = $amountToReceive;
 

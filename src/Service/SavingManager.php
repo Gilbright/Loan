@@ -63,9 +63,9 @@ class SavingManager
 
         //updating the client's balance
         if ('cotisation' === $savingArray['type']) {
-            $clientInfos->setBalance($clientInfos->getBalance() + (float)$savingArray['amount']);
+            $clientInfos->setBalance($clientInfos->getBalance() + (int)$savingArray['amount']);
         } elseif ('defalcation' === $savingArray['type']) {
-            $clientInfos->setBalance($clientInfos->getBalance() - (float)$savingArray['amount']);
+            $clientInfos->setBalance($clientInfos->getBalance() - (int)$savingArray['amount']);
         }
 
         $this->entityManager->persist($savingDetail);

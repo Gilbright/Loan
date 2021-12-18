@@ -24,6 +24,6 @@ class AmountDisplay extends AbstractExtension
 
     public function doSomething($amount): string
     {
-        return round($amount, 2) === 0.00 ? '--' : $amount;
+        return $amount === 0 ? '--' : $amount;
     }
 }

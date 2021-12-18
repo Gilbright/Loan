@@ -46,10 +46,10 @@ class PaymentManager
 
         $paymentDetails = (new PaymentDetails())
             ->setType($type)
-            ->setAmount((float)$data['amount'])
+            ->setAmount((int)$data['amount'])
             ->setPaymentDetailDoc($data['financeDetailDoc'])
-            ->setAmountToReceive($this->calculateAmountToReceive($projectMaster, (float)$data['amount'], strtolower($data['dropdownName'])))
-            ->setAmountToSend($this->calculateAmountToSend($projectMaster, (float)$data['amount'], strtolower($data['dropdownName'])))
+            ->setAmountToReceive($this->calculateAmountToReceive($projectMaster, (int)$data['amount'], strtolower($data['dropdownName'])))
+            ->setAmountToSend($this->calculateAmountToSend($projectMaster, (int)$data['amount'], strtolower($data['dropdownName'])))
             ->setProjectMaster($projectMaster)
             ->setDetails($data['paymentDetails']);
         
@@ -59,11 +59,11 @@ class PaymentManager
 
     /**
      * @param ProjectMaster $projectMaster
-     * @param float $amount
+     * @param int $amount
      * @param string|null $type
-     * @return float|null
+     * @return int|null
      */
-    #[Pure] public function calculateAmountToReceive(ProjectMaster $projectMaster, float $amount = 0.0, ?string $type = null): ?float
+    #[Pure] public function calculateAmountToReceive(ProjectMaster $projectMaster, int $amount = 0, ?string $type = null): ?int
     {
         $allPaymentDetails = $projectMaster->getPaymentDetails();
 
@@ -80,16 +80,16 @@ class PaymentManager
             }
         }
 
-        return round($projectMaster->getProject()->getFinalAmount() - $amountTotal, 2);
+        return $projectMaster->getProject()->getFinalAmount() - $amountTotal;
     }
 
     /**
      * @param ProjectMaster $projectMaster
-     * @param float $amount
+     * @param int $amount
      * @param string|null $type
-     * @return float|null
+     * @return int|null
      */
-    #[Pure] public function calculateAmountToSend(ProjectMaster $projectMaster, float $amount = 0.0, ?string $type = null): ?float
+    #[Pure] public function calculateAmountToSend(ProjectMaster $projectMaster, int $amount = 0, ?string $type = null): ?int
     {
         $allPaymentDetails = $projectMaster->getPaymentDetails();
 
@@ -106,7 +106,7 @@ class PaymentManager
             }
         }
 
-        return round($projectMaster->getProject()->getFinalAmount() - $amountTotal, 2);
+        return $projectMaster->getProject()->getFinalAmount() - $amountTotal;
     }
 
     public function getPaymentDetailsInDateRange(\DateTime $startDate, \DateTime $endDate)

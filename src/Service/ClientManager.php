@@ -148,7 +148,7 @@ class ClientManager
     {
         $client = $this->getClientByIdNumber($clientAmountArray['IdNumber']);
 
-        $amount = (float)$clientAmountArray['amount'];
+        $amount = (int)$clientAmountArray['amount'];
 
         foreach ($client->getProjectMasters() as $projectMaster){
             if (!$projectMaster->getIsFinished()){
