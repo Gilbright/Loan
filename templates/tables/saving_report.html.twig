@@ -87,7 +87,7 @@
                                     <tr>
                                         <td>{{ savingDetail.client.idDocNumber }}</td>
                                         <td>{{ savingDetail.client.fullName }}</td>
-                                        <td>{{ savingDetail.type }}</td>
+                                        <td>{{ savingDetail.type | getSavingType(savingDetail.type) }}</td>
                                         <td>{{ savingDetail.amount }}</td>
                                         <td>{{ savingDetail.paidMonth }}</td>
                                         <td>{{ savingDetail.details }}</td>

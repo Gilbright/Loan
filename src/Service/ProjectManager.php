@@ -161,7 +161,7 @@ class ProjectManager
         $projectMaster = $this->projectMasterRepository->findOneBy(['requestId' => $requestId]);
 
         if (!$projectMaster instanceof ProjectMaster) {
-            throw new EntityNotFoundException("Il n'exite pas de projet concordant avec ce identifiant! Veuillez corriger."); // update this message
+            throw new EntityNotFoundException("Il n'existe pas de projet concordant avec ce identifiant! Veuillez corriger."); // update this message
         }
 
         return $projectMaster;

@@ -67,14 +67,14 @@ class AccountantController extends AbstractController
             if (isset($data['noteContent'])) {
                 $noteManager->execute($data);
             } elseif (isset($data['paymentDetails'])) {
-                $projectManager->changeProjectStatus(Status::ACC_VALIDATED_FINANCED, $requestId);
-
                 $paymentManager->excecute($data);
 
+                $projectManager->changeProjectStatus(Status::ACC_VALIDATED_FINANCED, $requestId);
+
                 if (
-                    0.00 === round($paymentManager->calculateAmountToReceive($projectMaster), 2)
+                    !$paymentManager->calculateAmountToReceive($projectMaster)
                     &&
-                    0.00 === round($paymentManager->calculateAmountToSend($projectMaster, 2))
+                    !$paymentManager->calculateAmountToSend($projectMaster)
                 ) {
                     $projectManager->changeProjectStatus(Status::PROJECT_COMPLETED, $requestId);
                 }

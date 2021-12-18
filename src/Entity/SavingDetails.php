@@ -32,7 +32,7 @@ class SavingDetails
     private $amount;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $paidMonth;
 
@@ -92,12 +92,12 @@ class SavingDetails
         return $this;
     }
 
-    public function getPaidMonth(): ?int
+    public function getPaidMonth(): ?string
     {
         return $this->paidMonth;
     }
 
-    public function setPaidMonth(int $paidMonth): self
+    public function setPaidMonth(string $paidMonth): self
     {
         $this->paidMonth = $paidMonth;
 

@@ -32,20 +32,20 @@ class SavingManager
     public function getAllSavingDetails(): array
     {
         try {
-            return $this->savingRepository->findBy([],['updatedAt' => 'DESC']);
-        } catch (\Throwable $exception){
+            return $this->savingRepository->findBy([], ['updatedAt' => 'DESC']);
+        } catch (\Throwable $exception) {
             return [];
         }
     }
 
-    public function getSavingInDateRange(\DateTime $startDate, \DateTime $endDate){
+    public function getSavingInDateRange(\DateTime $startDate, \DateTime $endDate)
+    {
         return $this->savingRepository->createQueryBuilder('s')
             ->andWhere('s.updatedAt BETWEEN :start AND :end')
             ->setParameter('start', $startDate)
             ->setParameter('end', $endDate->modify('+1 day'))
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     public function addSaving(array $savingArray)
@@ -57,10 +57,9 @@ class SavingManager
             ->setClient($clientInfos)
             ->setDetailDocUrl($savingArray['proofDocument'])
             ->setPaidMonth($savingArray['month'])
-            ->setType($savingArray['type'])
+            ->setType('cotisation' === $savingArray['type'] ? 1 : 0)
             ->setDetails($savingArray['details'])
-            ->setExtra([]);
-        ;
+            ->setExtra([]);;
 
         //updating the client's balance
         if ('cotisation' === $savingArray['type']) {

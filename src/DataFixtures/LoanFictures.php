@@ -28,7 +28,7 @@ class LoanFictures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $faker = Factory::create('tr_TR');
+        $faker = Factory::create('fr_FR');
 
         $roles = ['ROLE_BOSS',
             'ROLE_EXPERT',
@@ -80,7 +80,7 @@ class LoanFictures extends Fixture
 
         $user->setPassword($this->passwordEncoder->hashPassword($user, '123456'));
 
-        for ($a = 0; $a <= random_int(2, 4); ++$a) {
+        for ($a = 0; $a <= 10; ++$a) {
             $projectMaster = new ProjectMaster();
             $projectMaster
                 ->setEndDate(null)
@@ -106,7 +106,7 @@ class LoanFictures extends Fixture
                 ->setProjectMaster($projectMaster)
                 ->setRepaymentDuration(ceil($amount / 2 / 50000));
 
-            for ($i = 0; $i <= random_int(1, 3); ++$i) {
+            for ($i = 0; $i <= random_int(1, 4); ++$i) {
                 $client = new Client();
 
                 if (0 === $i % 2) {
@@ -148,7 +148,7 @@ class LoanFictures extends Fixture
                     ->setExtra([])
                     ->setClient($client)
                     ->setDetailDocUrl('default')
-                    ->setPaidMonth(1)
+                    ->setPaidMonth($faker->monthName)
                     ->setUser($user);
 
                 $client->addProjectMaster($projectMaster);

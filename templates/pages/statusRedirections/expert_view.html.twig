@@ -1,7 +1,7 @@
 {% extends 'pages/base_project_clients.html.twig' %}
 
 {% block finalAmoutSetting %}
-    {% if (project.finalAmount == 0 and (project.status == 'ETAPE D ENTRETIEN' or project.status == 'POST ENTRETIEN')) %}
+    {% if (project.status == 'ETAPE D ENTRETIEN' or project.status == 'POST ENTRETIEN') %}
         {% block project_finale_price %}
             <form method="post">
                 <div class="card {{ statusData[0] }}">
@@ -95,7 +95,13 @@
                         {% set continuationLink = 'expert_continue_later' %}
                     {% endif %}
 
-                    <a type="button" class="btn btn-success col"
+                    {% if (project.finalAmount <= 0.00 and buttonValidationType == 'Valider definitivement') %}
+                        {% set buttonEnable = 'disabled' %}
+                    {% else %}
+                        {% set buttonEnable = 'enabled' %}
+                    {% endif %}
+
+                    <a type="button" class="btn btn-success col {{ buttonEnable }}"
                        href="{{ path( validationLink, {requestId: project.projectMaster.requestId} ) }}">
                         <i class="fas fa-plus"></i>
                         <span>{{ buttonValidationType }}</span>
