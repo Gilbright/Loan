@@ -6,18 +6,32 @@
  * Time: 00:01
  */
 
-namespace App\Service;
+namespace App\Helper;
 
 
 use Gedmo\Sluggable\Util\Urlizer;
-use League\Flysystem\FilesystemOperator;
+use League\Flysystem\Filesystem;
 use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploaderHelper
 {
-    private FilesystemOperator $filesystem;
+    public const BUS_PLAN_DOC_NAME = '_business_plan_document';
+
+    public const DET_EXTRA_DOC_NAME = '_detail_extra_document';
+
+    public const ID_PATH_NAME = '_id_document';
+
+    public const ID_DOC_PATH_NAME = '_id_doc_document'; // A revoir
+
+    public const SAVING_DOC_NAME = '_saving_document'; // A revoir
+
+    public const USER_ID_DOC_PATH_NAME = '_user_id_doc_document'; // A revoir
+
+    public const USER_ID_PATH_NAME = '_user_id_document';
+
+    private Filesystem $filesystem;
 
     private RequestStackContext $requestStackContext;
 
@@ -26,18 +40,18 @@ class UploaderHelper
     private string $publicAssetBaseUrl;
 
     /**
-     * @param FilesystemOperator $publicUploadsFilesystem
+     * @param Filesystem $publicUploadsFilesystem
      * @param RequestStackContext $requestStackContext
      * @param string $uploadedAssetsBaseUrl
      */
-    public function __construct(FilesystemOperator $publicUploadsFilesystem, RequestStackContext $requestStackContext, string $uploadedAssetsBaseUrl)
+    public function __construct(Filesystem $publicUploadsFilesystem, RequestStackContext $requestStackContext, string $uploadedAssetsBaseUrl)
     {
         $this->filesystem = $publicUploadsFilesystem;
         $this->requestStackContext = $requestStackContext;
         $this->publicAssetBaseUrl = $uploadedAssetsBaseUrl;
     }
 
-    public function uploadPhenixFile(File $file): string
+    public function uploadPhenixFile(File $file, ?string $newFileName): string
     {
         if ($file instanceof UploadedFile){
             $originalFilename = $file->getClientOriginalName();
@@ -45,7 +59,9 @@ class UploaderHelper
             $originalFilename = $file->getFilename();
         }
 
-        $newFilename = Urlizer::urlize(pathinfo($originalFilename, PATHINFO_FILENAME)).'-'.uniqid('', true).'.'.$file->guessExtension();
+        $originalFilename = $newFileName ?? $originalFilename;
+
+        $newFilename = $originalFilename.'.'.$file->guessExtension();
 
         $stream = fopen($file->getPathname(), 'r');
 
@@ -62,18 +78,12 @@ class UploaderHelper
             fclose($stream);
         }
 
-
-        /*$this->filesystem->write(
-            '/Demonstration/'.$newFilename,
-            file_get_contents($file->getPathname())
-        );*/
-        
         return $newFilename;
     }
 
-    public function getImagePath(string $path): string
+    public function getImagePath(string $path, ?string $subDirectory = ''): string
     {
         return $this->requestStackContext
-                ->getBasePath().$this->publicAssetBaseUrl.'/'.$path;
+                ->getBasePath().$this->publicAssetBaseUrl.'/'.$subDirectory.$path;
     }
 }

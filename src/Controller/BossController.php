@@ -3,18 +3,18 @@
 namespace App\Controller;
 
 use App\Helper\Status;
+use App\Helper\UploaderHelper;
 use App\Service\ClientManager;
 use App\Service\EmployeeManager;
 use App\Service\NoteManager;
 use App\Service\PaymentManager;
 use App\Service\ProjectManager;
 use App\Service\SavingManager;
-use App\Service\UploaderHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -317,11 +317,9 @@ class BossController extends AbstractController
     public function bossAddEmployee(Request $request, EmployeeManager $employeeManager, UploaderHelper $uploaderHelper)
     {
         if ($request->isMethod('POST')) {
-            foreach ($request->files->all() as $item){
-                $result = $uploaderHelper->uploadPhenixFile($item);
-            }
+            $data = array_merge($request->files->all(), $request->request->all());
 
-            $employeeManager->execute($request->request->all());
+            $employeeManager->execute($data);
 
             return $this->redirectToRoute('app_boss_list_employees');
         }

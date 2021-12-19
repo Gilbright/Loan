@@ -2,7 +2,7 @@
 
 namespace App\Twig;
 
-use App\Service\UploaderHelper;
+use App\Helper\UploaderHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -28,6 +28,6 @@ class FileExtension extends AbstractExtension
 
     public function getUploadedAssetPath(string $path): string
     {
-       return $this->uploaderHelper->getImagePath($path);
+       return $this->uploaderHelper->getImagePath($path, 'Phenix/');
     }
 }

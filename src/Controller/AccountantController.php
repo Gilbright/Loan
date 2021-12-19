@@ -212,7 +212,8 @@ class AccountantController extends AbstractController
     public function accSavingAction(Request $request, SavingManager $savingManager): Response
     {
         if ($request->isMethod('POST')) {
-            $savingArray = $request->request->all();
+            $savingArray = array_merge($request->request->all(), $request->files->all());
+
             $savingManager->addSaving($savingArray);
 
             return $this->redirectToRoute('admin');

@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Users;
 use App\Helper\RoleHelper;
+use App\Helper\UploaderHelper;
 use App\Repository\UsersRepository;
 use App\Service\OptionsResolver\EmployeeResolver;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,16 +21,24 @@ class EmployeeManager
 
     private UserPasswordHasherInterface $passwordEncoder;
 
+    private UploaderHelper $uploaderHelper;
+
     /**
      * @param EntityManagerInterface $entityManager
      * @param UsersRepository $usersRepository
      * @param UserPasswordHasherInterface $encoder
      */
-    public function __construct(EntityManagerInterface $entityManager, UsersRepository $usersRepository, UserPasswordHasherInterface $encoder)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UsersRepository $usersRepository,
+        UserPasswordHasherInterface $encoder,
+        UploaderHelper $uploaderHelper
+    )
     {
         $this->passwordEncoder = $encoder;
         $this->entityManager = $entityManager;
         $this->usersRepository = $usersRepository;
+        $this->uploaderHelper = $uploaderHelper;
     }
 
     /**
@@ -45,20 +54,26 @@ class EmployeeManager
 
         $encodedPassword = $this->passwordEncoder->hashPassword($userEntity, '123456');
 
+        $idDocNumber = $data['idNumber'];
+
+        $idDocPathName = $this->uploaderHelper->uploadPhenixFile($data['pieceIdentity'], $idDocNumber.UploaderHelper::USER_ID_DOC_PATH_NAME);
+        $idPathName = $this->uploaderHelper->uploadPhenixFile($data['photoIdentity'], $idDocNumber.UploaderHelper::USER_ID_PATH_NAME);
+
         $userEntity->setAddress($data['address'])
             ->setPhoneNumber($data['phoneNumber'])
             ->setEmail($data['email'])
             ->setUsername($data['email'])
             ->setFullName($data['nameSurname'])
-            ->setIdDocUrl("link there")
-            ->setPhotoUrl("link here")
+            ->setIdDocUrl($idDocPathName)
+            ->setPhotoUrl($idPathName)
             ->setNationality($data['nationality'])
             ->setGender($gender)
             ->setIdDocNumber($data['idNumber'])
             ->setRoles($this->roleParser($data['role']))
             ->setPassword($encodedPassword)
             ->setIsActive(true)
-            ->setBirthDate(new \DateTimeImmutable($data['birthDate']));
+            ->setBirthDate(new \DateTimeImmutable($data['birthDate']))
+        ;
 
         $this->entityManager->persist($userEntity);
         $this->entityManager->flush();

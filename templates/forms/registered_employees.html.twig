@@ -52,6 +52,7 @@
                                         <th>Telephone</th>
                                         <th>Email</th>
                                         <th>Addresse</th>
+                                        <th>DocId</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -67,6 +68,7 @@
                                             <td>{{ data.phoneNumber }}</td>
                                             <td>{{ data.email }}</td>
                                             <td>{{ data.address }}</td>
+                                            <td><img src="{{ uploaded_asset(data.idDocUrl) | imagine_filter('squared_thumbnail_medium') }}" class="img-rounded" alt="default"/></td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

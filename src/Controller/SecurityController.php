@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Employee;
+use App\Helper\UploaderHelper;
 use App\Service\EmployeeManager;
-use App\Service\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -7,16 +7,12 @@ namespace App\Service;
 use App\Entity\Client;
 use App\Entity\Project;
 use App\Entity\ProjectMaster;
+use App\Helper\UploaderHelper;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectMasterRepository;
-use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ClientResolver;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\Query\Expr\Join;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
@@ -28,16 +24,24 @@ class ClientManager
 
     private ProjectMasterRepository $projectMasterRepository;
 
+    private UploaderHelper $uploaderHelper;
+
     /**
      * @param EntityManagerInterface $entityManager
      * @param ClientRepository $clientRepository
      * @param ProjectMasterRepository $projectMasterRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, ProjectMasterRepository $projectMasterRepository)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ClientRepository $clientRepository,
+        ProjectMasterRepository $projectMasterRepository,
+        UploaderHelper $uploaderHelper
+    )
     {
         $this->entityManager = $entityManager;
         $this->clientRepository = $clientRepository;
         $this->projectMasterRepository = $projectMasterRepository;
+        $this->uploaderHelper = $uploaderHelper;
     }
 
     public function getClientsByRequestId(string $requestId = null)
@@ -123,14 +127,19 @@ class ClientManager
 
         $clientEntity = new Client();
 
+        $idDocNumber = $data['idNumber'];
+
+        $idDocPathName = $this->uploaderHelper->uploadPhenixFile($data['pieceIdentity'], $idDocNumber.UploaderHelper::ID_DOC_PATH_NAME);
+        $idPathName = $this->uploaderHelper->uploadPhenixFile($data['photoIdentity'], $idDocNumber.UploaderHelper::ID_PATH_NAME);
+
         $clientEntity
             ->setAddress($data['address'])
             ->setPhoneNumber($data['phoneNumber'])
             ->setEmail($data['email'])
             ->setFullName($data['nameSurname'])
-            ->setIdDocPictureUrl("link there")
-            ->setIdPictureUrl("link here")
-            ->setIdDocNumber($data['idNumber'])
+            ->setIdDocPictureUrl($idDocPathName)
+            ->setIdPictureUrl($idPathName)
+            ->setIdDocNumber($idDocNumber)
             ->setNationality($data['nationality'])
             ->setIsTeamLead(false)
             ->setGender($gender)

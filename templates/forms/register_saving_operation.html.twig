@@ -40,7 +40,7 @@
 
                         <!--formulaire des informations de cotisation et ou defalcation -->
                         <div class="card-body">
-                            <form method="post">
+                            <form method="post" id="addSavingForm" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col">
 
@@ -60,9 +60,9 @@
                                             <select class="form-control select2 select2-hidden-accessible"
                                                     style="width: 100%;" data-select2-id="1" tabindex="-1"
                                                     aria-hidden="true" name="type">
-                                                <option data-select2-id="cotisation" value="cotisation">Cotisation
+                                                <option selected="selected" data-select2-id="cotisation" value="cotisation">Cotisation
                                                 </option>
-                                                <option selected="selected" value="defalcation"
+                                                <option value="defalcation"
                                                         data-select2-id="defalcation">Défalcation
                                                 </option>
                                             </select>
@@ -99,7 +99,7 @@
                                             <label>Ajouter une piece justificative</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" required="true" id="piece_identity"
+                                                    <input type="file" class="custom-file-input" required="true" id="proof_document"
                                                            name="proofDocument">
                                                     <label class="custom-file-label" for="piece_identity">Choose
                                                         file</label>
