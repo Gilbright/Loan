@@ -10,30 +10,27 @@ namespace App\Service;
 
 
 use Gedmo\Sluggable\Util\Urlizer;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploaderHelper
 {
-    /** @var FilesystemInterface $filesystem */
-    private $filesystem;
+    private FilesystemOperator $filesystem;
 
-    /** @var RequestStackContext $requestStackContext */
-    private $requestStackContext;
+    private RequestStackContext $requestStackContext;
 
     private $uploadedAssetsBaseUrl;
 
-    private $publicAssetBaseUrl;
+    private string $publicAssetBaseUrl;
 
     /**
-     * UploaderHelper constructor.
-     * @param FilesystemInterface $publicUploadsFilesystem
+     * @param FilesystemOperator $publicUploadsFilesystem
      * @param RequestStackContext $requestStackContext
      * @param string $uploadedAssetsBaseUrl
      */
-    public function __construct(FilesystemInterface $publicUploadsFilesystem, RequestStackContext $requestStackContext, string $uploadedAssetsBaseUrl)
+    public function __construct(FilesystemOperator $publicUploadsFilesystem, RequestStackContext $requestStackContext, string $uploadedAssetsBaseUrl)
     {
         $this->filesystem = $publicUploadsFilesystem;
         $this->requestStackContext = $requestStackContext;
@@ -53,7 +50,7 @@ class UploaderHelper
         $stream = fopen($file->getPathname(), 'r');
 
         $result = $this->filesystem->writeStream(
-            '/Demonstration/'.$newFilename,
+            '/Phenix/'.$newFilename,
             $stream
         );
 
