@@ -1,6 +1,6 @@
 security:
     encoders:
-        App\Entity\Employee:
+        App\Entity\Users:
             algorithm: auto
 
 
@@ -9,7 +9,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\Employee
+                class: App\Entity\Users
                 property: email
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
@@ -22,11 +22,11 @@ security:
             provider: app_user_provider
             guard:
                 authenticators:
-                    - App\Security\EmployeeAuthenticator
-                entry_point: App\Security\EmployeeAuthenticator
+                    - App\Security\LoginAuthenticator
+                entry_point: App\Security\LoginAuthenticator
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800 # 1 week in seconds
+                lifetime: 86400 # 1 day in seconds
                 path: /
 
             logout:

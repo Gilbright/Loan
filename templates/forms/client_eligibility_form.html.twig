@@ -65,13 +65,13 @@
                     </div>
                     <!-- /.card -->
 
-                    {% if isEligible is defined %}
-                        {% if isEligible == false %}
+                    {% if result is defined %}
+                        {% if result['isEligible'] == false %}
                             {% set type = 'danger' %}
-                            {% set response = 'Non, vous n etes pas eligible pour ce pret.' %}
+                            {% set response = ' n est pas eligible pour ce pret.' %}
                         {% else %}
                             {% set type = 'success' %}
-                            {% set response = 'Oui, vous etes eligible pour ce pret.' %}
+                            {% set response = ' est eligible pour ce pret.' %}
                         {% endif %}
 
                         <div class="row">
@@ -81,7 +81,7 @@
                                         <h3 class="card-title">Resultat</h3>
                                     </div>
                                     <div class="card-body">
-                                        {{ response }}
+                                        {{ result['idNumber'] }} {{ response }}
                                     </div>
                                     <!-- /.card-body -->
                                 </div>

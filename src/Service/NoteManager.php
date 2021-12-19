@@ -3,33 +3,24 @@
 
 namespace App\Service;
 
-
 use App\Entity\Note;
-use App\Repository\NoteRepository;
+use App\Entity\ProjectMaster;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Join;
 
 class NoteManager
 {
-    /**
-     * @var NoteRepository $noteRepository
-     */
-    private $noteRepository;
+    private EntityManagerInterface $entityManager;
+
+    private ProjectManager $projectManager;
 
     /**
-     * @var EntityManagerInterface $entityManager
-     */
-    private $entityManager;
-
-    /**
-     * NoteManager constructor.
      * @param EntityManagerInterface $entityManager
-     * @param NoteRepository $noteRepository
+     * @param ProjectManager $projectManager
      */
-    public function __construct(EntityManagerInterface $entityManager, NoteRepository $noteRepository)
+    public function __construct(EntityManagerInterface $entityManager, ProjectManager $projectManager)
     {
         $this->entityManager = $entityManager;
-        $this->noteRepository = $noteRepository;
+        $this->projectManager = $projectManager;
     }
 
     public function execute(array $data)
@@ -47,14 +38,8 @@ class NoteManager
         }
     }
 
-    public function getNotesByProjectId(string $projectId)
+    public function getNotesByProjectMaster(ProjectMaster $projectMaster)
     {
-        return $this->entityManager->createQueryBuilder()
-            ->select('n')
-            ->from(Note::class, 'n')
-            ->innerJoin('n.project', 'p', Join::WITH, 'p.projectId = :projectId')
-            ->setParameter('projectId', $projectId)
-            ->orderBy('n.createdAt', 'ASC')
-            ->getQuery()->getResult();
+        return $projectMaster->getProject()->getNotes();
     }
 }

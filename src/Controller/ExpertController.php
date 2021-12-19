@@ -23,213 +23,215 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExpertController extends AbstractController
 {
     //TODO: The expert must add a note before validating or rejecting any project !!!!!******* TODO !!!!
+    //TODO: The expert must add a note before validating or rejecting any project !!!!!******* TODO !!!!
 
     /**
      * @Route("/expert/waitingAnalysis", name="app_exp_waiting_analysis")
+     * @param Request $request
      * @param ProjectManager $projectManager
      * @param ClientManager $clientManager
      * @return Response
      */
     public function expWaitingAnalysis(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_WAITING_FOR_ANALYSIS, $projectManager, $clientManager)) {
-            [$projects, $teamLeads] = $arr;
+        if ($arrResult = $projectManager->listProjectsByDates($request, Status::EXP_WAITING_FOR_ANALYSIS)) {
+            $projects  = $arrResult['projects'];
+            $teamLeads = $arrResult['teamLeads'];
         } else {
-            $projects = $projectManager->getProjectsByStatus(Status::EXP_WAITING_FOR_ANALYSIS);
-            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $projects  = $projectManager->removeProjectWithoutClient($projectManager->getProjectsByStatus(Status::EXP_WAITING_FOR_ANALYSIS));
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
         }
 
         return $this->render('pages/status/exp_waiting_for_analysis.html.twig', [
-            'projects' => $projects,
+            'projects'  => $projects,
             'teamLeads' => $teamLeads
         ]);
     }
 
-
     /**
-     * @Route("/expert/view/{projectId}", name="app_expert_view")
+     * @Route("/expert/view/{requestId}", name="app_expert_view")
      * @param ProjectManager $projectManager
-     * @param ClientManager $clientManager
-     * @param string $projectId
+     * @param string $requestId
      * @param Request $request
      * @param NoteManager $noteManager
      * @return Response
+     * @throws EntityNotFoundException
      */
-    public function expertView(ProjectManager $projectManager, ClientManager $clientManager, string $projectId, Request $request, NoteManager $noteManager, EntityManagerInterface $entityManager): Response
+    public function expertView(ProjectManager $projectManager, string $requestId, Request $request, NoteManager $noteManager): Response
     {
-        $project = $projectManager->getProjectById($projectId);
-        $projectTeam = $clientManager->getClientsByProjectId($projectId);
-        $projectNotes = $noteManager->getNotesByProjectId($projectId);
-
-        if (!$project instanceof Project){
-            throw new EntityNotFoundException("Ce Projet n'a pas été retrouvé");
-        }
+        $projectMaster = $projectManager->getProjectMasterById($requestId);
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $data['project'] = $project;
+            $data['project'] = $projectMaster->getProject();
 
             if (isset($data['noteContent'])) {
                 $noteManager->execute($data);
             } elseif (isset($data['finalAmount'])) {
-
-                $project->setFinalAmount((float)$data['finalAmount']);
-                $project->setModalityAmount((float)$data['modalityAmount']);
+                $project = $projectMaster->getProject();
+                $project->setFinalAmount((int)$data['finalAmount']);
+                $project->setModalityAmount((int)$data['modalityAmount']);
                 $project->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths']);
 
-                $repaymentArray = ['modalityAmount' => (float)$data['modalityAmount'],
-                    'modalityNumberOfMonths' => (int)$data['modalityNumberOfMonths'],
-                    'amountWanted' => (float)$data['finalAmount']
-                    ];
+                $repaymentArray = [
+                    'amountWanted'           => (int)$data['finalAmount'],
+                    'modalityAmount'         => (int)$data['modalityAmount'],
+                    'modalityNumberOfMonths' => (int)$data['modalityNumberOfMonths']
+                ];
 
                 $project->setRepaymentDuration($projectManager->repaymentDurationCalculator($repaymentArray));
 
-                $entityManager->flush();
+                $projectManager->doFlush();
             }
 
-
-            return $this->redirectToRoute('app_expert_view', ['projectId' => $projectId]);
+            return $this->redirectToRoute('app_expert_view', ['requestId' => $requestId]);
         }
+
         return $this->render('pages/statusRedirections/expert_view.html.twig', [
-            'project' => $project,
-            'projectTeam' => $projectTeam,
-            'projectNotes' => $projectNotes,
+            'project'       => $projectMaster->getProject(),
+            'projectTeam'   => $projectMaster->getClients(),
+            'projectNotes'  => $projectMaster->getProject()->getNotes(),
             'financeDetails' => []
         ]);
     }
 
     /**
-     * @Route ("/expert/sendToInterview/{projectId}", name="expert_send_to_interview")
-     * @param string $projectId
+     * @Route ("/expert/sendToInterview/{requestId}", name="expert_send_to_interview")
+     * @param string $requestId
      * @param ProjectManager $projectManager
+     * @return Response
      */
-    public function sendToInterview(string $projectId, ProjectManager $projectManager)
+    public function sendToInterview(string $requestId, ProjectManager $projectManager): Response
     {
-        $projectManager->changeProjectStatus(Status::EXP_INTERVIEW_STEP, $projectId);
+        $projectManager->changeProjectStatus(Status::EXP_INTERVIEW_STEP, $requestId);
+
         return $this->redirectToRoute('app_exp_waiting_analysis');
     }
 
     /**
-     * @Route ("/expert/continueLater/{projectId}", name="expert_continue_later")
-     * @param string $projectId
+     * @Route ("/expert/continueLater/{requestId}", name="expert_continue_later")
+     * @param string $requestId
      * @param ProjectManager $projectManager
+     * @return Response
      */
-    public function expContinueLater(string $projectId, ProjectManager $projectManager)
+    public function expContinueLater(string $requestId, ProjectManager $projectManager): Response
     {
-        $projectManager->changeProjectStatus(Status::EXP_ANALYSIS_ON_GOING, $projectId);
+        $projectManager->changeProjectStatus(Status::EXP_ANALYSIS_ON_GOING, $requestId);
+
         return $this->redirectToRoute('app_exp_waiting_analysis');
     }
 
     /**
-     * @Route ("/expert/rejectProject/{projectId}", name="expert_reject_project")
-     * @param string $projectId
+     * @Route ("/expert/rejectProject/{requestId}", name="expert_reject_project")
+     * @param string $requestId
      * @param ProjectManager $projectManager
+     * @return Response
      */
-    public function expRejectProject(string $projectId, ProjectManager $projectManager)
+    public function expRejectProject(string $requestId, ProjectManager $projectManager): Response
     {
-        $projectManager->changeProjectStatus(Status::EXP_REJECTED, $projectId);
+        $projectManager->changeProjectStatus(Status::EXP_REJECTED, $requestId);
+
         return $this->redirectToRoute('app_exp_waiting_analysis');
     }
 
     /**
      * @Route("/expert/analysisOnGoing", name="app_exp_analysis_on_going")
+     * @param Request $request
      * @param ProjectManager $projectManager
      * @param ClientManager $clientManager
      * @return Response
      */
     public function expAnalysisOn(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        if ($arr = $projectManager->listProjectsByDates($request, Status::EXP_ANALYSIS_ON_GOING, $projectManager, $clientManager)) {
-            [$projects, $teamLeads] = $arr;
+        if ($arrResult = $projectManager->listProjectsByDates($request, Status::EXP_ANALYSIS_ON_GOING)) {
+            $projects  = $arrResult['projects'];
+            $teamLeads = $arrResult['teamLeads'];
         } else {
-            $projects = $projectManager->getProjectsByStatus(Status::EXP_ANALYSIS_ON_GOING);
-            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $projects  = $projectManager->removeProjectWithoutClient($projectManager->getProjectsByStatus(Status::EXP_ANALYSIS_ON_GOING));
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
         }
 
         return $this->render('pages/status/exp_analysis_on_going.html.twig', [
-            'projects' => $projects,
+            'projects'  => $projects,
             'teamLeads' => $teamLeads
         ]);
     }
 
     /**
      * @Route("/expert/interviewStep", name="app_exp_interview_step")
+     * @param Request $request
      * @param ProjectManager $projectManager
      * @param ClientManager $clientManager
      * @return Response
      */
     public function expInterviewStep(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        $arrPostInterview = $projectManager->listProjectsByDates($request, Status::EXP_POST_INTERVIEW, $projectManager, $clientManager);
-        $arrInterview = $projectManager->listProjectsByDates($request, Status::EXP_INTERVIEW_STEP, $projectManager, $clientManager);
+        $arrInterview = $projectManager->listProjectsByDates($request, Status::EXP_INTERVIEW_STEP);
+        $arrPostInterview = $projectManager->listProjectsByDates($request, Status::EXP_POST_INTERVIEW);
 
         if ($arrPostInterview || $arrInterview) {
-            [$projects, $teamLeads] = $arrInterview;
-            [$postInterviewProjects, $postIntTeamLeads] = $arrPostInterview;
-
-            $projects = array_merge($postInterviewProjects, $projects);
-            $teamLeads = array_merge($postIntTeamLeads, $teamLeads);
+            $projects  = array_merge($arrPostInterview['projects'], $arrInterview['projects']);
+            $teamLeads = array_merge($arrPostInterview['teamLeads'], $arrInterview['teamLeads']);
         } else {
-            $postInterviewProjects = $projectManager->getProjectsByStatus(Status::EXP_POST_INTERVIEW);
             $projects = $projectManager->getProjectsByStatus(Status::EXP_INTERVIEW_STEP);
+            $postInterviewProjects = $projectManager->getProjectsByStatus(Status::EXP_POST_INTERVIEW);
 
-            $projects = array_merge($postInterviewProjects, $projects);
-            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $projects  = $projectManager->removeProjectWithoutClient(array_merge($postInterviewProjects, $projects));
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
         }
 
         return $this->render('pages/status/exp_interview_step.html.twig', [
-            'projects' => $projects,
+            'projects'  => $projects,
             'teamLeads' => $teamLeads
         ]);
     }
 
     /**
      * @Route("/expert/toReview", name="app_exp_to_review")
+     * @param Request $request
      * @param ProjectManager $projectManager
      * @param ClientManager $clientManager
      * @return Response
      */
     public function expToReview(Request $request, ProjectManager $projectManager, ClientManager $clientManager): Response
     {
-        if ($arr = $projectManager->listProjectsByDates($request, Status::BOS_TO_BE_REANALYZED, $projectManager, $clientManager)) {
-            [$projects, $teamLeads] = $arr;
+        if ($arrResult = $projectManager->listProjectsByDates($request, Status::BOS_TO_BE_REANALYZED)) {
+            $projects  = $arrResult['projects'];
+            $teamLeads = $arrResult['teamLeads'];
         } else {
-            $projects = $projectManager->getProjectsByStatus(Status::BOS_TO_BE_REANALYZED);
-            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $projects  = $projectManager->removeProjectWithoutClient($projectManager->getProjectsByStatus(Status::BOS_TO_BE_REANALYZED));
             $teamLeads = $clientManager->getProjectsTeamLeads($projects);
         }
 
         return $this->render('pages/status/exp_to_be_reanalysed.html.twig', [
-            'projects' => $projects,
+            'projects'  => $projects,
             'teamLeads' => $teamLeads
         ]);
     }
 
     /**
-     * @Route ("/expert/sendToPostInterview/{projectId}", name="expert_post_interview")
-     * @param string $projectId
+     * @Route("/expert/sendToPostInterview/{requestId}", name="expert_post_interview")
+     * @param string $requestId
      * @param ProjectManager $projectManager
+     * @return Response
      */
-    public function expPostInterview(string $projectId, ProjectManager $projectManager)
+    public function expPostInterview(string $requestId, ProjectManager $projectManager): Response
     {
-        $projectManager->changeProjectStatus(Status::EXP_POST_INTERVIEW, $projectId);
+        $projectManager->changeProjectStatus(Status::EXP_POST_INTERVIEW, $requestId);
+
         return $this->redirectToRoute('app_exp_waiting_analysis');
     }
 
     /**
-     * @Route ("/expert/validateProject/{projectId}", name="expert_validate_project")
-     * @param string $projectId
+     * @Route ("/expert/validateProject/{requestId}", name="expert_validate_project")
+     * @param string $requestId
      * @param ProjectManager $projectManager
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return Response
      */
-    public function expValidateProject(string $projectId, ProjectManager $projectManager)
+    public function expValidateProject(string $requestId, ProjectManager $projectManager): Response
     {
-        $projectManager->changeProjectStatus(Status::BOS_MANAGER_ANALYSIS, $projectId);
+        $projectManager->changeProjectStatus(Status::BOS_MANAGER_ANALYSIS, $requestId);
+
         return $this->redirectToRoute('app_exp_waiting_analysis');
     }
-
-    //TODO: The expert must add a note before validating or rejecting any project !!!!!******* TODO !!!!
 }

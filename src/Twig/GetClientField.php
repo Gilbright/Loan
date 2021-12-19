@@ -2,8 +2,6 @@
 
 namespace App\Twig;
 
-use App\Entity\Client;
-use App\Helper\TypeColorHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -13,9 +11,6 @@ class GetClientField extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            // If your filter generates SAFE HTML, you should add a third
-            // parameter: ['is_safe' => ['html']]
-            // Reference: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
             new TwigFilter('getField', [$this, 'doSomething']),
         ];
     }
@@ -27,29 +22,20 @@ class GetClientField extends AbstractExtension
         ];
     }
 
-    public function doSomething(array $clientKey)
+    public function doSomething(array $clientKey): string
     {
         [$key, $client] = array_values($clientKey);
 
-        switch ($key){
-            case 'nameSurname':
-                return $client->getNameSurname();
-            case 'phoneNumber':
-                return $client->getPhoneNumber();
-            case 'email':
-                return $client->getEmail();
-            case 'nationality':
-                return $client->getNationality();
-            case 'address':
-                return $client->getAddress();
-            case 'monthlyIncome':
-                return $client->getMonthlyIncome();
-            case 'birthDate':
-                return $client->getBirthDate();
-            case 'profession':
-                return $client->getProfession();
-            default:
-                return '';
-        }
+        return match ($key) {
+            'fullName'      => $client->getFullName(),
+            'phoneNumber'   => $client->getPhoneNumber(),
+            'email'         => $client->getEmail(),
+            'nationality'   => $client->getNationality(),
+            'address'       => $client->getAddress(),
+            'monthlyIncome' => $client->getMonthlyIncome(),
+            'birthDate'     => $client->getBirthDate()->format('d-m-Y'),
+            'profession'    => $client->getProfession(),
+            default         => '',
+        };
     }
 }

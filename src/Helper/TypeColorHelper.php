@@ -26,6 +26,7 @@ class TypeColorHelper
         Status::BOS_TO_BE_REANALYZED => 'card-orange',
         Status::PROJECT_COMPLETED => 'card-gray'
     ];
+
     public const BADGES = [
         Status::SEC_WAITING_FOR_CONTROL => 'badge badge-pill bg-navy',
         Status::EXP_WAITING_FOR_ANALYSIS => 'badge badge-pill bg-primary',

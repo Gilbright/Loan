@@ -58,8 +58,8 @@
                                     {% for data in  employeesData %}
                                         <tr>
                                             <td>{{ data.id }}</td>
-                                            <td>{{ data.nameSurname }}</td>
-                                            <td>{{ data.birthDate }}</td>
+                                            <td>{{ data.fullName }}</td>
+                                            <td>{{ data.birthDate | date('d-m-Y')}}</td>
                                             <td>{{ data.gender }}</td>
                                             <td>{{ data.roles[0] | getRole(data.roles[0]) }}</td>
                                             <td>{{ data.idDocNumber }}</td>

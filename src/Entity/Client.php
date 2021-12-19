@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimestampTrait;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,22 +14,19 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Client
 {
+    use TimestampTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $isTeamLead;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nameSurname;
+    private ?string $fullName;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -41,50 +39,9 @@ class Client
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $nationality;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $address;
-
-    /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      */
     private $monthlyIncome;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $extra;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $idPictureLink;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $idDocumentPictureLink;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $birthDate;
-
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -92,34 +49,69 @@ class Client
     private $profession;
 
     /**
-     * @ORM\Column(type="string", length=55)
+     * @ORM\Column(type="string", length=50)
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $idDocNumber;
-
-    /**
-     * @ORM\OneToMany(targetEntity=SavingDetail::class, mappedBy="clientId", orphanRemoval=true)
-     */
-    private $savingDetails;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="integer")
      */
     private $balance;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Project::class, inversedBy="clients")
+     * @ORM\Column(type="text")
      */
-    private $projectId;
+    private $address;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $birthdate;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $idDocNumber;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $idPictureUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $idDocPictureUrl;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isTeamLead;
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $extra = [];
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nationality;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SavingDetails::class, mappedBy="client")
+     */
+    private $savingDetails;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=ProjectMaster::class, inversedBy="client")
+     */
+    private $projectMasters;
 
     public function __construct()
     {
         $this->savingDetails = new ArrayCollection();
-        $this->projectId = new ArrayCollection();
+        $this->projectMasters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,26 +119,14 @@ class Client
         return $this->id;
     }
 
-    public function getIsTeamLead(): ?bool
+    public function getFullName(): ?string
     {
-        return $this->isTeamLead;
+        return $this->fullName;
     }
 
-    public function setIsTeamLead(?bool $isTeamLead): self
+    public function setFullName(string $fullName): self
     {
-        $this->isTeamLead = $isTeamLead;
-
-        return $this;
-    }
-
-    public function getNameSurname(): ?string
-    {
-        return $this->nameSurname;
-    }
-
-    public function setNameSurname(string $nameSurname): self
-    {
-        $this->nameSurname = $nameSurname;
+        $this->fullName = $fullName;
 
         return $this;
     }
@@ -175,14 +155,50 @@ class Client
         return $this;
     }
 
-    public function getNationality(): ?string
+    public function getMonthlyIncome(): ?int
     {
-        return $this->nationality;
+        return $this->monthlyIncome;
     }
 
-    public function setNationality(string $nationality): self
+    public function setMonthlyIncome(int $monthlyIncome): self
     {
-        $this->nationality = $nationality;
+        $this->monthlyIncome = $monthlyIncome;
+
+        return $this;
+    }
+
+    public function getProfession(): ?string
+    {
+        return $this->profession;
+    }
+
+    public function setProfession(string $profession): self
+    {
+        $this->profession = $profession;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getBalance(): ?int
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(int $balance): self
+    {
+        $this->balance = $balance;
 
         return $this;
     }
@@ -199,223 +215,150 @@ class Client
         return $this;
     }
 
-    public function getMonthlyIncome(): ?float
+    public function getBirthdate(): ?\DateTimeInterface
     {
-        return $this->monthlyIncome;
+        return $this->birthdate;
     }
 
-    public function setMonthlyIncome(float $monthlyIncome): self
+    public function setBirthdate(\DateTimeInterface $birthdate): self
     {
-        $this->monthlyIncome = $monthlyIncome;
+        $this->birthdate = $birthdate;
 
         return $this;
     }
 
-    public function getExtra(): ?string
-    {
-        return $this->extra;
-    }
-
-    public function setExtra(?string $extra): self
-    {
-        $this->extra = $extra;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getIdPictureLink(): ?string
-    {
-        return $this->idPictureLink;
-    }
-
-    public function setIdPictureLink(?string $idPictureLink): self
-    {
-        $this->idPictureLink = $idPictureLink;
-
-        return $this;
-    }
-
-    public function getIdDocumentPictureLink(): ?string
-    {
-        return $this->idDocumentPictureLink;
-    }
-
-    public function setIdDocumentPictureLink(?string $idDocumentPictureLink): self
-    {
-        $this->idDocumentPictureLink = $idDocumentPictureLink;
-
-        return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setUpdatedAt(new \DateTime('now'));
-
-        if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTime('now'));
-        }
-    }
-
-    public function getBirthDate(): ?string
-    {
-        return $this->birthDate;
-    }
-
-    public function setBirthDate(string $birthDate): self
-    {
-        $this->birthDate = $birthDate;
-
-        return $this;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
-
-    /**
-     * @param $gender
-     * @return $this
-     */
-    public function setGender($gender): self
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProfession()
-    {
-        return $this->profession;
-    }
-
-    /**
-     * @param $profession
-     * @return $this
-     */
-    public function setProfession($profession): self
-    {
-        $this->profession = $profession;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdDocNumber()
+    public function getIdDocNumber(): ?string
     {
         return $this->idDocNumber;
     }
 
-    /**
-     * @param $idDocNumber
-     * @return $this
-     */
-    public function setIdDocNumber($idDocNumber): self
+    public function setIdDocNumber(string $idDocNumber): self
     {
         $this->idDocNumber = $idDocNumber;
 
         return $this;
     }
 
+    public function getIdPictureUrl(): ?string
+    {
+        return $this->idPictureUrl;
+    }
+
+    public function setIdPictureUrl(string $idPictureUrl): self
+    {
+        $this->idPictureUrl = $idPictureUrl;
+
+        return $this;
+    }
+
+    public function getIdDocPictureUrl(): ?string
+    {
+        return $this->idDocPictureUrl;
+    }
+
+    public function setIdDocPictureUrl(string $idDocPictureUrl): self
+    {
+        $this->idDocPictureUrl = $idDocPictureUrl;
+
+        return $this;
+    }
+
+    public function getExtra(): ?array
+    {
+        return $this->extra;
+    }
+
+    public function setExtra(?array $extra): self
+    {
+        $this->extra = $extra;
+
+        return $this;
+    }
+
+    public function getNationality(): ?string
+    {
+        return $this->nationality;
+    }
+
+    public function setNationality(string $nationality): self
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
     /**
-     * @return Collection|SavingDetail[]
+     * @return Collection|SavingDetails[]
      */
     public function getSavingDetails(): Collection
     {
         return $this->savingDetails;
     }
 
-    public function addSavingDetail(SavingDetail $savingDetail): self
+    public function addSavingDetail(SavingDetails $savingDetail): self
     {
         if (!$this->savingDetails->contains($savingDetail)) {
             $this->savingDetails[] = $savingDetail;
-            $savingDetail->setClientId($this);
+            $savingDetail->setClient($this);
         }
 
         return $this;
     }
 
-    public function removeSavingDetail(SavingDetail $savingDetail): self
+    public function removeSavingDetail(SavingDetails $savingDetail): self
     {
         if ($this->savingDetails->removeElement($savingDetail)) {
             // set the owning side to null (unless already changed)
-            if ($savingDetail->getClientId() === $this) {
-                $savingDetail->setClientId(null);
+            if ($savingDetail->getClient() === $this) {
+                $savingDetail->setClient(null);
             }
         }
 
         return $this;
     }
 
-    public function getBalance(): ?float
-    {
-        return $this->balance;
-    }
-
-    public function setBalance(?float $balance): self
-    {
-        $this->balance = $balance;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|Project[]
+     * @return Collection|ProjectMaster[]
      */
-    public function getProjectId(): Collection
+    public function getProjectMasters()
     {
-        return $this->projectId;
+        return $this->projectMasters;
     }
 
-    public function addProjectId(Project $projectId): self
+    public function addProjectMaster(ProjectMaster $projectMaster): self
     {
-        if (!$this->projectId->contains($projectId)) {
-            $this->projectId[] = $projectId;
+        if (!$this->projectMasters->contains($projectMaster)) {
+            $this->projectMasters[] = $projectMaster;
+            //$projectMaster->addClient($this);
         }
 
         return $this;
     }
 
-    public function removeProjectId(Project $projectId): self
+    public function removeProjectMaster(ProjectMaster $projectMaster): self
     {
-        $this->projectId->removeElement($projectId);
+        if ($this->projectMasters->removeElement($projectMaster)) {
+            $projectMaster->removeClient($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsTeamLead()
+    {
+        return $this->isTeamLead;
+    }
+
+    /**
+     * @param bool $isTeamLead
+     * @return $this
+     */
+    public function setIsTeamLead(bool $isTeamLead): self
+    {
+        $this->isTeamLead = $isTeamLead;
 
         return $this;
     }

@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
     public function accountUpdates(Request $request, EmployeeManager $employeeManager): Response
     {
         if ($request->isMethod('POST')){
-            $employeeManager->updateEmployeeInfos($request->request->all(), $this->getUser());
+            $employeeManager->updateUserInfos($request->request->all(), $this->getUser());
 
             return $this->redirectToRoute('app_account');
         }
