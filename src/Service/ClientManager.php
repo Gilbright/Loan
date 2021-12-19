@@ -144,23 +144,30 @@ class ClientManager
         $this->entityManager->flush();
     }
 
-    public function isEligible(array $clientAmountArray): bool
+    public function isEligible(array $clientAmountArray): array
     {
         $client = $this->getClientByIdNumber($clientAmountArray['IdNumber']);
 
         $amount = (int)$clientAmountArray['amount'];
 
+        $result = [
+            'idNumber' => $client->getIdDocNumber()
+        ];
+
         foreach ($client->getProjectMasters() as $projectMaster){
             if (!$projectMaster->getIsFinished()){
-                return false;
+                $result['isEligible'] = false;
+                return $result;
             }
         }
 
         if (round($amount/10, 2) > round($client->getBalance(), 2)){
-            return false;
+            $result['isEligible'] = false;
+            return $result;
         }
 
-        return true;
+        $result['isEligible'] = true;
+        return $result;
     }
 
     /**

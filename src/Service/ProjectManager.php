@@ -172,6 +172,11 @@ class ProjectManager
         /** @var ProjectMaster $projectMaster */
         $projectMaster = $this->getProjectMasterById($requestId);
 
+        $this->changeProjectStatusByProjectMaster($projectMaster, $newStatus);
+    }
+
+    public function changeProjectStatusByProjectMaster(ProjectMaster $projectMaster, string $newStatus)
+    {
         $mailReceivers = MailReceiverHelper::getReceiverRoleByStatus($newStatus);
 
         $projectMaster->getProject()->setStatus($newStatus);

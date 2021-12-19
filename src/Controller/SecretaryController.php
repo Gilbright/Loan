@@ -84,7 +84,7 @@ class SecretaryController extends AbstractController
         if ($request->isMethod('POST')) {
             $result = $clientManager->isEligible($request->request->all());
 
-            return $this->render('forms/client_eligibility_form.html.twig', ['isEligible' => $result]);
+            return $this->render('forms/client_eligibility_form.html.twig', ['result' => $result]);
         }
 
         return $this->render('forms/client_eligibility_form.html.twig');

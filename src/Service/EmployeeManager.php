@@ -10,7 +10,7 @@ use App\Repository\UsersRepository;
 use App\Service\OptionsResolver\EmployeeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EmployeeManager
 {
@@ -18,14 +18,14 @@ class EmployeeManager
 
     private UsersRepository $usersRepository;
 
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordEncoder;
 
     /**
      * @param EntityManagerInterface $entityManager
      * @param UsersRepository $usersRepository
-     * @param UserPasswordEncoderInterface $encoder
+     * @param UserPasswordHasherInterface $encoder
      */
-    public function __construct(EntityManagerInterface $entityManager, UsersRepository $usersRepository, UserPasswordEncoderInterface $encoder)
+    public function __construct(EntityManagerInterface $entityManager, UsersRepository $usersRepository, UserPasswordHasherInterface $encoder)
     {
         $this->passwordEncoder = $encoder;
         $this->entityManager = $entityManager;
@@ -43,7 +43,7 @@ class EmployeeManager
 
         $userEntity = new Users();
 
-        $encodedPassword = $this->passwordEncoder->encodePassword($userEntity, 'phenix');
+        $encodedPassword = $this->passwordEncoder->hashPassword($userEntity, '123456');
 
         $userEntity->setAddress($data['address'])
             ->setPhoneNumber($data['phoneNumber'])
@@ -110,7 +110,7 @@ class EmployeeManager
         }
 
         if ($data['password']){
-            $password = $this->passwordEncoder->encodePassword($user, $data['password']);
+            $password = $this->passwordEncoder->hashPassword($user, $data['password']);
             $user->setPassword($password);
         }
 

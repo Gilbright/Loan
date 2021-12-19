@@ -10,6 +10,7 @@ namespace App\Service;
 
 use App\Entity\PaymentDetails;
 use App\Entity\ProjectMaster;
+use App\Helper\Status;
 use App\Helper\TypeHelper;
 use App\Repository\PaymentDetailsRepository;
 use App\Service\OptionsResolver\PaymentDetailResolver;
@@ -52,8 +53,17 @@ class PaymentManager
             ->setAmountToSend($this->calculateAmountToSend($projectMaster, (int)$data['amount'], strtolower($data['dropdownName'])))
             ->setProjectMaster($projectMaster)
             ->setDetails($data['paymentDetails']);
-        
+
         $this->entityManager->persist($paymentDetails);
+
+        if ($data['dropdownName'] === 'Sortie' && !$paymentDetails->getAmountToSend()) {
+            return;
+        }
+
+        if (!$paymentDetails->getAmountToSend() && !$paymentDetails->getAmountToReceive()) {
+            $this->projectManager->changeProjectStatusByProjectMaster($projectMaster, Status::PROJECT_COMPLETED);
+        }
+
         $this->entityManager->flush();
     }
 
@@ -80,7 +90,9 @@ class PaymentManager
             }
         }
 
-        return $projectMaster->getProject()->getFinalAmount() - $amountTotal;
+        $result = $projectMaster->getProject()->getFinalAmount() - $amountTotal;
+
+        return $result > 0 ? $result : 0;
     }
 
     /**
@@ -106,7 +118,9 @@ class PaymentManager
             }
         }
 
-        return $projectMaster->getProject()->getFinalAmount() - $amountTotal;
+        $result = $projectMaster->getProject()->getFinalAmount() - $amountTotal;
+
+        return $result > 0 ? $result : 0;
     }
 
     public function getPaymentDetailsInDateRange(\DateTime $startDate, \DateTime $endDate)

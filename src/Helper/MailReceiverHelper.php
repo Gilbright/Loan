@@ -20,7 +20,8 @@ class MailReceiverHelper
         Status::EXP_REJECTED => [RoleHelper::BOSS],
         Status::ACC_LACKING_FUND => [RoleHelper::BOSS],
         Status::ACC_VALIDATED_FINANCED => [RoleHelper::BOSS],
-        Status::BOS_TO_BE_REANALYZED => [RoleHelper::EXPERT]
+        Status::BOS_TO_BE_REANALYZED => [RoleHelper::EXPERT],
+        Status::PROJECT_COMPLETED => [RoleHelper::BOSS, RoleHelper::ACCOUNTANT]
     ];
 
     public static function getReceiverRoleByStatus($status)
