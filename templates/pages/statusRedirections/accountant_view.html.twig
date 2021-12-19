@@ -1,7 +1,7 @@
 {% extends 'pages/base_project_clients.html.twig' %}
 
 {% block finance_detail_block %}
-    {% if financeDetails %}
+    {% if financeDetails and financeDetails is not empty %}
         <div class="card {{ statusData[0] }}">
             <div class="card-header">
                 <div class="row">
@@ -26,16 +26,16 @@
                     </thead>
                     <tbody>
                     {% for financeDetail in financeDetails %}
-                        {% if  financeDetail.amountLeftToBePaidToUs == project.finalAmount %}
+                        {% if  financeDetail.amountToReceive == project.finalAmount %}
                             {% set amountInfos = 'Remboursement non amorçé' %}
                         {% else %}
-                            {% set amountInfos = financeDetail.amountLeftToBePaidToUs %}
+                            {% set amountInfos = financeDetail.amountToReceive %}
                         {% endif %}
                         <tr>
-                            <td>{{ financeDetail.operationExecutor.nameSurname }}</td>
+                            <td>{{ financeDetail.user.fullName }}</td>
                             <td>{{ financeDetail.type | getType(financeDetail.type) }}</td>
                             <td>{{ financeDetail.amount }}</td>
-                            <td>{{ financeDetail.amountLeftToBeSentByUs }}</td>
+                            <td>{{ financeDetail.amountToSend }}</td>
                             <td>{{ amountInfos }}</td>
                             <td>{{ financeDetail.createdAt|date('d-m-Y H:i:s') }}</td>
                         </tr>
@@ -52,7 +52,7 @@
         {% set financeDetail = financeDetails|last %}
     {% endif %}
 
-    {% if project.isFinished == false %}
+    {% if project.projectMaster.isFinished == false %}
         <form method="post">
             <div class="card {{ statusData[0] }}">
                 <div class="card-header">
@@ -70,10 +70,10 @@
                                     <label>Type de depense</label>
                                     <select class="form-control select2 select2-hidden-accessible" style="width: 100%;"
                                             data-select2-id="1" tabindex="-1" aria-hidden="true" name="dropdownName">
-                                        <option data-select2-id="1">Entree</option>
+                                        <option selected data-select2-id="1">Sortie</option>
 
-                                        {% if financeDetail.amountLeftToBeSentByUs != 0.0 %}
-                                            <option selected="selected" data-select2-id="2">Sortie</option>
+                                        {% if financeDetail %}
+                                            <option  data-select2-id="2">Entree</option>
                                         {% endif %}
                                     </select>
                                 </div>
@@ -126,7 +126,7 @@
                                 <span>Enregister ce rapport</span></button>
 
                             <a type="button" class="btn btn-danger col"
-                               href="{{ path('acc_lack_fund', {projectId: project.projectId}) }}">
+                               href="{{ path('acc_lack_fund', {requestId: project.projectMaster.requestId}) }}">
                                 <i class="fas fa-times-circle"></i>
                                 <span>Notifier que le projet manque de fonds</span>
                             </a>

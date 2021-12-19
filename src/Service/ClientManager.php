@@ -6,96 +6,57 @@ namespace App\Service;
 
 use App\Entity\Client;
 use App\Entity\Project;
+use App\Entity\ProjectMaster;
 use App\Repository\ClientRepository;
+use App\Repository\ProjectMasterRepository;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ClientResolver;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Query\Expr\Join;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 class ClientManager
 {
-    /** @var EntityManagerInterface $entityManager */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
+
+    private ClientRepository $clientRepository;
+
+    private ProjectMasterRepository $projectMasterRepository;
 
     /**
-     * @var ClientRepository $clientRepository
-     */
-    private $clientRepository;
-
-    /** @var ProjectRepository $projectRepository */
-    private $projectRepository;
-
-    /**
-     * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param ClientRepository $clientRepository
-     * @param ProjectRepository $projectRepository
+     * @param ProjectMasterRepository $projectMasterRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, ProjectRepository $projectRepository)
+    public function __construct(EntityManagerInterface $entityManager, ClientRepository $clientRepository, ProjectMasterRepository $projectMasterRepository)
     {
         $this->entityManager = $entityManager;
         $this->clientRepository = $clientRepository;
-        $this->projectRepository = $projectRepository;
+        $this->projectMasterRepository = $projectMasterRepository;
     }
 
-    public function execute(array $data, string $projectId): void
+    public function getClientsByRequestId(string $requestId = null)
     {
-        $data = ClientResolver::resolve($data);
+        $projectMaster = $this->getProjectMasterByRequestId($requestId);
 
-        $gender = $data['gender'] === 'Homme' ? 'H' : 'F';
+        return $projectMaster->getClients();
+    }
 
-        //find the project by projectID
-        $projectEntity = $this->getProjectById($projectId);
+    public function getClientById(int $clientId): ?Client
+    {
+        $client = $this->clientRepository->find($clientId);
 
-        if (!$projectEntity) {
-            //TODO: thow an exception that the project entity has not been found
-            throw new EntityNotFoundException("Ce Projet n'existe pas, reverifiez l'identifiant du projet.");
+        if (!$client instanceof Client){
+            //@Todo client not fount exception
+            throw new EntityNotFoundException('Client not found');
         }
 
-        $clientEntity = new Client();
-
-        $clientEntity->addProjectId($projectEntity)
-            ->setAddress($data['address'])
-            ->setPhoneNumber($data['phoneNumber'])
-            ->setEmail($data['email'])
-            ->setNameSurname($data['nameSurname'])
-            ->setIdDocumentPictureLink("link there")
-            ->setIdPictureLink("link here")
-            ->setIdDocNumber($data['idNumber'])
-            ->setNationality($data['nationality'])
-            ->setIsTeamLead(false)
-            ->setGender($gender)
-            ->setProfession($data['profession'])
-            ->setMonthlyIncome($data['monthlyIncome'])
-            ->setBirthDate($data['birthDate']);
-
-        $this->entityManager->persist($clientEntity);
-        $this->entityManager->flush();
-
-    }
-
-    public function getClientsByProjectId(string $projectId = null)
-    {
-        /*
-        $result = $this->entityManager->createQueryBuilder()
-            ->select('c')
-            ->from(Client::class, 'c')
-            ->innerJoin('c.projectId', 'p', Join::WITH, 'p.projectId = :projectId')
-            ->setParameter('projectId', $projectId)
-            ->setMaxResults(10)
-            ->orderBy('c.createdAt', 'DESC')
-            ->getQuery()->getArrayResult();
-        */
-
-        $projectEntity = $this->getProjectById($projectId);
-        return $projectEntity->getClients();
-    }
-
-    public function getClientById(int $clientId)
-    {
-        return $this->clientRepository->find($clientId);
+        return $client;
     }
 
     public function getClientByIdNumber(string $clientIdNumber): Client
@@ -104,45 +65,38 @@ class ClientManager
 
         if (! $client instanceof Client){
             //@Todo client not fount exception
-
             throw new EntityNotFoundException('Client not found');
         }
 
         return $client;
     }
 
-    public function setClientProjectId(string $clientIdNumber, string $projectId): void
+    public function setClientProjectMaster(string $clientIdNumber, string $requestId): void
     {
         $client = $this->getClientByIdNumber($clientIdNumber);
-        $project = $this->getProjectById($projectId);
+        $projectMaster = $this->getProjectMasterByRequestId($requestId);
 
-        if (!$client instanceof Client) {
-            //@Todo client not fount exception
-
-            throw new EntityNotFoundException('Client not found');
-        }
-
-        if (!$project instanceof Project) {
-            //@Todo client not fount exception
-
-            throw new EntityNotFoundException('Project not found');
-        }
-
-        foreach ($client->getProjectId() as $item) {
-            if (!$item->getIsFinished()) {
+        foreach ($client->getProjectMasters() as $_projectMaster) {
+            if (!$_projectMaster->getIsFinished()) {
                 //TODO: Review the right way to throw this exception
                 throw new Exception("Ce client a un autre projet en cours qui n'est pas encore finalizé!");
             }
         }
 
-        $client->addProjectId($project);
+        $client->addProjectMaster($projectMaster);
 
         $this->entityManager->flush();
     }
 
-    public function getProjectById(string $projectId = null)
+    public function getProjectMasterByRequestId(string $requestId = null)
     {
-        return $this->projectRepository->findOneBy(['projectId' => $projectId]);
+        $projectMaster = $this->projectMasterRepository->findOneBy(['requestId' => $requestId]);
+
+        if (!$projectMaster instanceof ProjectMaster) {
+            throw new EntityNotFoundException("Ce Projet n'existe pas, reverifiez l'identifiant du projet.");
+        }
+
+        return $projectMaster;
     }
 
     public function getProjectsTeamLeads(array $projects): array
@@ -151,7 +105,7 @@ class ClientManager
 
         /** @var Project $project */
         foreach ($projects as $project) {
-            foreach ($project->getClients() as $client) {
+            foreach ($project->getProjectMaster()->getClients() as $client) {
                 if ($client->getIsTeamLead()) {
                     $teamLeads[] = $client;
                 }
@@ -173,42 +127,71 @@ class ClientManager
             ->setAddress($data['address'])
             ->setPhoneNumber($data['phoneNumber'])
             ->setEmail($data['email'])
-            ->setNameSurname($data['nameSurname'])
-            ->setIdDocumentPictureLink("link there")
-            ->setIdPictureLink("link here")
+            ->setFullName($data['nameSurname'])
+            ->setIdDocPictureUrl("link there")
+            ->setIdPictureUrl("link here")
             ->setIdDocNumber($data['idNumber'])
             ->setNationality($data['nationality'])
             ->setIsTeamLead(false)
             ->setGender($gender)
             ->setProfession($data['profession'])
             ->setMonthlyIncome($data['monthlyIncome'])
-            ->setBirthDate($data['birthDate'])
-            ->setBalance(0);
+            ->setBirthDate(new \DateTimeImmutable($data['birthDate']))
+            ->setBalance(0)
+        ;
 
         $this->entityManager->persist($clientEntity);
         $this->entityManager->flush();
     }
 
-    public function isEligible(array $clientAmountArray){
-        $currentClient = $this->getClientByIdNumber($clientAmountArray['IdNumber']);
-        if (!$currentClient instanceof Client) {
-            //@Todo client not fount exception
+    public function isEligible(array $clientAmountArray): array
+    {
+        $client = $this->getClientByIdNumber($clientAmountArray['IdNumber']);
 
-            throw new EntityNotFoundException('Client not found');
-        }
+        $amount = (int)$clientAmountArray['amount'];
 
-        $amount = (float)$clientAmountArray['amount'];
+        $result = [
+            'idNumber' => $client->getIdDocNumber()
+        ];
 
-        foreach ($currentClient->getProjectId() as $project){
-            if (!$project->getIsFinished()){
-                return false;
+        foreach ($client->getProjectMasters() as $projectMaster){
+            if (!$projectMaster->getIsFinished()){
+                $result['isEligible'] = false;
+                return $result;
             }
         }
 
-        if ($amount/10 > $currentClient->getBalance()){
-            return false;
+        if (round($amount/10, 2) > round($client->getBalance(), 2)){
+            $result['isEligible'] = false;
+            return $result;
         }
 
-        return true;
+        $result['isEligible'] = true;
+        return $result;
+    }
+
+    /**
+     * @param $projectMasters
+     * @return array
+     * You can mark functions that do not produce any side effects as pure.
+     * Such functions can be safely removed if the result from executing them is not used in the code after. [Pure]
+     */
+    #[Pure] public function getClientProjects($projectMasters): array
+    {
+        $projectCollection = [];
+
+        /** @var ProjectMaster $projectMaster */
+        foreach ($projectMasters as $projectMaster) {
+            if ($project = $projectMaster->getProject()) {
+                $projectCollection[] = $project;
+            }
+        }
+
+        return $projectCollection;
+    }
+
+    public function doFlush()
+    {
+        $this->entityManager->flush();
     }
 }

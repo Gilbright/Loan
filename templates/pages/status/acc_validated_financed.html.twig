@@ -1,7 +1,7 @@
 {% extends 'pages/status/all_status_base.html.twig' %}
 
 {% block button_block %}
-        <a href="{{ path('app_acc_view', {projectId: project.projectId})  }}">
+        <a href="{{ path('app_acc_view', {requestId: project.projectMaster.requestId})  }}">
             <button type="button" class="btn btn-info btn-sm"  ><i class="fa fa-dot-circle-o"></i>
              Details et Modifications
             </button>

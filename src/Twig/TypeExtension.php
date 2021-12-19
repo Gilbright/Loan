@@ -22,7 +22,7 @@ class TypeExtension extends AbstractExtension
         ];
     }
 
-    public function doSomething($value)
+    public function doSomething($value): string
     {
         return $value ? 'Entree' : 'Sortie';
     }

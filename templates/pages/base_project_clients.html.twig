@@ -42,8 +42,8 @@
                             <table class="table">
                                 <tbody>
                                 <tr>
-                                    <td><b>ID du projet</b></td>
-                                    <td>{{ project.projectId }}</td>
+                                    <td><b>Identifiant</b></td>
+                                    <td>{{ project.projectMaster.requestId }}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Nom du projet</b></td>
@@ -112,11 +112,11 @@
                                         <tbody>
                                         {% for financeDetail in financeDetails %}
                                             <tr>
-                                                <td>{{ financeDetail.operationExecutor.nameSurname }}</td>
+                                                <td>{{ financeDetail.user.fullName }}</td>
                                                 <td>{{ financeDetail.type }}</td>
                                                 <td>{{ financeDetail.amount }}</td>
-                                                <td>{{ financeDetail.amountLeftToBeSentByUs }}</td>
-                                                <td>{{ financeDetail.amountLeftToBePaidToUs }}</td>
+                                                <td>{{ financeDetail.amountToSend }}</td>
+                                                <td>{{ financeDetail.amountToReceive }}</td>
                                                 <td>{{ financeDetail.updatedAt|date('d-m-Y H:m:s') }}</td>
                                             </tr>
                                         {% endfor %}
@@ -157,8 +157,8 @@
                                 <tbody>
                                 {% for note in projectNotes %}
                                     <tr>
-                                        <td>{{ note.employee.nameSurname }}</td>
-                                        <td>{{ note.authorRole }}</td>
+                                        <td>{{ note.user.fullName }}</td>
+                                        <td>{{ note.userRoleTranslate }}</td>
                                         <td>{{ note.updatedAt|date('d-m-Y H:i:s') }}</td>
                                         <td>{{ note.content }}</td>
                                     </tr>
@@ -237,7 +237,7 @@
                                 </tr>
 
                                 {% set properties = {
-                                    'nameSurname': 'Nom et prénoms',
+                                    'fullName': 'Nom et prénoms',
                                     'phoneNumber': 'Numéro de téléphone',
                                     'email': 'Email',
                                     'nationality': 'Nationalité',
