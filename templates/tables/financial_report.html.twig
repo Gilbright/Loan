@@ -82,6 +82,7 @@
                                     <th>Reste a debourser </th>
                                     <th>Reste a rembourser</th>
                                     <th>Details</th>
+                                    <th>Documents</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -96,6 +97,24 @@
                                         <td>{{ financialDetail.amountToSend | getDisplay(financialDetail.amountToSend) }}</td>
                                         <td>{{ financialDetail.amountToReceive | getDisplay(financialDetail.amountToReceive) }}</td>
                                         <td>{{ financialDetail.details }}</td>
+                                        <td>
+                                            {% if financialDetail.paymentDetailDoc %}
+                                                <div>
+                                                    <a type="button" class="btn btn-secondary col"
+                                                       href="{{ path('app_download', { 'path' : financialDetail.paymentDetailDoc }) }}">
+                                                        <i class="fas fa-download"></i>
+                                                        <span>Telecharger</span>
+                                                    </a>
+                                                </div>
+                                            {% else %}
+                                                <div>
+                                                    <a type="button" class="btn btn-secondary col">
+                                                        <i class="fas fa-download"></i>
+                                                        <span>Pas de document</span>
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
