@@ -53,7 +53,7 @@
     {% endif %}
 
     {% if project.projectMaster.isFinished == false %}
-        <form method="post">
+        <form method="post" id="savePaymentForm" enctype="multipart/form-data">
             <div class="card {{ statusData[0] }}">
                 <div class="card-header">
                     <div class="row">
@@ -96,7 +96,7 @@
                                         <div class="custom-file">
                                             <input type="file" required="true" class="custom-file-input"
                                                    id="financeDetailDoc" name="financeDetailDoc">
-                                            <label class="custom-file-label" for="financeDetailDoc">Choose file</label>
+                                            <label class="custom-file-label" for="financeDetailDoc">Choisir le fichier</label>
                                         </div>
                                         <div class="input-group-append">
                                             <span class="input-group-text">Upload</span>

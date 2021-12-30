@@ -81,9 +81,14 @@ class UploaderHelper
         return $newFilename;
     }
 
-    public function getImagePath(string $path, ?string $subDirectory = ''): string
+    public function getFilePath(string $path, ?string $subDirectory = ''): string
     {
         return $this->requestStackContext
                 ->getBasePath().$this->publicAssetBaseUrl.'/'.$subDirectory.$path;
+    }
+
+    public function getDownloadPath(string $path, ?string $subDirectory = 'uploads/Phenix/'): string
+    {
+        return $this->requestStackContext->getBasePath().$subDirectory.$path;
     }
 }

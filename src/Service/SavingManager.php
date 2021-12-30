@@ -59,7 +59,7 @@ class SavingManager
     {
         $clientInfos = $this->clientManager->getClientByIdNumber($savingArray['IdNumber']);
 
-        $proofDocument = $this->uploaderHelper->uploadPhenixFile($savingArray['pieceIdentity'], $clientInfos->getIdDocNumber().'-'.uniqid('', true).UploaderHelper::SAVING_DOC_NAME);
+        $proofDocument = $this->uploaderHelper->uploadPhenixFile($savingArray['proofDocument'], $clientInfos->getIdDocNumber().'-'.uniqid('', true).UploaderHelper::SAVING_DOC_NAME);
 
         $savingDetail = (new SavingDetails())
             ->setAmount($savingArray['amount'])

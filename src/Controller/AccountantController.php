@@ -60,13 +60,14 @@ class AccountantController extends AbstractController
         $projectMaster = $projectManager->getProjectMasterById($requestId);
 
         if ($request->isMethod('POST')) {
-            $data = $request->request->all();
+            $data =  array_merge($request->request->all(), $request->files->all());
             $data['requestId'] = $projectMaster->getRequestId();
             $data['project'] = $projectMaster->getProject();
 
             if (isset($data['noteContent'])) {
                 $noteManager->execute($data);
             } elseif (isset($data['paymentDetails'])) {
+
                 $paymentManager->excecute($data);
 
                 if (

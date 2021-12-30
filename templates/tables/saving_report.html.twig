@@ -80,6 +80,7 @@
                                     <th>Mois de l'operation</th>
                                     <th>Details</th>
                                     <th>Date d'enrégistrement</th>
+                                    <th>Document</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -92,6 +93,16 @@
                                         <td>{{ savingDetail.paidMonth }}</td>
                                         <td>{{ savingDetail.details }}</td>
                                         <td>{{ savingDetail.updatedAt | date('d-m-Y H:i:s') }}</td>
+                                        <td>
+                                            <div>
+                                                <a type="button" class="btn btn-secondary col"
+                                                   href="{{ path('app_download', { 'path' : savingDetail.detailDocUrl }) }}">
+                                                    <i class="fas fa-download"></i>
+                                                    <span>Document</span>
+                                                </a>
+                                            </div>
+                                        </td>
+
                                     </tr>
                                 {% endfor %}
                                 </tbody>

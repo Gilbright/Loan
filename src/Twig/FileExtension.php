@@ -28,6 +28,6 @@ class FileExtension extends AbstractExtension
 
     public function getUploadedAssetPath(string $path): string
     {
-       return $this->uploaderHelper->getImagePath($path, 'Phenix/');
+       return $this->uploaderHelper->getFilePath($path, 'Phenix/');
     }
 }
