@@ -8,11 +8,10 @@
 
 namespace App\Service;
 
-use App\Entity\Client;
 use App\Entity\SavingDetails;
+use App\Helper\UploaderHelper;
 use App\Repository\SavingDetailsRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
 
 class SavingManager
 {
@@ -22,11 +21,19 @@ class SavingManager
 
     private ClientManager $clientManager;
 
-    public function __construct(EntityManagerInterface $entityManager, SavingDetailsRepository $savingDetailRepository, ClientManager $clientManager)
+    private UploaderHelper $uploaderHelper;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        SavingDetailsRepository $savingDetailRepository,
+        ClientManager $clientManager,
+        UploaderHelper $uploaderHelper
+    )
     {
         $this->savingRepository = $savingDetailRepository;
         $this->entityManager = $entityManager;
         $this->clientManager = $clientManager;
+        $this->uploaderHelper = $uploaderHelper;
     }
 
     public function getAllSavingDetails(): array
@@ -52,14 +59,16 @@ class SavingManager
     {
         $clientInfos = $this->clientManager->getClientByIdNumber($savingArray['IdNumber']);
 
+        $proofDocument = $this->uploaderHelper->uploadPhenixFile($savingArray['proofDocument'], $clientInfos->getIdDocNumber().'-'.uniqid('', true).UploaderHelper::SAVING_DOC_NAME);
+
         $savingDetail = (new SavingDetails())
             ->setAmount($savingArray['amount'])
             ->setClient($clientInfos)
-            ->setDetailDocUrl($savingArray['proofDocument'])
+            ->setDetailDocUrl($proofDocument)
             ->setPaidMonth($savingArray['month'])
             ->setType('cotisation' === $savingArray['type'] ? 1 : 0)
             ->setDetails($savingArray['details'])
-            ->setExtra([]);;
+            ->setExtra([]);
 
         //updating the client's balance
         if ('cotisation' === $savingArray['type']) {

@@ -12,6 +12,7 @@ use App\Entity\PaymentDetails;
 use App\Entity\ProjectMaster;
 use App\Helper\Status;
 use App\Helper\TypeHelper;
+use App\Helper\UploaderHelper;
 use App\Repository\PaymentDetailsRepository;
 use App\Service\OptionsResolver\PaymentDetailResolver;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,6 +24,8 @@ class PaymentManager
 
     private ProjectManager $projectManager;
 
+    private UploaderHelper $uploaderHelper;
+
     private PaymentDetailsRepository $paymentDetailsRepository;
 
     /**
@@ -30,11 +33,12 @@ class PaymentManager
      * @param ProjectManager $projectManager
      * @param PaymentDetailsRepository $paymentDetailsRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, ProjectManager $projectManager, PaymentDetailsRepository $paymentDetailsRepository)
+    public function __construct(EntityManagerInterface $entityManager, ProjectManager $projectManager, PaymentDetailsRepository $paymentDetailsRepository, UploaderHelper $uploaderHelper)
     {
         $this->entityManager = $entityManager;
         $this->projectManager = $projectManager;
         $this->paymentDetailsRepository = $paymentDetailsRepository;
+        $this->uploaderHelper = $uploaderHelper;
     }
 
     public function excecute(array $data)
@@ -45,10 +49,12 @@ class PaymentManager
 
         $type = $data['dropdownName'] === 'Entree';
 
+        $proofDocument = $this->uploaderHelper->uploadPhenixFile($data['financeDetailDoc'], $projectMaster->getRequestId().'-'.uniqid('', true).UploaderHelper::SAVING_DOC_NAME);
+
         $paymentDetails = (new PaymentDetails())
             ->setType($type)
             ->setAmount((int)$data['amount'])
-            ->setPaymentDetailDoc($data['financeDetailDoc'])
+            ->setPaymentDetailDoc($proofDocument)
             ->setAmountToReceive($this->calculateAmountToReceive($projectMaster, (int)$data['amount'], strtolower($data['dropdownName'])))
             ->setAmountToSend($this->calculateAmountToSend($projectMaster, (int)$data['amount'], strtolower($data['dropdownName'])))
             ->setProjectMaster($projectMaster)

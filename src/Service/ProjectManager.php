@@ -9,6 +9,7 @@ use App\Entity\Project;
 use App\Entity\ProjectMaster;
 use App\Helper\MailReceiverHelper;
 use App\Helper\Status;
+use App\Helper\UploaderHelper;
 use App\Repository\ProjectMasterRepository;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ProjectResolver;
@@ -40,14 +41,26 @@ class ProjectManager
     /** @var ClientManager */
     private ClientManager $clientManager;
 
+    private UploaderHelper $uploaderHelper;
+
     /**
-     * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
-     * @param ProjectRepository $projectRepository
+     * @param ProjectMasterRepository $projectMasterRepository
      * @param EmployeeManager $employeeManager
      * @param MailerManager $mailerManager
+     * @param ClientManager $clientManager
+     * @param ProjectRepository $projectRepository
+     * @param UploaderHelper $uploaderHelper
      */
-    public function __construct(EntityManagerInterface $entityManager, ProjectMasterRepository $projectMasterRepository, EmployeeManager $employeeManager, MailerManager $mailerManager, ClientManager $clientManager, ProjectRepository $projectRepository)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ProjectMasterRepository $projectMasterRepository,
+        EmployeeManager $employeeManager,
+        MailerManager $mailerManager,
+        ClientManager $clientManager,
+        ProjectRepository $projectRepository,
+        UploaderHelper $uploaderHelper
+    )
     {
         $this->entityManager = $entityManager;
         $this->projectMasterRepository = $projectMasterRepository;
@@ -55,6 +68,7 @@ class ProjectManager
         $this->mailerManager = $mailerManager;
         $this->clientManager = $clientManager;
         $this->projectRepository = $projectRepository;
+        $this->uploaderHelper = $uploaderHelper;
     }
 
     public function execute(array $data): ?string
@@ -63,6 +77,9 @@ class ProjectManager
 
         $requestId = str_replace('.', '', uniqid('ph_', false));
 
+        $businessPlanDoc = $this->uploaderHelper->uploadPhenixFile($data['businessPlanDoc'], $requestId.UploaderHelper::BUS_PLAN_DOC_NAME);
+        $detailsExtraDoc = $this->uploaderHelper->uploadPhenixFile($data['detailsExtraDoc'], $requestId.UploaderHelper::DET_EXTRA_DOC_NAME);
+
         $projectEntity = (new Project())
             ->setStatus(Status::EXP_WAITING_FOR_ANALYSIS)
             ->setRepaymentDuration((int)$this->repaymentDurationCalculator($data))
@@ -70,8 +87,8 @@ class ProjectManager
             ->setModalityAmount((int)$data['modalityAmount'])
             ->setAmount((int)$data['amountWanted'])
             ->setFinalAmount(0)
-            ->setBusinessPlanDocUrl($data['businessPlanDoc'])
-            ->setDetailsExtraDocUrl($data['detailsExtraDoc'])
+            ->setBusinessPlanDocUrl($businessPlanDoc)
+            ->setDetailsExtraDocUrl($detailsExtraDoc)
             ->setName($data['projectName'])
             ->setDetails($data['projectDetails'])
         ;

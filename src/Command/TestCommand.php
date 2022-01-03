@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Helper\UploaderHelper;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectMasterRepository;
 use App\Service\ClientManager;
@@ -29,10 +30,17 @@ class TestCommand extends Command
     /** @var ClientManager */
     private $clientManager;
 
-    public function __construct(ClientRepository $clientRepository, ProjectMasterRepository $projectMasterRepository, ClientManager $clientManager, string $name = null)
+    private  UploaderHelper $uploaderHelper;
+
+    public function __construct(
+        ClientRepository $clientRepository,
+        ProjectMasterRepository $projectMasterRepository,
+        UploaderHelper $uploaderHelper,
+        string $name = null)
     {
         $this->projectMasterRepository =$projectMasterRepository;
         $this->clientRepository = $clientRepository;
+        $this->uploaderHelper = $uploaderHelper;
         parent::__construct($name);
     }
 
@@ -47,20 +55,10 @@ class TestCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
 
-        $client = $this->clientRepository->find(2);
-        $projectMaster = $this->projectMasterRepository->find(1);
+        $demo = $this->uploaderHelper->getImagePath('90594268_user_id_doc_document.jpg', 'Phenix/');
 
-       $projectMaster->getClients()->count();
-
-
-        dd($this->clientManager->isEligible([
-            'IdNumber' => $client->getIdDocNumber(),
-            'amount'  => 23445
-        ]));
-
-
+        dd($demo);
         return Command::SUCCESS;
     }
 }

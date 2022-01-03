@@ -1,2 +1,41 @@
 {% extends 'layout.html.twig' %}
-{% block body %}{% endblock %}
+{% block body %}
+    <section class="content-header">
+        <div class="card-img">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"></h3>
+                        </div>
+                        <div class="card-body">
+                            <a class="app-logo" href="#"><img class="card-img-top" src="{{ asset('build/images/benin.png') }}" alt="logo"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"></h3>
+                        </div>
+
+                        <div class="card-body">
+                            <a class="app-logo" href="#"><img class="card-img-top" src="{{ asset('build/images/image_phenix.png') }}" alt="logo"></a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"></h3>
+                        </div>
+                        <div class="card-body">
+                            <a class="app-logo" href="#"><img class="card-img-top" src="{{ asset('build/images/france.png') }}" alt="logo"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -24,7 +24,6 @@ Encore
     .addEntry('phenix_base', './assets/phenix_base.js')
     .addEntry('login', './assets/login.js')
     .addEntry('mailer', './assets/mailer.js')
-    .addEntry('input_form', './assets/input_form.js')
     .addEntry('form_validation', './assets/form_validation.js')
     .addEntry('datatable', './assets/datatable.js')
     .addEntry('login_demo', './assets/login_demo.js')

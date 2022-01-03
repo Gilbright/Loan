@@ -9,12 +9,16 @@
 namespace App\Controller;
 
 
+use App\Helper\UploaderHelper;
 use App\Service\ClientManager;
 use App\Service\ProjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -45,14 +49,14 @@ class HomeController extends AbstractController
             $requestId = $request->request->all()['requestId'];
 
             $projectMaster = $projectManager->getProjectMasterById($requestId);
-            $projectTeam    = $projectMaster->getClients();
-            $projectNotes   = $projectMaster->getProject()->getNotes();
+            $projectTeam = $projectMaster->getClients();
+            $projectNotes = $projectMaster->getProject()->getNotes();
             $paymentDetails = $projectMaster->getPaymentDetails();
 
             return $this->render('pages/consult_status.html.twig', [
-                'project'       => $projectMaster->getProject(),
-                'projectTeam'   => $projectTeam,
-                'projectNotes'  => $projectNotes,
+                'project' => $projectMaster->getProject(),
+                'projectTeam' => $projectTeam,
+                'projectNotes' => $projectNotes,
                 'financeDetails' => $paymentDetails
             ]);
         }
@@ -75,12 +79,40 @@ class HomeController extends AbstractController
             $client = $clientManager->getClientByIdNumber($clientIdNumber);
 
             return $this->render('pages/consult_status_client.html.twig', [
-                'client'        => $client,
-                'projects'      => $clientManager->getClientProjects($client->getProjectMasters()),
+                'client' => $client,
+                'projects' => $clientManager->getClientProjects($client->getProjectMasters()),
                 'savingDetails' => $client->getSavingDetails()
             ]);
         }
 
         return $this->render('pages/consult_status_client.html.twig');
     }
+
+    /**
+     * @Route("/download/{path}", name="app_download")
+     * @param string $path
+     * @param UploaderHelper $uploaderHelper
+     * @return BinaryFileResponse
+     */
+    public function fileDownloadHandler(string $path, UploaderHelper $uploaderHelper)
+    {
+        try {
+            $filePath = $uploaderHelper->getDownloadPath($path);
+
+            $response = new BinaryFileResponse($filePath);
+
+            $response->headers->set('Content-Type', 'text/plain');
+
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $path);
+
+            return $response;
+        } catch (\Throwable $exception){
+            $array = array (
+                'status' => 400,
+                'message' => 'Download error'
+            );
+            return new JsonResponse( $array, 400 );
+        }
+    }
+
 }

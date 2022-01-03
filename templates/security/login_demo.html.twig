@@ -28,8 +28,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="app-auth-branding mb-4">
-                        <a class="app-logo" href="#"><img class="card-img-top"
-                                                          src="{{ asset('build/images/benin.png') }}" alt="logo"></a>
+                        <a class="app-logo" href="#"><img class="card-img-top" src="{{ asset('build/images/benin.png') }}" alt="logo"></a>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -59,12 +58,12 @@
                         <form class="auth-form login-form">
                             <div class="email mb-3">
                                 <label class="sr-only" for="signin-email">Email</label>
-                                <input id="signin-email" name="email" type="email" class="form-control signin-email"
+                                <input id="signin-email" name="emailInput" type="email" class="form-control signin-email"
                                        placeholder="Email address" value="{{ last_username }}" required="required">
                             </div><!--//form-group-->
                             <div class="password mb-3">
                                 <label class="sr-only" for="signin-password">Mot de Passe</label>
-                                <input id="signin-password" name="password" type="password"
+                                <input id="signin-password" name="passwordInput" type="password"
                                        class="form-control signin-password" placeholder="Password" required="required">
                                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                                 <div class="extra mt-3 row justify-content-between">

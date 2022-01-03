@@ -22,6 +22,7 @@
                         <th>Montant restant a debourser pour le project</th>
                         <th>Montant restant a rembourser</th>
                         <th>Date d'ajout</th>
+                        <th>Document</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,6 +39,24 @@
                             <td>{{ financeDetail.amountToSend }}</td>
                             <td>{{ amountInfos }}</td>
                             <td>{{ financeDetail.createdAt|date('d-m-Y H:i:s') }}</td>
+                            <td>
+                                {% if financeDetail.paymentDetailDoc %}
+                                    <div>
+                                        <a type="button" class="btn btn-secondary col"
+                                           href="{{ path('app_download', { 'path' : financeDetail.paymentDetailDoc }) }}">
+                                            <i class="fas fa-download"></i>
+                                            <span>Telecharger</span>
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <a type="button" class="btn btn-secondary col">
+                                            <i class="fas fa-download"></i>
+                                            <span>Pas de document</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -53,7 +72,7 @@
     {% endif %}
 
     {% if project.projectMaster.isFinished == false %}
-        <form method="post">
+        <form method="post" id="savePaymentForm" enctype="multipart/form-data">
             <div class="card {{ statusData[0] }}">
                 <div class="card-header">
                     <div class="row">
@@ -96,7 +115,7 @@
                                         <div class="custom-file">
                                             <input type="file" required="true" class="custom-file-input"
                                                    id="financeDetailDoc" name="financeDetailDoc">
-                                            <label class="custom-file-label" for="financeDetailDoc">Choose file</label>
+                                            <label class="custom-file-label" for="financeDetailDoc">Choisir le fichier</label>
                                         </div>
                                         <div class="input-group-append">
                                             <span class="input-group-text">Upload</span>

@@ -4,14 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Helper\Status;
+use App\Helper\UploaderHelper;
 use App\Service\ClientManager;
 use App\Service\NoteManager;
 use App\Service\ProjectManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -27,10 +27,13 @@ class SecretaryController extends AbstractController
      * @param ProjectManager $projectManager
      * @return Response
      */
-    public function index(Request $request, ProjectManager $projectManager): Response
+    public function index(Request $request, ProjectManager $projectManager, UploaderHelper $uploaderHelper): Response
     {
         if ($request->isMethod('POST')) {
-            $requestId = $projectManager->execute($request->request->all());
+
+            $data = array_merge($request->files->all(), $request->request->all());
+
+            $requestId = $projectManager->execute($data);
 
             return $this->redirectToRoute('app_sec_list_client', ['requestId' => $requestId]);
         }
@@ -123,7 +126,10 @@ class SecretaryController extends AbstractController
     public function AddClient(Request $request, ClientManager $clientManager): Response
     {
         if ($request->isMethod('POST')) {
-            $clientManager->addClient($request->request->all());
+
+            $data = array_merge($request->files->all(), $request->request->all());
+
+            $clientManager->addClient($data);
 
             return $this->redirectToRoute('admin');
         }
