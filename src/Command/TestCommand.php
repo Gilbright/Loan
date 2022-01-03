@@ -58,7 +58,6 @@ class TestCommand extends Command
 
         $demo = $this->uploaderHelper->getImagePath('90594268_user_id_doc_document.jpg', 'Phenix/');
 
-        dd($demo);
         return Command::SUCCESS;
     }
 }

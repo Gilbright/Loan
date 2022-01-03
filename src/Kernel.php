@@ -36,7 +36,7 @@ class Kernel extends BaseKernel
         }
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return "/tmp/loan";
     }

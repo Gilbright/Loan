@@ -47,28 +47,28 @@ services:
     networks:
       - app-loan-network
 
-  maildev:
-    image: maildev/maildev
-    container_name: app-loan-maildev
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
-    ports:
-      - 9959:80
-    restart: on-failure
-    networks:
-      - app-loan-network
+#  maildev:
+#    image: maildev/maildev
+#    container_name: app-loan-maildev
+#    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+#    ports:
+#      - 9959:80
+#    restart: on-failure
+#    networks:
+#      - app-loan-network
 
-  blackfire:
-    image: blackfire/blackfire
-    container_name: blackfire_symfony
-    ports: ["8707"]
-    environment:
-      # Exposes BLACKFIRE_* environment variables from the host
-      BLACKFIRE_SERVER_ID: $BLACKFIRE_SERVER_ID
-      BLACKFIRE_SERVER_TOKEN: $BLACKFIRE_SERVER_TOKEN
-      BLACKFIRE_CLIENT_ID: $BLACKFIRE_CLIENT_ID
-      BLACKFIRE_CLIENT_TOKEN: $BLACKFIRE_CLIENT_TOKEN
-    networks:
-      - app-loan-network
+#  blackfire:
+#    image: blackfire/blackfire
+#    container_name: blackfire_symfony
+#    ports: ["8707"]
+#    environment:
+#      # Exposes BLACKFIRE_* environment variables from the host
+#      BLACKFIRE_SERVER_ID: $BLACKFIRE_SERVER_ID
+#      BLACKFIRE_SERVER_TOKEN: $BLACKFIRE_SERVER_TOKEN
+#      BLACKFIRE_CLIENT_ID: $BLACKFIRE_CLIENT_ID
+#      BLACKFIRE_CLIENT_TOKEN: $BLACKFIRE_CLIENT_TOKEN
+#    networks:
+#      - app-loan-network
 
 networks:
   app-loan-network:
