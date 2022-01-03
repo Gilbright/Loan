@@ -14,8 +14,10 @@ import './subJS/client_validation.js'
 
 import './subJS/employee_validation.js'
 
-import './input_form.js'
-
 import './subJS/login_validation.js'
 
 import './subJS/saving_validation.js'
+
+import  './subJS/save_payment_validation.js'
+
+import './input_form.js'
