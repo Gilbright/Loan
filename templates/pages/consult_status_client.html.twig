@@ -132,6 +132,32 @@
                                             <td><b>Addresse</b></td>
                                             <td>{{ client.address }}</td>
                                         </tr>
+                                        <tr>
+                                            <td><b>Document d'identité</b></td>
+                                            <td>
+                                                <div>
+                                                    <a type="button" class="btn btn-secondary col"
+                                                       href="{{ path('app_download', { 'path' : client.idDocPictureUrl }) }}">
+                                                        <i class="fas fa-download"></i>
+                                                        <span>Telecharger</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><b>Photo d'identité</b></td>
+                                            <td>
+                                                <div>
+                                                    <a type="button" class="btn btn-secondary col"
+                                                       href="{{ path('app_download', { 'path' : client.idPictureUrl }) }}">
+                                                        <i class="fas fa-download"></i>
+                                                        <span>Telecharger</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -256,6 +282,7 @@
                                            <th>Mois payé</th>
                                            <th>Details</th>
                                            <th>Date D'enregistement</th>
+                                           <th>Document</th>
                                        </tr>
                                        </thead>
                                        <tbody>
@@ -266,6 +293,17 @@
                                                <td>{{ savingDetail.paidMonth }}</td>
                                                <td>{{ savingDetail.details}}</td>
                                                <td>{{ savingDetail.createdAt | date('d-m-Y H:m:s') }}</td>
+
+                                               <td>
+                                                   <div>
+                                                       <a type="button" class="btn btn-secondary col"
+                                                          href="{{ path('app_download', { 'path' : savingDetail.detailDocUrl }) }}">
+                                                           <i class="fas fa-download"></i>
+                                                           <span>Document</span>
+                                                       </a>
+                                                   </div>
+                                               </td>
+
                                            </tr>
                                        {% endfor %}
                                        </tbody>

@@ -144,10 +144,10 @@
                                                 <td>{{ financeDetail.amountToReceive }}</td>
                                                 <td>{{ financeDetail.updatedAt|date('d-m-Y H:m:s') }}</td>
                                                 <td>
-                                                    {% if financialDetail.paymentDetailDoc %}
+                                                    {% if financeDetail.paymentDetailDoc %}
                                                         <div>
                                                             <a type="button" class="btn btn-secondary col"
-                                                               href="{{ path('app_download', { 'path' : financialDetail.paymentDetailDoc }) }}">
+                                                               href="{{ path('app_download', { 'path' : financeDetail.paymentDetailDoc }) }}">
                                                                 <i class="fas fa-download"></i>
                                                                 <span>Telecharger</span>
                                                             </a>
@@ -288,6 +288,7 @@
                                     'monthlyIncome': 'Revenu mensuel',
                                     'birthDate': 'Date de naissance',
                                     'profession': 'Profession',
+                                    'idDocNumber': 'Identifiant',
                                 } %}
 
                                 {% for key,property in properties %}

@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\Client;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -24,6 +25,7 @@ class GetClientField extends AbstractExtension
 
     public function doSomething(array $clientKey): string
     {
+        /** @var Client $client */
         [$key, $client] = array_values($clientKey);
 
         return match ($key) {
@@ -35,6 +37,7 @@ class GetClientField extends AbstractExtension
             'monthlyIncome' => $client->getMonthlyIncome(),
             'birthDate'     => $client->getBirthDate()->format('d-m-Y'),
             'profession'    => $client->getProfession(),
+            'idDocNumber'         => $client->getIdDocNumber(),
             default         => '',
         };
     }
