@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Employee;
+use App\Helper\UploaderHelper;
 use App\Service\EmployeeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,17 +40,20 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/account", name="app_account")
+     * @Route("/employee/account", name="app_account")
      */
-    public function account(): Response
+    public function account(UploaderHelper $uploaderHelper): Response
     {
         return $this->render('pages/account.html.twig',
-            ['user' => $this->getUser()]
+            [
+                'user' => $this->getUser(),
+                'imageUrl' => 'Demonstration/account-60a8e3095ecdf.png'
+            ]
         );
     }
 
     /**
-     * @Route("/account-updates", name="app_account_updates")
+     * @Route("/employee/account-updates", name="app_account_updates")
      * @param Request $request
      * @param EmployeeManager $employeeManager
      * @return Response
@@ -58,7 +61,7 @@ class SecurityController extends AbstractController
     public function accountUpdates(Request $request, EmployeeManager $employeeManager): Response
     {
         if ($request->isMethod('POST')){
-            $employeeManager->updateEmployeeInfos($request->request->all(), $this->getUser());
+            $employeeManager->updateUserInfos($request->request->all(), $this->getUser());
 
             return $this->redirectToRoute('app_account');
         }

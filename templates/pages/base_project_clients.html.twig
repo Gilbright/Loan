@@ -42,8 +42,8 @@
                             <table class="table">
                                 <tbody>
                                 <tr>
-                                    <td><b>ID du projet</b></td>
-                                    <td>{{ project.projectId }}</td>
+                                    <td><b>Identifiant</b></td>
+                                    <td>{{ project.projectMaster.requestId }}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Nom du projet</b></td>
@@ -77,6 +77,30 @@
                                         mois
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><b>Business Plan</b></td>
+                                    <td>
+                                        <div>
+                                            <a type="button" class="btn btn-secondary col"
+                                               href="{{ path('app_download', { 'path' : project.businessPlanDocUrl }) }}">
+                                                <i class="fas fa-download"></i>
+                                                <span>Telecharger</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Autres Details</b></td>
+                                    <td>
+                                        <div>
+                                            <a type="button" class="btn btn-secondary col"
+                                               href="{{ path('app_download', { 'path' : project.detailsExtraDocUrl }) }}">
+                                                <i class="fas fa-download"></i>
+                                                <span>Telecharger</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -104,20 +128,39 @@
                                             <th>Auteur</th>
                                             <th>Type</th>
                                             <th>Montant</th>
-                                            <th>Montant restant a debourser pour le project</th>
+                                            <th>Montant restant a debourser pour le projet</th>
                                             <th>Montant restant a rembourser</th>
                                             <th>Date d'ajout</th>
+                                            <th>Document</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for financeDetail in financeDetails %}
                                             <tr>
-                                                <td>{{ financeDetail.operationExecutor.nameSurname }}</td>
+                                                <td>{{ financeDetail.user.fullName }}</td>
                                                 <td>{{ financeDetail.type }}</td>
                                                 <td>{{ financeDetail.amount }}</td>
-                                                <td>{{ financeDetail.amountLeftToBeSentByUs }}</td>
-                                                <td>{{ financeDetail.amountLeftToBePaidToUs }}</td>
+                                                <td>{{ financeDetail.amountToSend }}</td>
+                                                <td>{{ financeDetail.amountToReceive }}</td>
                                                 <td>{{ financeDetail.updatedAt|date('d-m-Y H:m:s') }}</td>
+                                                <td>
+                                                    {% if financeDetail.paymentDetailDoc %}
+                                                        <div>
+                                                            <a type="button" class="btn btn-secondary col"
+                                                               href="{{ path('app_download', { 'path' : financeDetail.paymentDetailDoc }) }}">
+                                                                <i class="fas fa-download"></i>
+                                                                <span>Telecharger</span>
+                                                            </a>
+                                                        </div>
+                                                    {% else %}
+                                                        <div>
+                                                            <a type="button" class="btn btn-secondary col">
+                                                                <i class="fas fa-download"></i>
+                                                                <span>Pas de document</span>
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -157,8 +200,8 @@
                                 <tbody>
                                 {% for note in projectNotes %}
                                     <tr>
-                                        <td>{{ note.employee.nameSurname }}</td>
-                                        <td>{{ note.authorRole }}</td>
+                                        <td>{{ note.user.fullName }}</td>
+                                        <td>{{ note.userRoleTranslate }}</td>
                                         <td>{{ note.updatedAt|date('d-m-Y H:i:s') }}</td>
                                         <td>{{ note.content }}</td>
                                     </tr>
@@ -237,7 +280,7 @@
                                 </tr>
 
                                 {% set properties = {
-                                    'nameSurname': 'Nom et prénoms',
+                                    'fullName': 'Nom et prénoms',
                                     'phoneNumber': 'Numéro de téléphone',
                                     'email': 'Email',
                                     'nationality': 'Nationalité',
@@ -245,6 +288,7 @@
                                     'monthlyIncome': 'Revenu mensuel',
                                     'birthDate': 'Date de naissance',
                                     'profession': 'Profession',
+                                    'idDocNumber': 'Identifiant',
                                 } %}
 
                                 {% for key,property in properties %}

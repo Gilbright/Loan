@@ -1,21 +1,21 @@
 $(function () {
     $('#loginForm').validate({
         rules: {
-            email: {
+            emailInput: {
                 required: true,
                 email: true,
             },
-            password: {
+            passwordInput: {
                 required: true,
                 minlength: 5
             }
         },
         messages: {
-            email: {
+            emailInput: {
                 required: "Veuillez entrer votre addresse électronique",
                 email: "Veuillez entrer une addresse électronique valide"
             },
-            password: {
+            passwordInput: {
                 required: "Veuillez entrer votre mot de passe",
                 minlength: "Veuillez entrer un mot de passe valide"
             }

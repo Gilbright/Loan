@@ -2,14 +2,13 @@
 
 namespace App\Security;
 
-use App\Entity\Employee;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -21,16 +20,18 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class EmployeeAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
+class LoginAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private $entityManager;
-    private $urlGenerator;
-    private $csrfTokenManager;
-    private $passwordEncoder;
+    public const HOME_ROUTE = 'admin';
+
+    private EntityManagerInterface $entityManager;
+    private UrlGeneratorInterface $urlGenerator;
+    private CsrfTokenManagerInterface $csrfTokenManager;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -49,10 +50,11 @@ class EmployeeAuthenticator extends AbstractFormLoginAuthenticator implements Pa
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'email' => $request->request->get('email'),
-            'password' => $request->request->get('password'),
+            'email' => $request->request->get('emailInput'),
+            'password' => $request->request->get('passwordInput'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
+
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['email']
@@ -68,7 +70,7 @@ class EmployeeAuthenticator extends AbstractFormLoginAuthenticator implements Pa
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(Employee::class)->findOneBy(['email' => $credentials['email']]);
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $credentials['email']]);
 
         if (!$user) {
             // fail authentication with a custom error
@@ -97,8 +99,7 @@ class EmployeeAuthenticator extends AbstractFormLoginAuthenticator implements Pa
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('admin'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        return new RedirectResponse($this->urlGenerator->generate(self::HOME_ROUTE));
     }
 
     protected function getLoginUrl()

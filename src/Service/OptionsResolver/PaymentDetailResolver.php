@@ -11,7 +11,7 @@ namespace App\Service\OptionsResolver;
 
 use Symfony\Component\OptionsResolver\OptionsResolver as SymfonyOptionsResolver;
 
-class FinancialDetailResolver extends AbstractOptionResolver
+class PaymentDetailResolver extends AbstractOptionResolver
 {
     /**
      * @param $data
@@ -19,17 +19,17 @@ class FinancialDetailResolver extends AbstractOptionResolver
      */
     public static function _resolve($data)
     {
-        $data = (new SymfonyOptionsResolver())
+        return (new SymfonyOptionsResolver())
             ->setRequired([
                 'dropdownName',
                 'amount',
-                'paymentDetails'
+                'paymentDetails',
+                'requestId'
             ])
             ->setAllowedTypes('dropdownName', 'string')
             ->setAllowedTypes('amount', ['float', 'int', 'string'])
             ->setAllowedTypes('paymentDetails' , 'string')
-            ->resolve($data)
-        ;
-        return $data;
+            ->setAllowedTypes('requestId' , 'string')
+            ->resolve($data);
     }
 }

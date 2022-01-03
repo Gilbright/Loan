@@ -22,20 +22,20 @@ class Note
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Employee::class, inversedBy="notes")
-     */
-    private $employee;
-
-
-    /**
      * @ORM\Column(type="text")
      */
     private $content;
 
     /**
-    * @ORM\Column(type="string", nullable=false)
-    */
-    private $authorRole;
+     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="notes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private string $userRoleTranslate;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="notes")
@@ -48,18 +48,6 @@ class Note
         return $this->id;
     }
 
-    public function getEmployee(): ?Employee
-    {
-        return $this->employee;
-    }
-
-    public function setEmployee(?Employee $employee): self
-    {
-        $this->employee = $employee;
-
-        return $this;
-    }
-
     public function getContent(): ?string
     {
         return $this->content;
@@ -68,6 +56,18 @@ class Note
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
@@ -87,18 +87,18 @@ class Note
     /**
      * @return string
      */
-    public function getAuthorRole(): string
+    public function getUserRoleTranslate(): string
     {
-        return $this->authorRole;
+        return $this->userRoleTranslate;
     }
 
     /**
-     * @param string $authorRole
+     * @param string $roleTranslate
      * @return $this
      */
-    public function setAuthorRole(string $authorRole): self
+    public function setUserRoleTranslate(string $roleTranslate): self
     {
-        $this->authorRole = $authorRole;
+        $this->userRoleTranslate = $roleTranslate;
 
         return $this;
     }

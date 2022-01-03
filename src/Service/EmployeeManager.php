@@ -4,117 +4,129 @@
 namespace App\Service;
 
 
-use App\Entity\Employee;
+use App\Entity\Users;
 use App\Helper\RoleHelper;
-use App\Repository\EmployeeRepository;
+use App\Helper\UploaderHelper;
+use App\Repository\UsersRepository;
 use App\Service\OptionsResolver\EmployeeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EmployeeManager
 {
-    /** @var EntityManagerInterface $entityManager */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
+
+    private UsersRepository $usersRepository;
+
+    private UserPasswordHasherInterface $passwordEncoder;
+
+    private UploaderHelper $uploaderHelper;
 
     /**
-     * @var EmployeeRepository $employeeRepository
-     */
-    private $employeeRepository;
-
-    /**
-     * @var UserPasswordEncoderInterface $passWordEncoder
-     */
-    private $passwordEncoder;
-
-    /**
-     * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
-     * @param EmployeeRepository $employeeRepository
+     * @param UsersRepository $usersRepository
+     * @param UserPasswordHasherInterface $encoder
      */
-    public function __construct(EntityManagerInterface $entityManager, EmployeeRepository $employeeRepository, UserPasswordEncoderInterface $encoder)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UsersRepository $usersRepository,
+        UserPasswordHasherInterface $encoder,
+        UploaderHelper $uploaderHelper
+    )
     {
         $this->passwordEncoder = $encoder;
         $this->entityManager = $entityManager;
-        $this->employeeRepository = $employeeRepository;
+        $this->usersRepository = $usersRepository;
+        $this->uploaderHelper = $uploaderHelper;
     }
 
-
+    /**
+     * @param array $data
+     */
     public function execute(array $data): void
     {
         $data = EmployeeResolver::resolve($data);
 
         $gender = $data['gender'] === 'Homme' ? 'H' : 'F';
 
-        $employeeEntity = new Employee();
+        $userEntity = new Users();
 
-        $encodedPassword = $this->passwordEncoder->encodePassword($employeeEntity, 'phenix');
+        $encodedPassword = $this->passwordEncoder->hashPassword($userEntity, '123456');
 
-        $employeeEntity->setAddress($data['address'])
+        $idDocNumber = $data['idNumber'];
+
+        $idDocPathName = $this->uploaderHelper->uploadPhenixFile($data['pieceIdentity'], $idDocNumber.UploaderHelper::USER_ID_DOC_PATH_NAME);
+        $idPathName = $this->uploaderHelper->uploadPhenixFile($data['photoIdentity'], $idDocNumber.UploaderHelper::USER_ID_PATH_NAME);
+
+        $userEntity->setAddress($data['address'])
             ->setPhoneNumber($data['phoneNumber'])
             ->setEmail($data['email'])
-            ->setNameSurname($data['nameSurname'])
-            ->setIdDocumentPictureLink("link there")
-            ->setIdPictureLink("link here")
+            ->setUsername($data['email'])
+            ->setFullName($data['nameSurname'])
+            ->setIdDocUrl($idDocPathName)
+            ->setPhotoUrl($idPathName)
             ->setNationality($data['nationality'])
             ->setGender($gender)
-            ->setIdDocNumber($data['idDocNumber'])
+            ->setIdDocNumber($data['idNumber'])
             ->setRoles($this->roleParser($data['role']))
             ->setPassword($encodedPassword)
-            ->setBirthDate($data['birthDate']);
+            ->setIsActive(true)
+            ->setBirthDate(new \DateTimeImmutable($data['birthDate']))
+        ;
 
-        $this->entityManager->persist($employeeEntity);
+        $this->entityManager->persist($userEntity);
         $this->entityManager->flush();
     }
 
+    /**
+     * @param $role
+     * @return array
+     */
     public function roleParser($role): array
     {
-        switch (strtolower($role)) {
-            case 'secretaire':
-                return [RoleHelper::SECRETARY];
-            case 'directeur':
-                return [RoleHelper::BOSS];
-            case 'tresorier':
-                return [RoleHelper::ACCOUNTANT];
-            case 'expert':
-                return [RoleHelper::EXPERT];
-            default:
-                throw new Exception('Aucun Role Correspondant au choix de fonction effectué');
-        }
+        return match (strtolower($role)) {
+            RoleHelper::SECRETARY_FR => [RoleHelper::SECRETARY],
+            RoleHelper::BOSS_FR => [RoleHelper::BOSS],
+            RoleHelper::ACCOUNTANT_FR => [RoleHelper::ACCOUNTANT],
+            RoleHelper::EXPERT_FR => [RoleHelper::EXPERT],
+            default => throw new Exception('Aucun Role Correspondant au choix de fonction effectué'),
+        };
     }
 
     /**
-     * @return Employee[]
+     * @return Users[]
      */
-    public function getEmployees(): array
+    public function getUsers(): array
     {
-        return $this->employeeRepository->findAll();
+        return $this->usersRepository->findAll();
     }
 
-    public function getEmployeesByRole($role)
+    public function getUsersByRole($role)
     {
         $qb = $this->entityManager->createQueryBuilder();
+
         return $qb->select('u')
-            ->from(Employee::class, 'u')
+            ->from(Users::class, 'u')
             ->where('u.roles like :roles')
             ->setParameter('roles', '%"' . $role . '"%')
             ->getQuery()->getResult();
     }
 
-    public function updateEmployeeInfos(array $data, Employee $employee): void
+    public function updateUserInfos(array $data, Users $user): void
     {
-        $employee
+        $user
             ->setPhoneNumber($data['phoneNumber'])
             ->setEmail($data['email'])
         ;
 
         if ($data['address']){
-            $employee->setAddress($data['address']);
+            $user->setAddress($data['address']);
         }
 
         if ($data['password']){
-            $password = $this->passwordEncoder->encodePassword($employee, $data['password']);
-            $employee->setPassword($password);
+            $password = $this->passwordEncoder->hashPassword($user, $data['password']);
+            $user->setPassword($password);
         }
 
         $this->entityManager->flush();

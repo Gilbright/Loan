@@ -11,6 +11,8 @@ namespace App\Service;
 
 use App\Entity\Employee;
 use App\Entity\Project;
+use App\Entity\ProjectMaster;
+use App\Entity\Users;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
@@ -29,16 +31,16 @@ class MailerManager
         $this->mailerSender = $mailer;
     }
 
-    public function sendMailNotification(Project $project,Employee $employee)
+    public function sendMailNotification(ProjectMaster $projectMaster, Users $user)
     {
         $mailObject = (new TemplatedEmail())
             ->from(self::FROM_ADDRESS)
-            ->to($employee->getEmail())
-            ->subject('Notification sur le statut du projet ' . $project->getProjectId())
+            ->to($user->getEmail())
+            ->subject('Notification sur le statut du projet ' . $projectMaster->getRequestId())
             ->htmlTemplate('mails/employee_mail.html.twig')
             ->context([
-                'project' => $project,
-                'employee' => $employee
+                'project' => $projectMaster->getProject(),
+                'user' => $user
             ])
         ;
 

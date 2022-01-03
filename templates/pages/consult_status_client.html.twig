@@ -90,7 +90,7 @@
                                         <tbody>
                                         <tr>
                                             <td><b>Nom et Prenom</b></td>
-                                            <td>{{ client.nameSurname }}</td>
+                                            <td>{{ client.fullName }}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Numéro de la piece d'identité</b></td>
@@ -114,7 +114,7 @@
                                         </tr>
                                         <tr>
                                             <td><b>Date de Naissance</b></td>
-                                            <td>{{ client.birthDate }}</td>
+                                            <td>{{ client.birthDate|date("m-d-Y") }}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Revenu Mensuel</b></td>
@@ -132,6 +132,32 @@
                                             <td><b>Addresse</b></td>
                                             <td>{{ client.address }}</td>
                                         </tr>
+                                        <tr>
+                                            <td><b>Document d'identité</b></td>
+                                            <td>
+                                                <div>
+                                                    <a type="button" class="btn btn-secondary col"
+                                                       href="{{ path('app_download', { 'path' : client.idDocPictureUrl }) }}">
+                                                        <i class="fas fa-download"></i>
+                                                        <span>Telecharger</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><b>Photo d'identité</b></td>
+                                            <td>
+                                                <div>
+                                                    <a type="button" class="btn btn-secondary col"
+                                                       href="{{ path('app_download', { 'path' : client.idPictureUrl }) }}">
+                                                        <i class="fas fa-download"></i>
+                                                        <span>Telecharger</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -161,7 +187,7 @@
                                         <tbody>
                                         <tr>
                                             <td><b>ID du projet</b></td>
-                                            <td>{{ project.projectId }}</td>
+                                            <td>{{ project.projectMaster.requestId }}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Nom du projet</b></td>
@@ -233,21 +259,22 @@
                {% if  savingDetails|length > 0 %}
                    <div class="row">
                        <div class="col-lg-12">
-                           <div class="app-card app-card-orders-table shadow-sm mb-5">
-                               <div class="app-card-header">
+
+                           <div class="card card-primary">
+                               <div class="card-header">
                                    <div class="row">
                                        <div class="col">
-                                           <h3 class="card-title">Saving Details</h3>
+                                           <h3 class="card-title">Details d' épargne</h3>
                                        </div>
                                    </div>
                                </div>
 
                                <!--LE body du tableau -->
-                               <div class="app-card-body table-responsive p-0">
+                               <div class="card-body table-responsive p-0">
                                    <div class="table-responsive">
 
                                    </div>
-                                   <table id="financialReportTableId" class="table table-bordered table-striped">
+                                   <table id="financialReportTableId" class="table table-striped">
                                        <thead>
                                        <tr>
                                            <th>Type</th>
@@ -255,16 +282,28 @@
                                            <th>Mois payé</th>
                                            <th>Details</th>
                                            <th>Date D'enregistement</th>
+                                           <th>Document</th>
                                        </tr>
                                        </thead>
                                        <tbody>
                                        {% for savingDetail in savingDetails %}
                                            <tr>
-                                               <td>{{ savingDetail.type }}</td>
+                                               <td>{{ savingDetail.type | getSavingType(savingDetail.type)  }}</td>
                                                <td>{{ savingDetail.amount }}</td>
                                                <td>{{ savingDetail.paidMonth }}</td>
-                                               <td>{{ savingDetail.extra }}</td>
-                                               <td>{{ savingDetail.createdAt |date('d-m-Y H:m:s') }}</td>
+                                               <td>{{ savingDetail.details}}</td>
+                                               <td>{{ savingDetail.createdAt | date('d-m-Y H:m:s') }}</td>
+
+                                               <td>
+                                                   <div>
+                                                       <a type="button" class="btn btn-secondary col"
+                                                          href="{{ path('app_download', { 'path' : savingDetail.detailDocUrl }) }}">
+                                                           <i class="fas fa-download"></i>
+                                                           <span>Document</span>
+                                                       </a>
+                                                   </div>
+                                               </td>
+
                                            </tr>
                                        {% endfor %}
                                        </tbody>

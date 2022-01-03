@@ -52,14 +52,16 @@
                                         <th>Telephone</th>
                                         <th>Email</th>
                                         <th>Addresse</th>
+                                        <th>Document</th>
+                                        <th>Photo</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for data in  employeesData %}
                                         <tr>
                                             <td>{{ data.id }}</td>
-                                            <td>{{ data.nameSurname }}</td>
-                                            <td>{{ data.birthDate }}</td>
+                                            <td>{{ data.fullName }}</td>
+                                            <td>{{ data.birthDate | date('d-m-Y')}}</td>
                                             <td>{{ data.gender }}</td>
                                             <td>{{ data.roles[0] | getRole(data.roles[0]) }}</td>
                                             <td>{{ data.idDocNumber }}</td>
@@ -67,6 +69,24 @@
                                             <td>{{ data.phoneNumber }}</td>
                                             <td>{{ data.email }}</td>
                                             <td>{{ data.address }}</td>
+                                            <td>
+                                                <div>
+                                                    <a type="button" class="btn btn-secondary col"
+                                                       href="{{ path('app_download', { 'path' : data.idDocUrl }) }}">
+                                                        <i class="fas fa-download"></i>
+                                                        <span>Telecharger</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <a type="button" class="btn btn-secondary col"
+                                                       href="{{ path('app_download', { 'path' : data.photoUrl }) }}">
+                                                        <i class="fas fa-download"></i>
+                                                        <span>Telecharger</span>
+                                                    </a>
+                                                </div>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

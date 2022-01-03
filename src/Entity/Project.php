@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimestampTrait;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Project
 {
+    use TimestampTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -23,62 +26,57 @@ class Project
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $projectId;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $name;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $amount;
-
-    /**
-     * @ORM\Column(type="float",nullable=true)
-     */
-    private $finalAmount;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $repaymentDuration;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $modalityAmount;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $modalityPaymentFrequency;
+    private $amount;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $finalAmount;
+
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=2)
+     */
+    private $repaymentDuration;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $modalityAmount;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      */
     private $status;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="integer")
      */
-    private $extra;
+    private $modalityPaymentFrequency;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="text")
      */
     private $details;
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $extra = [];
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $businessPlanDocUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $detailsExtraDocUrl;
 
     /**
      * @ORM\OneToMany(targetEntity=Note::class, mappedBy="project")
@@ -86,51 +84,18 @@ class Project
     private $notes;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Client::class, mappedBy="projectId")
+     * @ORM\OneToOne(targetEntity=ProjectMaster::class, mappedBy="project", cascade={"persist", "remove"})
      */
-    private $clients;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=false, options={"default" : false})
-     */
-    private $isFinished;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $completionDate;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    private $businessPlanDocument;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $detailsExtraDocument;
+    private $projectMaster;
 
     public function __construct()
     {
         $this->notes = new ArrayCollection();
-        $this->clients = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getProjectId(): ?string
-    {
-        return $this->projectId;
-    }
-
-    public function setProjectId(string $projectId): self
-    {
-        $this->projectId = $projectId;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -145,50 +110,50 @@ class Project
         return $this;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(float $amount): self
+    public function setAmount(int $amount): self
     {
         $this->amount = $amount;
 
         return $this;
     }
 
-    public function getRepaymentDuration(): ?int
+    public function getFinalAmount(): ?int
+    {
+        return $this->finalAmount;
+    }
+
+    public function setFinalAmount(?int $finalAmount): self
+    {
+        $this->finalAmount = $finalAmount;
+
+        return $this;
+    }
+
+    public function getRepaymentDuration(): ?string
     {
         return $this->repaymentDuration;
     }
 
-    public function setRepaymentDuration(int $repaymentDuration): self
+    public function setRepaymentDuration(string $repaymentDuration): self
     {
         $this->repaymentDuration = $repaymentDuration;
 
         return $this;
     }
 
-    public function getModalityAmount(): ?float
+    public function getModalityAmount(): ?int
     {
         return $this->modalityAmount;
     }
 
-    public function setModalityAmount(?float $modalityAmount): self
+    public function setModalityAmount(int $modalityAmount): self
     {
         $this->modalityAmount = $modalityAmount;
-
-        return $this;
-    }
-
-    public function getModalityPaymentFrequency(): ?int
-    {
-        return $this->modalityPaymentFrequency;
-    }
-
-    public function setModalityPaymentFrequency(?int $modalityPaymentFrequency): self
-    {
-        $this->modalityPaymentFrequency = $modalityPaymentFrequency;
 
         return $this;
     }
@@ -198,76 +163,69 @@ class Project
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getExtra(): ?string
+    public function getModalityPaymentFrequency(): ?int
+    {
+        return $this->modalityPaymentFrequency;
+    }
+
+    public function setModalityPaymentFrequency(int $modalityPaymentFrequency): self
+    {
+        $this->modalityPaymentFrequency = $modalityPaymentFrequency;
+
+        return $this;
+    }
+
+    public function getDetails(): ?string
+    {
+        return $this->details;
+    }
+
+    public function setDetails(string $details): self
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    public function getExtra(): ?array
     {
         return $this->extra;
     }
 
-    public function setExtra(?string $extra): self
+    public function setExtra(?array $extra): self
     {
         $this->extra = $extra;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getBusinessPlanDocUrl(): ?string
     {
-        return $this->createdAt;
+        return $this->businessPlanDocUrl;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setBusinessPlanDocUrl(string $businessPlanDocUrl): self
     {
-        $this->createdAt = $createdAt;
+        $this->businessPlanDocUrl = $businessPlanDocUrl;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getDetailsExtraDocUrl(): ?string
     {
-        return $this->updatedAt;
+        return $this->detailsExtraDocUrl;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setDetailsExtraDocUrl(?string $detailsExtraDocUrl): self
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps()
-    {
-        $this->setUpdatedAt(new \DateTime('now'));
-
-        if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTime('now'));
-        }
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDetails()
-    {
-        return $this->details;
-    }
-
-    /**
-     * @param mixed $details
-     */
-    public function setDetails($details): self
-    {
-        $this->details = $details;
+        $this->detailsExtraDocUrl = $detailsExtraDocUrl;
 
         return $this;
     }
@@ -302,96 +260,24 @@ class Project
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFinalAmount()
+    public function getProjectMaster(): ?ProjectMaster
     {
-        return $this->finalAmount;
+        return $this->projectMaster;
     }
 
-    /**
-     * @param $finalAmount
-     * @return $this
-     */
-    public function setFinalAmount($finalAmount): self
+    public function setProjectMaster(?ProjectMaster $projectMaster): self
     {
-        $this->finalAmount = $finalAmount;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Client[]
-     */
-    public function getClients(): Collection
-    {
-        return $this->clients;
-    }
-
-    public function addClient(Client $client): self
-    {
-        if (!$this->clients->contains($client)) {
-            $this->clients[] = $client;
-            $client->addProjectId($this);
+        // unset the owning side of the relation if necessary
+        if (null === $projectMaster && null !== $this->projectMaster) {
+            $this->projectMaster->setProject(null);
         }
 
-        return $this;
-    }
-
-    public function removeClient(Client $client): self
-    {
-        if ($this->clients->removeElement($client)) {
-            $client->removeProjectId($this);
+        // set the owning side of the relation if necessary
+        if (null !== $projectMaster && $projectMaster->getProject() !== $this) {
+            $projectMaster->setProject($this);
         }
 
-        return $this;
-    }
-
-    public function getIsFinished(): ?bool
-    {
-        return $this->isFinished;
-    }
-
-    public function setIsFinished(?bool $isFinished): self
-    {
-        $this->isFinished = $isFinished;
-
-        return $this;
-    }
-
-    public function getCompletionDate(): ?\DateTimeInterface
-    {
-        return $this->completionDate;
-    }
-
-    public function setCompletionDate(?\DateTimeInterface $completionDate): self
-    {
-        $this->completionDate = $completionDate;
-
-        return $this;
-    }
-
-    public function getBusinessPlanDocument(): ?string
-    {
-        return $this->businessPlanDocument;
-    }
-
-    public function setBusinessPlanDocument(string $businessPlanDocument): self
-    {
-        $this->businessPlanDocument = $businessPlanDocument;
-
-        return $this;
-    }
-
-    public function getDetailsExtraDocument(): ?string
-    {
-        return $this->detailsExtraDocument;
-    }
-
-    public function setDetailsExtraDocument(?string $detailsExtraDocument): self
-    {
-        $this->detailsExtraDocument = $detailsExtraDocument;
+        $this->projectMaster = $projectMaster;
 
         return $this;
     }

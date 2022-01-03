@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Employee;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -10,42 +10,42 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @method Employee|null find($id, $lockMode = null, $lockVersion = null)
- * @method Employee|null findOneBy(array $criteria, array $orderBy = null)
- * @method Employee[]    findAll()
- * @method Employee[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Users|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Users|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Users[]    findAll()
+ * @method Users[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UsersRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Employee::class);
+        parent::__construct($registry, Users::class);
     }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
-    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
+    public function upgradePassword(UserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof Employee) {
+        if (!$user instanceof Users) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
-        $user->setPassword($newEncodedPassword);
+        $user->setPassword($newHashedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
     }
 
     // /**
-    //  * @return Employee[] Returns an array of Employee objects
+    //  * @return Users[] Returns an array of Users objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
+            ->orderBy('u.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -54,10 +54,10 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
     */
 
     /*
-    public function findOneBySomeField($value): ?Employee
+    public function findOneBySomeField($value): ?Users
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

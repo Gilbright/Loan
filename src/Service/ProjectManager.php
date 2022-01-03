@@ -4,13 +4,15 @@
 namespace App\Service;
 
 
-use App\Entity\Employee;
+use App\Entity\Client;
 use App\Entity\Project;
+use App\Entity\ProjectMaster;
 use App\Helper\MailReceiverHelper;
 use App\Helper\Status;
+use App\Helper\UploaderHelper;
+use App\Repository\ProjectMasterRepository;
 use App\Repository\ProjectRepository;
 use App\Service\OptionsResolver\ProjectResolver;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -22,7 +24,10 @@ class ProjectManager
     private $entityManager;
 
 
-    /**@var ProjectRepository $projectRepository */
+    /**@var ProjectMasterRepository */
+    private $projectMasterRepository;
+
+    /**@var ProjectRepository */
     private $projectRepository;
 
     /**@var EmployeeManager $employeeManager */
@@ -33,51 +38,75 @@ class ProjectManager
      */
     private $mailerManager;
 
+    /** @var ClientManager */
+    private ClientManager $clientManager;
+
+    private UploaderHelper $uploaderHelper;
+
     /**
-     * ProjectManager constructor.
      * @param EntityManagerInterface $entityManager
-     * @param ProjectRepository $projectRepository
+     * @param ProjectMasterRepository $projectMasterRepository
      * @param EmployeeManager $employeeManager
      * @param MailerManager $mailerManager
+     * @param ClientManager $clientManager
+     * @param ProjectRepository $projectRepository
+     * @param UploaderHelper $uploaderHelper
      */
-    public function __construct(EntityManagerInterface $entityManager, ProjectRepository $projectRepository, EmployeeManager $employeeManager, MailerManager $mailerManager)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ProjectMasterRepository $projectMasterRepository,
+        EmployeeManager $employeeManager,
+        MailerManager $mailerManager,
+        ClientManager $clientManager,
+        ProjectRepository $projectRepository,
+        UploaderHelper $uploaderHelper
+    )
     {
         $this->entityManager = $entityManager;
-        $this->projectRepository = $projectRepository;
+        $this->projectMasterRepository = $projectMasterRepository;
         $this->employeeManager = $employeeManager;
         $this->mailerManager = $mailerManager;
+        $this->clientManager = $clientManager;
+        $this->projectRepository = $projectRepository;
+        $this->uploaderHelper = $uploaderHelper;
     }
 
     public function execute(array $data): ?string
     {
         $data = ProjectResolver::resolve($data);
 
-        $projectEntity = new Project();
+        $requestId = str_replace('.', '', uniqid('ph_', false));
 
-        $projectId = str_replace('.', '', uniqid('ph', false));
+        $businessPlanDoc = $this->uploaderHelper->uploadPhenixFile($data['businessPlanDoc'], $requestId.UploaderHelper::BUS_PLAN_DOC_NAME);
+        $detailsExtraDoc = $this->uploaderHelper->uploadPhenixFile($data['detailsExtraDoc'], $requestId.UploaderHelper::DET_EXTRA_DOC_NAME);
 
-        $projectEntity->setProjectId($projectId)
+        $projectEntity = (new Project())
             ->setStatus(Status::EXP_WAITING_FOR_ANALYSIS)
             ->setRepaymentDuration((int)$this->repaymentDurationCalculator($data))
-
-            //TODO revoir le hesaplama RepaymentDuration is in months
-            ->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths'])
-            ->setModalityAmount((float)$data['modalityAmount'])
-            ->setAmount((float)$data['amountWanted'])
+            ->setModalityPaymentFrequency((int)$data['modalityNumberOfMonths']) //TODO revoir le hesaplama RepaymentDuration is in months
+            ->setModalityAmount((int)$data['modalityAmount'])
+            ->setAmount((int)$data['amountWanted'])
             ->setFinalAmount(0)
-            ->setIsFinished(false)
-            ->setBusinessPlanDocument($data['businessPlanDoc'])
-            ->setDetailsExtraDocument($data['detailsExtraDoc'])
+            ->setBusinessPlanDocUrl($businessPlanDoc)
+            ->setDetailsExtraDocUrl($detailsExtraDoc)
             ->setName($data['projectName'])
-            ->setDetails($data['projectDetails']);
+            ->setDetails($data['projectDetails'])
+        ;
 
-        $this->entityManager->persist($projectEntity);
+        $projectMaster = (new ProjectMaster())
+            ->setRequestId($requestId)
+            ->setIsAbandoned(false)
+            ->setProject($projectEntity)
+            ->setIsFinished(false)
+        ;
+
+        $this->entityManager->persist($projectMaster);
         $this->entityManager->flush();
 
-        return $projectEntity->getProjectId();
+        return $projectMaster->getRequestId();
     }
 
-    public function repaymentDurationCalculator(array $data): float
+    public function repaymentDurationCalculator(array $data): int
     {
         $monthlyPay = $data['modalityAmount'] / $data['modalityNumberOfMonths'];
 
@@ -106,12 +135,12 @@ class ProjectManager
             ->getResult();
     }
 
-    public function removeProjectWithoutClient(array $projects)
+    public function removeProjectWithoutClient(array $projects): array
     {
         $projectsArray = [];
         /** @var Project $project */
         foreach ($projects as $project) {
-            if (!$project->getClients()->isEmpty()) {
+            if (!$project->getProjectMaster()->getClients()->isEmpty()) {
                 $projectsArray[] = $project;
             }
         }
@@ -119,7 +148,7 @@ class ProjectManager
         return $projectsArray;
     }
 
-    public function listProjectsByDates(Request $request, string $status, ProjectManager $projectManager, ClientManager $clientManager)
+    public function listProjectsByDates(Request $request, string $status): ?array
     {
         if ($request->isMethod('POST')) {
             $startDate = new \DateTime($request->request->all()['startDate']);
@@ -130,51 +159,80 @@ class ProjectManager
                 throw new Exception("la date finale ne peut pas preceder la date initiale");
             }
 
-            $projects = $projectManager->getProjectsInDateRangeByStatus($status, $startDate, $endDate);
-            $projects = $projectManager->removeProjectWithoutClient($projects);
+            $projectsInRange = $this->getProjectsInDateRangeByStatus($status, $startDate, $endDate);
+            $projects = $this->removeProjectWithoutClient($projectsInRange);
 
-            $teamLeads = $clientManager->getProjectsTeamLeads($projects);
+            $teamLeads = $this->clientManager->getProjectsTeamLeads($projects);
 
-            return [$projects, $teamLeads];
+            return [
+                'projects'  => $projects,
+                'teamLeads' => $teamLeads
+            ];
         }
 
         return null;
     }
 
-    public function getProjectById(string $projectId = null): ?Project
+    public function getProjectMasterById(string $requestId = null): ?ProjectMaster
     {
-        $project = $this->projectRepository->findOneBy(['projectId' => $projectId]);
+        $projectMaster = $this->projectMasterRepository->findOneBy(['requestId' => $requestId]);
 
-        if (!$project instanceof Project) {
-            throw new EntityNotFoundException("Il n'exite pas de projet concordant avec ce identifiant! Veuillez corriger.");
+        if (!$projectMaster instanceof ProjectMaster) {
+            throw new EntityNotFoundException("Il n'existe pas de projet concordant avec ce identifiant! Veuillez corriger."); // update this message
         }
-        return $project;
+
+        return $projectMaster;
     }
 
-    public function changeProjectStatus(string $newStatus, string $projectId)
+    public function changeProjectStatus(string $newStatus, string $requestId)
     {
-        /** @var Project $project */
-        $project = $this->getProjectById($projectId);
+        /** @var ProjectMaster $projectMaster */
+        $projectMaster = $this->getProjectMasterById($requestId);
 
+        $this->changeProjectStatusByProjectMaster($projectMaster, $newStatus);
+    }
+
+    public function changeProjectStatusByProjectMaster(ProjectMaster $projectMaster, string $newStatus)
+    {
         $mailReceivers = MailReceiverHelper::getReceiverRoleByStatus($newStatus);
 
-        $project->setStatus($newStatus);
+        $projectMaster->getProject()->setStatus($newStatus);
 
         if ($newStatus === Status::PROJECT_COMPLETED){
-            $project->setIsFinished(true)->setCompletionDate(new \DateTime());
+            $projectMaster
+                ->setIsFinished(true)
+                ->setEndDate(new \DateTime())
+            ;
         }
 
         // if that status change is concerned by an update mail sending, then we do it here.
         if ($mailReceivers) {
             foreach ($mailReceivers as $receiver) {
-                $employees = $this->employeeManager->getEmployeesByRole($receiver);
+                $users = $this->employeeManager->getUsersByRole($receiver);
 
-                foreach ($employees as $employee) {
-                    $this->mailerManager->sendMailNotification($project, $employee);
+                foreach ($users as $user) {
+                    $this->mailerManager->sendMailNotification($projectMaster, $user);
                 }
             }
         }
 
+        $this->entityManager->flush();
+    }
+
+    public function setTeamLeadDoc(Client $client, $requestId)
+    {
+        foreach ($client->getProjectMasters() as $projectMaster) {
+            if ($projectMaster->getRequestId() === $requestId) {
+                $projectMaster->setTeamLeadDocId($client->getIdDocNumber());
+                $client->setIsTeamLead(true);
+            }
+        }
+
+        $this->entityManager->flush();
+    }
+
+    public function doFlush()
+    {
         $this->entityManager->flush();
     }
 }

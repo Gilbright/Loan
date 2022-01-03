@@ -9,14 +9,16 @@
 namespace App\Controller;
 
 
+use App\Helper\UploaderHelper;
 use App\Service\ClientManager;
-use App\Service\FinanceManager;
-use App\Service\NoteManager;
 use App\Service\ProjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -27,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/", name="admin")
      */
     public function adminGo(): Response
     {
@@ -37,28 +39,25 @@ class HomeController extends AbstractController
     /**
      * @Route("/readres", name="app_consult_status")
      * @param ProjectManager $projectManager
-     * @param FinanceManager $financeManager
-     * @param NoteManager $noteManager
      * @param Request $request
-     * @param ClientManager $clientManager
      * @return Response
      * @throws \Doctrine\ORM\EntityNotFoundException
      */
-    public function consultStatus(ProjectManager $projectManager, FinanceManager $financeManager, NoteManager $noteManager, Request $request, ClientManager $clientManager): Response
+    public function consultStatus(ProjectManager $projectManager, Request $request): Response
     {
         if ($request->isMethod('POST')) {
-            $projectId = $request->request->all()['projectId'];
-            $project = $projectManager->getProjectById($projectId);
+            $requestId = $request->request->all()['requestId'];
 
-            $projectTeam = $clientManager->getClientsByProjectId($projectId);
-            $projectNotes = $noteManager->getNotesByProjectId($projectId);
-            $financialDetails = $financeManager->getFinancialDetailsByProjectId($projectId);
+            $projectMaster = $projectManager->getProjectMasterById($requestId);
+            $projectTeam = $projectMaster->getClients();
+            $projectNotes = $projectMaster->getProject()->getNotes();
+            $paymentDetails = $projectMaster->getPaymentDetails();
 
             return $this->render('pages/consult_status.html.twig', [
-                'project' => $project,
+                'project' => $projectMaster->getProject(),
                 'projectTeam' => $projectTeam,
                 'projectNotes' => $projectNotes,
-                'financeDetails' => $financialDetails
+                'financeDetails' => $paymentDetails
             ]);
         }
 
@@ -67,15 +66,12 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/readresclient", name="app_consult_status_client")
-     * @param ProjectManager $projectManager
-     * @param FinanceManager $financeManager
-     * @param NoteManager $noteManager
      * @param Request $request
      * @param ClientManager $clientManager
      * @return Response
      * @throws \Doctrine\ORM\EntityNotFoundException
      */
-    public function consultStatusClient(ProjectManager $projectManager, FinanceManager $financeManager, NoteManager $noteManager, Request $request, ClientManager $clientManager): Response
+    public function consultStatusClient(Request $request, ClientManager $clientManager): Response
     {
         if ($request->isMethod('POST')) {
             $clientIdNumber = $request->request->all()['clientIdNumber'];
@@ -84,11 +80,39 @@ class HomeController extends AbstractController
 
             return $this->render('pages/consult_status_client.html.twig', [
                 'client' => $client,
-                'projects' => $client->getProjectId(),
+                'projects' => $clientManager->getClientProjects($client->getProjectMasters()),
                 'savingDetails' => $client->getSavingDetails()
             ]);
         }
 
         return $this->render('pages/consult_status_client.html.twig');
     }
+
+    /**
+     * @Route("/download/{path}", name="app_download")
+     * @param string $path
+     * @param UploaderHelper $uploaderHelper
+     * @return BinaryFileResponse
+     */
+    public function fileDownloadHandler(string $path, UploaderHelper $uploaderHelper)
+    {
+        try {
+            $filePath = $uploaderHelper->getDownloadPath($path);
+
+            $response = new BinaryFileResponse($filePath);
+
+            $response->headers->set('Content-Type', 'text/plain');
+
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $path);
+
+            return $response;
+        } catch (\Throwable $exception){
+            $array = array (
+                'status' => 400,
+                'message' => 'Download error'
+            );
+            return new JsonResponse( $array, 400 );
+        }
+    }
+
 }

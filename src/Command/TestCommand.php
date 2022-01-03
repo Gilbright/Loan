@@ -2,8 +2,11 @@
 
 namespace App\Command;
 
+use App\Helper\UploaderHelper;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectMasterRepository;
+use App\Service\ClientManager;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,10 +14,35 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'TestCommand',
+    description: 'Add a short description for your command',
+)]
 class TestCommand extends Command
 {
-    protected static $defaultName = 'testCommand';
-    protected static $defaultDescription = 'Add a short description for your command';
+
+    /** @var ClientRepository */
+    private $clientRepository;
+
+    /** @var ProjectMasterRepository */
+    private $projectMasterRepository;
+
+    /** @var ClientManager */
+    private $clientManager;
+
+    private  UploaderHelper $uploaderHelper;
+
+    public function __construct(
+        ClientRepository $clientRepository,
+        ProjectMasterRepository $projectMasterRepository,
+        UploaderHelper $uploaderHelper,
+        string $name = null)
+    {
+        $this->projectMasterRepository =$projectMasterRepository;
+        $this->clientRepository = $clientRepository;
+        $this->uploaderHelper = $uploaderHelper;
+        parent::__construct($name);
+    }
 
     protected function configure(): void
     {
@@ -24,35 +52,13 @@ class TestCommand extends Command
         ;
     }
 
-    /** @var ClientRepository */
-    private $clientRepository;
-
-    /** @var ProjectMasterRepository */
-    private $projectMasterRepository;
-
-    public function __construct(ClientRepository $clientRepository, ProjectMasterRepository  $projectMasterRepository, string $name = null)
-    {
-        $this->clientRepository = $clientRepository;
-        $this->projectMasterRepository = $projectMasterRepository;
-        parent::__construct($name);
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $client = $this->clientRepository->find(1);
+        $demo = $this->uploaderHelper->getImagePath('90594268_user_id_doc_document.jpg', 'Phenix/');
 
-        $projectMaster = $this->projectMasterRepository->find(1);
-
-        //dd($client, $projectMaster);
-        //TODO:
-         dd($client->getProjectMasters()->unwrap()->toArray());
-        $projectMaster->getClients()->toArray(); //this is working
-        dd($client->getProjectMasters()->toArray()); //this is not working
-
+        dd($demo);
         return Command::SUCCESS;
     }
-
-    //@TODO Dayı bu Command a bakabilirsin. Sorun sadece Client te :(
 }

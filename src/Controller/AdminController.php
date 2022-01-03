@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Intl\Intl;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
@@ -20,32 +19,32 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/attente_ee/{projectId}", name="app-view")
-     * @param string|null $projectId
+     * @Route("/attente_ee/{requestId}", name="app-view")
+     * @param string|null $requestId
      * @return Response
      */
-    public function attente($projectId): Response
+    public function attente($requestId): Response
     {
-       // dd($projectId);
+       // dd($requestId);
         return $this->render('pages/registered_project_clients.html.twig');
     }
 
     /**
-     * @Route("/attente_control/{projectId}", name="app-view1")
-     * @param string|null $projectId
+     * @Route("/attente_control/{requestId}", name="app-view1")
+     * @param string|null $requestId
      * @return Response
      */
-   /* public function attenteControl($projectId): Response
+   /* public function attenteControl($requestId): Response
     {
         return $this->render('pages/status/en_attente_de_control.html.twig');
     }
 */
     /**
-     * @Route("/attente_etude/{projectId}", name="app-attente-etude-view")
-     * @param string|null $projectId
+     * @Route("/attente_etude/{requestId}", name="app-attente-etude-view")
+     * @param string|null $requestId
      * @return Response
      */
-    public function attenteEtude($projectId): Response
+    public function attenteEtude($requestId): Response
     {
         return $this->render('pages/status/en_attente_etude.html.twig');
     }
