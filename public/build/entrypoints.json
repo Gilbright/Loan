@@ -1,0 +1,85 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "/build/runtime.f3575a88.js",
+        "/build/755.5a8586e9.js",
+        "/build/31.5bb1b164.js",
+        "/build/363.d10c5a07.js",
+        "/build/app.5d5ff25e.js"
+      ],
+      "css": [
+        "/build/app.def7efd2.css"
+      ]
+    },
+    "phenix_base": {
+      "js": [
+        "/build/runtime.f3575a88.js",
+        "/build/755.5a8586e9.js",
+        "/build/31.5bb1b164.js",
+        "/build/363.d10c5a07.js",
+        "/build/50.fa099cf8.js",
+        "/build/phenix_base.b5c10bd3.js"
+      ],
+      "css": [
+        "/build/50.643576b2.css",
+        "/build/phenix_base.31d6cfe0.css"
+      ]
+    },
+    "login": {
+      "js": [
+        "/build/runtime.f3575a88.js",
+        "/build/31.5bb1b164.js",
+        "/build/363.d10c5a07.js",
+        "/build/login.f38f1d5f.js"
+      ],
+      "css": [
+        "/build/login.2c4e86b4.css"
+      ]
+    },
+    "mailer": {
+      "js": [
+        "/build/runtime.f3575a88.js",
+        "/build/mailer.0f353296.js"
+      ],
+      "css": [
+        "/build/mailer.d8d28b21.css"
+      ]
+    },
+    "form_validation": {
+      "js": [
+        "/build/runtime.f3575a88.js",
+        "/build/755.5a8586e9.js",
+        "/build/31.5bb1b164.js",
+        "/build/931.98cdb6ba.js",
+        "/build/form_validation.e2feabf0.js"
+      ],
+      "css": [
+        "/build/form_validation.31d6cfe0.css"
+      ]
+    },
+    "datatable": {
+      "js": [
+        "/build/runtime.f3575a88.js",
+        "/build/755.5a8586e9.js",
+        "/build/319.10670a4f.js",
+        "/build/datatable.873b8fd9.js"
+      ],
+      "css": [
+        "/build/datatable.ed1b1f80.css"
+      ]
+    },
+    "login_demo": {
+      "js": [
+        "/build/runtime.f3575a88.js",
+        "/build/755.5a8586e9.js",
+        "/build/31.5bb1b164.js",
+        "/build/363.d10c5a07.js",
+        "/build/login_demo.705707ff.js"
+      ],
+      "css": [
+        "/build/login_demo.af61919e.css"
+      ]
+    }
+  }
+}
