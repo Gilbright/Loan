@@ -49,7 +49,7 @@ class LoanFictures extends Fixture
                 ->setEmail($email)
                 ->setBirthdate($faker->dateTimeBetween('-30 years', '-20 years', null))
                 ->setIdDocUrl('default')
-                ->setIsActive(false)
+                ->setIsActive(true)
                 ->setLastLogin(new \DateTime())
                 ->setPhotoUrl('default')
                 ->setUsername($email)
