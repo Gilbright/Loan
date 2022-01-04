@@ -6,6 +6,7 @@ use App\Helper\UploaderHelper;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectMasterRepository;
 use App\Service\ClientManager;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,9 +31,13 @@ class TestCommand extends Command
     /** @var ClientManager */
     private $clientManager;
 
+    /** @var Connection */
+    private  $connection;
+
     private  UploaderHelper $uploaderHelper;
 
     public function __construct(
+        Connection $connection,
         ClientRepository $clientRepository,
         ProjectMasterRepository $projectMasterRepository,
         UploaderHelper $uploaderHelper,
@@ -41,6 +46,7 @@ class TestCommand extends Command
         $this->projectMasterRepository =$projectMasterRepository;
         $this->clientRepository = $clientRepository;
         $this->uploaderHelper = $uploaderHelper;
+        $this->connection = $connection;
         parent::__construct($name);
     }
 
@@ -56,7 +62,15 @@ class TestCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $demo = $this->uploaderHelper->getImagePath('90594268_user_id_doc_document.jpg', 'Phenix/');
+        $demo = $this->connection->fetchAllAssociative(
+            'SELECT * FROM users'
+        );
+
+        foreach ($demo as $item) {
+
+            $io->info($item['username']);
+
+        }
 
         return Command::SUCCESS;
     }
