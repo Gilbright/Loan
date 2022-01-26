@@ -10,6 +10,7 @@ use App\Helper\UploaderHelper;
 use App\Repository\UsersRepository;
 use App\Service\OptionsResolver\EmployeeResolver;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -111,6 +112,30 @@ class EmployeeManager
             ->where('u.roles like :roles')
             ->setParameter('roles', '%"' . $role . '"%')
             ->getQuery()->getResult();
+    }
+
+    public function deleteUser($userIdNumber)
+    {
+        $user = $this->getUserByIdNumber($userIdNumber);
+
+        $prefix = 'deleted_' . (new \DateTime())->format('d-m-Y') . '_';
+
+        $user->setIsActive(1)->setEmail($prefix . $user->getEmail());
+
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    public function getUserByIdNumber($idNumber)
+    {
+        $user = $this->usersRepository->findOneBy(['idDocNumber' => $idNumber]);
+
+        if (!$user instanceof Users) {
+            throw new EntityNotFoundException('Cet employé n a pas été retrouvé');
+        }
+
+        return $user;
     }
 
     public function updateUserInfos(array $data, Users $user): void

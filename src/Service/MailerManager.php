@@ -9,6 +9,7 @@
 namespace App\Service;
 
 
+use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Project;
 use App\Entity\ProjectMaster;
@@ -47,4 +48,21 @@ class MailerManager
         //@Todo We will reopen, client mail are not real mail. ça cause des errors...
         $this->mailerSender->send($mailObject);
     }
+
+    public function sendSavingMailNotification(Client $client, Users $user)
+    {
+        $mailObject = (new TemplatedEmail())
+            ->from(self::FROM_ADDRESS)
+            ->to($user->getEmail())
+            ->subject('Notification sur l épargne ')
+            ->htmlTemplate('mails/saving_mail.html.twig')
+            ->context([
+                'client' => $client,
+                'user' => $user
+            ])
+        ;
+
+        $this->mailerSender->send($mailObject);
+    }
+
 }

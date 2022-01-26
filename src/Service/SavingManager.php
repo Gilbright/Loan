@@ -8,7 +8,9 @@
 
 namespace App\Service;
 
+use App\Entity\Client;
 use App\Entity\SavingDetails;
+use App\Helper\MailReceiverHelper;
 use App\Helper\UploaderHelper;
 use App\Repository\SavingDetailsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,16 +25,28 @@ class SavingManager
 
     private UploaderHelper $uploaderHelper;
 
+    /**@var EmployeeManager $employeeManager */
+    private $employeeManager;
+
+    /**
+     * @var MailerManager $mailerManager
+     */
+    private $mailerManager;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         SavingDetailsRepository $savingDetailRepository,
         ClientManager $clientManager,
+        MailerManager $mailerManager,
+        EmployeeManager $employeeManager,
         UploaderHelper $uploaderHelper
     )
     {
         $this->savingRepository = $savingDetailRepository;
         $this->entityManager = $entityManager;
         $this->clientManager = $clientManager;
+        $this->mailerManager = $mailerManager;
+        $this->employeeManager = $employeeManager;
         $this->uploaderHelper = $uploaderHelper;
     }
 
@@ -77,7 +91,17 @@ class SavingManager
             $clientInfos->setBalance($clientInfos->getBalance() - (int)$savingArray['amount']);
         }
 
+        $this->notifySaving($clientInfos);
+
         $this->entityManager->persist($savingDetail);
         $this->entityManager->flush();
+    }
+
+    public function notifySaving(Client $client)
+    {
+        $user = $this->employeeManager->getUsersByRole(MailReceiverHelper::getSavingMailReceiver())[0];
+
+        $this->mailerManager->sendSavingMailNotification($client, $user);
+
     }
 }

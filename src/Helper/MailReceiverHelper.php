@@ -28,6 +28,11 @@ class MailReceiverHelper
     {
         return self::RECEIVERS[$status] ?? [];
     }
+
+    public static function getSavingMailReceiver()
+    {
+        return RoleHelper::BOSS;
+    }
 }
 
 //     status non pris en compte par les notifications de mail.
