@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
 use App\Helper\Status;
 use App\Helper\UploaderHelper;
 use App\Service\ClientManager;
@@ -326,6 +327,28 @@ class BossController extends AbstractController
 
         return $this->render('forms/register_employee.html.twig');
     }
+
+    /**
+     * @Route ("/boss/deleteEmployee", name="app_boss_delete_employees")
+     * @param Request $request
+     * @param EmployeeManager $employeeManager
+     * @return Response
+     */
+    public function bossDeleteEmployee(Request $request, EmployeeManager $employeeManager): Response
+    {
+        if ($request->isMethod('POST')){
+            $userIdNumber = $request->request->all()['userIdNumber'];
+
+            $employeeManager->deleteUser($userIdNumber);
+
+            $users = $employeeManager->getUsers();
+
+            return $this->render('forms/registered_employees.html.twig', ['employeesData' => $users]);
+        }
+
+        return $this->render('pages/delete_user.html.twig');
+    }
+
 
     /**
      * @Route ("/boss/listEmployee", name="app_boss_list_employees")
