@@ -122,7 +122,7 @@ class EmployeeManager
 
         $user->setIsActive(1)
             ->setEmail($prefix . $user->getEmail())
-            ->setUsername($prefix . $user->getEmail());
+            ->setUsername($user->getEmail());
 
         $this->entityManager->flush();
 
