@@ -120,7 +120,9 @@ class EmployeeManager
 
         $prefix = 'deleted_' . (new \DateTime())->format('d-m-Y') . '_';
 
-        $user->setIsActive(1)->setEmail($prefix . $user->getEmail());
+        $user->setIsActive(1)
+            ->setEmail($prefix . $user->getEmail())
+            ->setUsername($prefix . $user->getEmail());
 
         $this->entityManager->flush();
 
