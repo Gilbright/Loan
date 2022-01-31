@@ -120,7 +120,7 @@ class EmployeeManager
 
         $prefix = 'deleted_' . (new \DateTime())->format('d-m-Y') . '_';
 
-        $user->setIsActive(1)
+        $user->setIsActive(0)
             ->setEmail($prefix . $user->getEmail())
             ->setUsername($user->getEmail());
 

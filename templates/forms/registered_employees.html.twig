@@ -58,7 +58,7 @@
                                     </thead>
                                     <tbody>
                                     {% for data in  employeesData %}
-                                        {% if data.isActive == 0 %}
+                                        {% if data.isActive == 1 %}
                                             <tr>
                                                 <td>{{ data.id }}</td>
                                                 <td>{{ data.fullName }}</td>
