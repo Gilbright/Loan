@@ -35,10 +35,10 @@ $(function () {
             address: {
                 required: true
             },
-            idNumber: {
-                required: true,
-                number: true
-            },
+            // idNumber: {
+            //     required: true,
+            //     number: true
+            // },
             pieceIdentity: {
                 required: true
             },
@@ -80,10 +80,10 @@ $(function () {
                 number: "Must be a valid number"
             } ,
             address: "Please write your address" ,
-            idNumber: {
-                required: "Please write your idNumber",
-                number: "Must be a valid number"
-            } ,
+            // idNumber: {
+            //     required: "Please write your idNumber",
+            //     number: "Must be a valid number"
+            // } ,
             pieceIdentity: "Please choose your pieceIdentity",
             photoIdentity: "Please choose your photoIdentity",
             confirmation: "Please accept our terms"
