@@ -13,6 +13,7 @@ use App\Entity\Employee;
 use App\Entity\Project;
 use App\Entity\ProjectMaster;
 use App\Entity\Users;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
@@ -26,8 +27,12 @@ class MailerManager
      */
     private $mailerSender;
 
-    public function __construct(MailerInterface $mailer)
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(MailerInterface $mailer, LoggerInterface $logger)
     {
+        $this->logger = $logger;
         $this->mailerSender = $mailer;
     }
 
@@ -44,7 +49,14 @@ class MailerManager
             ])
         ;
 
-        //@Todo We will reopen, client mail are not real mail. ça cause des errors...
-        $this->mailerSender->send($mailObject);
+        $this->logger->info('[MAILER_DATA_INFOS', [
+            'from' => self::FROM_ADDRESS,
+            'to' => $user->getEmail(),
+            'project' => $projectMaster->getProject(),
+            'user' => $user
+        ]);
+
+        //Todo We will reopen, client mail are not real mail. ça cause des errors...
+        //$this->mailerSender->send($mailObject);
     }
 }
