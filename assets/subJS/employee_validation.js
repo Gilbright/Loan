@@ -20,7 +20,6 @@ $(function () {
             },
             idNumber: {
                 required: true,
-                number: true
             },
             pieceIdentity: {
                 required: true

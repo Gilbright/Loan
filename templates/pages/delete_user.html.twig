@@ -1,0 +1,78 @@
+{% extends 'layout.html.twig' %}
+
+ {% block stylesheets %}
+     {{ parent() }}
+     {{ encore_entry_link_tags('datatable') }}
+ {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('datatable') }}
+{% endblock %}
+
+
+{% block body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Supprimer un employé</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Supprimer un employé</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    {% block readResForm %}
+                        <!-- general form elements disabled -->
+                        <div class="card card-warning">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="card-title">Veuillez Entrer le numero de la piece d'identité de l' employé </h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--LE tableau des data des clients du team -->
+                            <div class="card-body">
+                                <form method="post">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <!-- text input -->
+                                            <div class="form-group">
+                                                <input type="text" required="true" class="form-control"
+                                                       name="userIdNumber"
+                                                       placeholder="Entrer le numero de la piece d'identité">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-info">Supprimer</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    {% endblock %}
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+

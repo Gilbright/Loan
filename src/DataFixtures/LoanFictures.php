@@ -72,7 +72,7 @@ class LoanFictures extends Fixture
             ->setEmail($email)
             ->setBirthdate($faker->dateTimeBetween('-30 years', '-20 years', null))
             ->setIdDocUrl('default')
-            ->setIsActive(false)
+            ->setIsActive(true)
             ->setLastLogin(new \DateTime())
             ->setPhotoUrl('default')
             ->setUsername($email)
@@ -93,7 +93,7 @@ class LoanFictures extends Fixture
             $project = new Project();
             $amount = $faker->randomNumber(6);
             $project
-                ->setStatus(Status::SEC_WAITING_FOR_CONTROL)
+                ->setStatus(Status::EXP_WAITING_FOR_ANALYSIS)
                 ->setName($faker->realText(20))
                 ->setAmount($amount)
                 ->setDetails($faker->realText(350))

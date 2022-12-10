@@ -2,83 +2,84 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.f3575a88.js",
-        "/build/755.5a8586e9.js",
-        "/build/31.5bb1b164.js",
-        "/build/363.d10c5a07.js",
-        "/build/app.5d5ff25e.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_jquery_dist_jquery_js.js",
+        "/build/vendors-node_modules_core-js_internals_add-to-unscopables_js-node_modules_core-js_internals_a-dd2802.js",
+        "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_core-js_modules_es_ob-09d390.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/app.def7efd2.css"
+        "/build/app.css"
       ]
     },
     "phenix_base": {
       "js": [
-        "/build/runtime.f3575a88.js",
-        "/build/755.5a8586e9.js",
-        "/build/31.5bb1b164.js",
-        "/build/363.d10c5a07.js",
-        "/build/50.fa099cf8.js",
-        "/build/phenix_base.b5c10bd3.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_jquery_dist_jquery_js.js",
+        "/build/vendors-node_modules_core-js_internals_add-to-unscopables_js-node_modules_core-js_internals_a-dd2802.js",
+        "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_core-js_modules_es_ob-09d390.js",
+        "/build/vendors-node_modules_fortawesome_fontawesome-free_js_all_js-node_modules_admin-lte_dist_js_ad-eaca74.js",
+        "/build/phenix_base.js"
       ],
       "css": [
-        "/build/50.643576b2.css",
-        "/build/phenix_base.31d6cfe0.css"
+        "/build/vendors-node_modules_fortawesome_fontawesome-free_js_all_js-node_modules_admin-lte_dist_js_ad-eaca74.css",
+        "/build/phenix_base.css"
       ]
     },
     "login": {
       "js": [
-        "/build/runtime.f3575a88.js",
-        "/build/31.5bb1b164.js",
-        "/build/363.d10c5a07.js",
-        "/build/login.f38f1d5f.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_internals_add-to-unscopables_js-node_modules_core-js_internals_a-dd2802.js",
+        "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_core-js_modules_es_ob-09d390.js",
+        "/build/login.js"
       ],
       "css": [
-        "/build/login.2c4e86b4.css"
+        "/build/login.css"
       ]
     },
     "mailer": {
       "js": [
-        "/build/runtime.f3575a88.js",
-        "/build/mailer.0f353296.js"
+        "/build/runtime.js",
+        "/build/mailer.js"
       ],
       "css": [
-        "/build/mailer.d8d28b21.css"
+        "/build/mailer.css"
       ]
     },
     "form_validation": {
       "js": [
-        "/build/runtime.f3575a88.js",
-        "/build/755.5a8586e9.js",
-        "/build/31.5bb1b164.js",
-        "/build/931.98cdb6ba.js",
-        "/build/form_validation.e2feabf0.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_jquery_dist_jquery_js.js",
+        "/build/vendors-node_modules_core-js_internals_add-to-unscopables_js-node_modules_core-js_internals_a-dd2802.js",
+        "/build/vendors-node_modules_admin-lte_plugins_bs-custom-file-input_bs-custom-file-input_min_js-node_-6e5688.js",
+        "/build/form_validation.js"
       ],
       "css": [
-        "/build/form_validation.31d6cfe0.css"
+        "/build/form_validation.css"
       ]
     },
     "datatable": {
       "js": [
-        "/build/runtime.f3575a88.js",
-        "/build/755.5a8586e9.js",
-        "/build/319.10670a4f.js",
-        "/build/datatable.873b8fd9.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_jquery_dist_jquery_js.js",
+        "/build/vendors-node_modules_admin-lte_plugins_datatables-bs4_js_dataTables_bootstrap4_min_js-node_mo-539adc.js",
+        "/build/datatable.js"
       ],
       "css": [
-        "/build/datatable.ed1b1f80.css"
+        "/build/vendors-node_modules_admin-lte_plugins_datatables-bs4_js_dataTables_bootstrap4_min_js-node_mo-539adc.css",
+        "/build/datatable.css"
       ]
     },
     "login_demo": {
       "js": [
-        "/build/runtime.f3575a88.js",
-        "/build/755.5a8586e9.js",
-        "/build/31.5bb1b164.js",
-        "/build/363.d10c5a07.js",
-        "/build/login_demo.705707ff.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_jquery_dist_jquery_js.js",
+        "/build/vendors-node_modules_core-js_internals_add-to-unscopables_js-node_modules_core-js_internals_a-dd2802.js",
+        "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_core-js_modules_es_ob-09d390.js",
+        "/build/login_demo.js"
       ],
       "css": [
-        "/build/login_demo.af61919e.css"
+        "/build/login_demo.css"
       ]
     }
   }
