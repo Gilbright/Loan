@@ -17,6 +17,7 @@ use App\Entity\Users;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Email;
 
 class MailerManager
@@ -46,7 +47,7 @@ class MailerManager
         ;
 
         //@Todo We will reopen, client mail are not real mail. ça cause des errors...
-        $this->mailerSender->send($mailObject);
+        $this->deliverMailObject($mailObject);
     }
 
     public function sendSavingMailNotification(Client $client, Users $user)
@@ -62,7 +63,13 @@ class MailerManager
             ])
         ;
 
-        $this->mailerSender->send($mailObject);
+        $this->deliverMailObject($mailObject);
     }
 
+    public function deliverMailObject(TemplatedEmail $mailObject)
+    {
+        $transport = Transport::fromDsn($_ENV['MAILER_DSN']);
+
+        $this->mailerSender->send($mailObject);
+    }
 }
